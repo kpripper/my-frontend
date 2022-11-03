@@ -1,0 +1,39 @@
+.board {
+    padding-left: 16px;
+    background-color: #0000003d;    
+    background:linear-gradient(to bottom,
+    rgba(81, 81, 81, 0.832),
+    rgba(109, 109, 109, 0.257),
+    rgba(212, 212, 212, 0.041))
+}
+
+.board-content {
+    white-space: nowrap;
+}
+
+h1 {
+   padding: 0 0 0 30px; 
+   color: white;
+}
+
+.add-list {
+    display: inline-block;
+    background-color: #ffffff3d;
+    border-radius: 3px;
+    min-height: 32px;
+    width: 272px;
+    color: rgb(255, 255, 255);
+    padding: 5px 10px;
+    //same for text vertical centering
+    height: 40px;
+    line-height: 40px;
+    &:hover {
+        background-color: #ffffff82;
+        cursor: pointer;
+    }
+}
+
+.fa-plus {
+    margin: 0 5px 0 0;
+}
+

@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/kpripper/trello-1/static/css/main.04f8b409.css",
+    "main.js": "/kpripper/trello-1/static/js/main.fb86b7f6.js",
+    "static/js/787.cd528a5f.chunk.js": "/kpripper/trello-1/static/js/787.cd528a5f.chunk.js",
+    "static/media/fa-solid-900.ttf": "/kpripper/trello-1/static/media/fa-solid-900.b48ad290d0335879a92b.ttf",
+    "static/media/fa-brands-400.ttf": "/kpripper/trello-1/static/media/fa-brands-400.f9ee61fab3c11e2f3ed3.ttf",
+    "static/media/fa-solid-900.woff2": "/kpripper/trello-1/static/media/fa-solid-900.66104b766c3d0462b3c5.woff2",
+    "static/media/fa-brands-400.woff2": "/kpripper/trello-1/static/media/fa-brands-400.e1a247a5ef41e1975742.woff2",
+    "static/media/fa-regular-400.ttf": "/kpripper/trello-1/static/media/fa-regular-400.abf801b7acb6705a15ad.ttf",
+    "static/media/fa-regular-400.woff2": "/kpripper/trello-1/static/media/fa-regular-400.639d2000c1ece92eaec8.woff2",
+    "static/media/fa-v4compatibility.ttf": "/kpripper/trello-1/static/media/fa-v4compatibility.f601162ae669f88823a3.ttf",
+    "static/media/fa-v4compatibility.woff2": "/kpripper/trello-1/static/media/fa-v4compatibility.745989aab0d69cab7e70.woff2",
+    "index.html": "/kpripper/trello-1/index.html",
+    "main.04f8b409.css.map": "/kpripper/trello-1/static/css/main.04f8b409.css.map",
+    "main.fb86b7f6.js.map": "/kpripper/trello-1/static/js/main.fb86b7f6.js.map",
+    "787.cd528a5f.chunk.js.map": "/kpripper/trello-1/static/js/787.cd528a5f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.04f8b409.css",
+    "static/js/main.fb86b7f6.js"
+  ]
+}

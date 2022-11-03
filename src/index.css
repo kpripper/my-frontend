@@ -1,3 +1,7 @@
+html {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +9,42 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
+  background-size: cover;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#root { 
+  /* height: 100%;   */
+}
+
+.simplebar-scrollbar::before {
+  background-color: rgb(211, 209, 209);  
+}
+
+.simplebar-track.simplebar-horizontal {
+  z-index: 1;
+  position: fixed;
+  bottom: 2px;
+  pointer-events: all; 
+  overflow: hidden;
+  background-color: rgba(40, 40, 40, 0.463); 
+  border-radius: 8px;
+  height: 17px; 
+  left: 50px;
+  right: 50px;
+}
+
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+  left: 0;
+  top: 0;
+  height: 17px;
+  min-height: 0;
+  min-width: 10px;
+  width: auto;
 }
