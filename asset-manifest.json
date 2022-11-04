@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/my-trello-frontend/static/css/main.a1b5b4b8.css",
-    "main.js": "/my-trello-frontend/static/js/main.d9df810d.js",
+    "main.css": "/my-trello-frontend/static/css/main.26e9d9df.css",
+    "main.js": "/my-trello-frontend/static/js/main.09855eed.js",
     "static/js/787.cd528a5f.chunk.js": "/my-trello-frontend/static/js/787.cd528a5f.chunk.js",
     "static/media/fa-solid-900.ttf": "/my-trello-frontend/static/media/fa-solid-900.b48ad290d0335879a92b.ttf",
     "static/media/fa-brands-400.ttf": "/my-trello-frontend/static/media/fa-brands-400.f9ee61fab3c11e2f3ed3.ttf",
@@ -12,12 +12,12 @@
     "static/media/fa-v4compatibility.ttf": "/my-trello-frontend/static/media/fa-v4compatibility.f601162ae669f88823a3.ttf",
     "static/media/fa-v4compatibility.woff2": "/my-trello-frontend/static/media/fa-v4compatibility.745989aab0d69cab7e70.woff2",
     "index.html": "/my-trello-frontend/index.html",
-    "main.a1b5b4b8.css.map": "/my-trello-frontend/static/css/main.a1b5b4b8.css.map",
-    "main.d9df810d.js.map": "/my-trello-frontend/static/js/main.d9df810d.js.map",
+    "main.26e9d9df.css.map": "/my-trello-frontend/static/css/main.26e9d9df.css.map",
+    "main.09855eed.js.map": "/my-trello-frontend/static/js/main.09855eed.js.map",
     "787.cd528a5f.chunk.js.map": "/my-trello-frontend/static/js/787.cd528a5f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a1b5b4b8.css",
-    "static/js/main.d9df810d.js"
+    "static/css/main.26e9d9df.css",
+    "static/js/main.09855eed.js"
   ]
 }
