@@ -1,10 +1,11 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useParams, RouteProps } from 'react-router-dom'
 import List from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
 import '../../index.css'
+import { IBoard } from '../../common/interfaces/IBoard'
 
 const state = {
   title: 'My Board',
@@ -34,34 +35,106 @@ const state = {
   ],
 }
 
-export default class Board extends React.Component {
-  render() {
-    return (
-      <div className="board">
+interface BoardState {
+  // id: number
+}
+
+interface BoardProps {
+  // id?: number
+}
+
+export function Board() {
+  console.log(useParams())
+
+  let { id } = useParams()
+  console.log(id + ' id')
+
+  useEffect(() => {
+    document.body.classList.add("boards");
+    return () => {
+      document.body.classList.remove("boards");
+    };
+  }, []);
+
+  // document.body.classList.add(window.location.pathname === '/' ? 'home' : 'boards');
+
+  return (
+    <div>
+      <div 
+      // className=
+      >
         <div className="header-container">
           <Link className="" to="/">
             Main
-          </Link>
+          </Link>          
         </div>
 
         <div className="board-header">
-          <h1 className="board-h1">{state.title}</h1>
+          <h1 className="board-h1">{state.title} {id}</h1>
         </div>
 
-        <SimpleBar className="simplebar"
+        <SimpleBar
+          className="simplebar"
           direction="rtl"
           // forceVisible="y"
           autoHide={false}
-         // style={position: 300 }}
+          // style={position: 300 }}
         >
           <div className="board-content">
             {state.lists.map((list) => List(list))}
             <div className="add-list">
-              <span className="fa-solid fa-plus"></span><span>Add list</span>
+              <span className="fa-solid fa-plus"></span>
+              <span>Add list</span>
             </div>
           </div>
         </SimpleBar>
       </div>
-    )
-  }
+    </div>
+
+  )
 }
+
+// export default class ClassBoard extends React.Component {
+//   // constructor(props) {
+//   //   super(props);
+//   //   const {board_id} = this.props.match.params;
+
+//   // }
+
+//   render() {
+//     // console.log(this.props)
+//     // console.log(this.state)
+
+//     return (
+//       <div >
+//         {/* <div className="header-container">
+//           <Link className="" to="/">
+//             Main
+//           </Link>
+//           <Board />
+//           <div> pathname board.tsx {window.location.pathname} </div>
+//         </div>
+
+//         <div className="board-header">
+//           <h1 className="board-h1">{state.title}</h1>
+//         </div>
+
+//         <SimpleBar
+//           className="simplebar"
+//           direction="rtl"
+//           // forceVisible="y"
+//           autoHide={false}
+//           // style={position: 300 }}
+//         >
+//           <div className="board-content">
+//             {state.lists.map((list) => List(list))}
+//             <div className="add-list">
+//               <span className="fa-solid fa-plus"></span>
+//               <span>Add list</span>
+//             </div>
+//           </div>
+//         </SimpleBar> */}
+//       </div>
+//     )
+//   }
+// }

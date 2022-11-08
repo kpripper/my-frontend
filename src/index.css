@@ -9,9 +9,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
-  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
-  background-size: cover;
 }
 
 code {
@@ -21,6 +18,12 @@ code {
 
 #root { 
   /* height: 100%;   */
+}
+
+.home {
+  background: rgb(255, 255, 255);
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .simplebar-scrollbar::before {
