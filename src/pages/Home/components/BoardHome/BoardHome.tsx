@@ -5,6 +5,7 @@ import './boardhome.scss'
 
 export default function BoardHome(props: { id: number; title: string }) {
   //props are displayed correctly
+  console.log(BoardHome)
   console.log(props)
 
   return (
