@@ -9,6 +9,16 @@ const instance = axios.create({
   },
 });
 
+interface BoardsServerResponse {
+  boards: []
+}
+
+type ResponseContainer = {
+  board: BoardsServerResponse
+}
+
+//BUG тут interceptors повертає res.data незрозумілого типу
+
 instance.interceptors.response.use((res) => res.data);
 
 export default instance;

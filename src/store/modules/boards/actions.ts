@@ -3,6 +3,7 @@
 import instance from '../../../api/request';
 import config from '../../../common/constants/api';
 import {Dispatch} from "redux";
+import {IBoardArray} from '../../../common/interfaces/IBoardArray';
 
 export const getBoards = () => async (dispatch: Dispatch) => {
     console.log("getBoards");
@@ -10,8 +11,22 @@ export const getBoards = () => async (dispatch: Dispatch) => {
 
         
         //BUG TS2339: Property 'boards' does not exist on type 'AxiosResponse<any, any>'
-        const boardsInGet  = await instance.get("/board"); 
-        
+       //NOTE Katya               const boardsInGet  = await instance.get<{boards:[]}>("/board"); 
+     
+     //так тс свариться, але бачить поле boardsInGet.boards
+     //  const {boardsInGet}  = await instance.get("/board"); 
+
+       //так тс НЕ свариться, але НЕ бачить поле boardsInGet.boards
+     //  const boardsInGet  = await instance.get("/board"); 
+
+     //так працює з payload: boardsInGet.boards
+     //const boardsInGet  = await instance.get("/board")  as { boards: IBoardArray };
+
+     //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
+    const boardsInGet  = await instance.get("/board") as { boards: [] };
+
+   //BUG  Property 'boards' does not exist on type 'AxiosResponse<{ boards: []; }, any>'.
+  // const boardsInGet  = await instance.get <{ boards: [] }>("/board");
         
         // {
         //     "boards": [
@@ -31,9 +46,9 @@ export const getBoards = () => async (dispatch: Dispatch) => {
         //         }
         //     ]
         // }
-        //console.log(boards);
+        console.log(boardsInGet);
           
-        await dispatch({type: 'UPDATE_BOARDS', payload: boardsInGet});
+        await dispatch({type: 'UPDATE_BOARDS', payload: boardsInGet.boards});
     } catch (e) {
         console.log(e)
         dispatch({type: 'ERROR_ACTION_TYPE'});
