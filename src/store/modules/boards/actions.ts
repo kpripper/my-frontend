@@ -4,6 +4,9 @@ import instance from '../../../api/request';
 import config from '../../../common/constants/api';
 import {Dispatch} from "redux";
 import {IBoardArray} from '../../../common/interfaces/IBoardArray';
+import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse';
+
+
 
 export const getBoards = () => async (dispatch: Dispatch) => {
     console.log("getBoards");
@@ -23,7 +26,8 @@ export const getBoards = () => async (dispatch: Dispatch) => {
      //const boardsInGet  = await instance.get("/board")  as { boards: IBoardArray };
 
      //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
-    const boardsInGet  = await instance.get("/board") as { boards: [] };
+     
+    const boardsInGet: BoardsServerResponse  = await instance.get("/board");
 
    //BUG  Property 'boards' does not exist on type 'AxiosResponse<{ boards: []; }, any>'.
   // const boardsInGet  = await instance.get <{ boards: [] }>("/board");

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { api } from '../common/constants';
 
 const instance = axios.create({
@@ -9,16 +9,9 @@ const instance = axios.create({
   },
 });
 
-interface BoardsServerResponse {
-  boards: []
-}
-
-type ResponseContainer = {
-  board: BoardsServerResponse
-}
 
 //BUG тут interceptors повертає res.data незрозумілого типу
 
-instance.interceptors.response.use((res) => res.data);
+instance.interceptors.response.use((res: AxiosResponse) => res.data);
 
 export default instance;

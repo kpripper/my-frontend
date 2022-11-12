@@ -90,10 +90,9 @@ class Home extends React.Component <propsType, stateType> {
          */}
 
           <div className="all-boards">
-            <div>
-              {/* {this.props.boards.boards.map(b => <div>{b}</div>)}                */}
-            </div>
-            <div>{this.props.boards.map((elem) => BoardHome(elem))}</div> 
+          {/* <div className="all-boards">{this.props.boards.map({id, title}}) => <BoardHome id = {id} />)}</div>  */}
+          <div>{this.props.boards.map(({ id, title }) => <BoardHome id={id} title={title} />)}</div>
+             {/* <div className="all-boards">{this.props.boards.map((elem) => BoardHome(elem))}</div>   */}
                        <div className="add-board">
               <div className="add-board-button">
                 <span className="fa-solid fa-plus"></span>
