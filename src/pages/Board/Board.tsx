@@ -14,22 +14,22 @@ const state = {
       id: 1,
       title: 'To Do',
       cards: [
-        { id: 1, title: 'помыть кота' },
-        { id: 2, title: 'приготовить суп' },
-        { id: 3, title: 'сходить в магазин' },
+        { id: 1, title: 'wash the cat' },
+        { id: 2, title: 'make soup' },
+        { id: 3, title: 'go to the store' },
       ],
     },
     {
       id: 2,
       title: 'Doing',
-      cards: [{ id: 4, title: 'посмотреть сериал' }],
+      cards: [{ id: 4, title: 'watch the series' }],
     },
     {
       id: 3,
       title: 'Done',
       cards: [
-        { id: 5, title: 'сделать домашку' },
-        { id: 6, title: 'погулять с собакой' },
+        { id: 5, title: 'do homework' },
+        { id: 6, title: 'walk the dog' },
       ],
     },
   ],
@@ -47,16 +47,13 @@ export const Board = (props: any) => {
   console.log('Board useParams ', useParams())
 
   let { id } = useParams()
-  // console.log(id + ' id')  
+  // console.log(id + ' id')
 
   let location = useLocation()
-  console.log('Board useLocation ', location);
-  
+  console.log('Board useLocation ', location)
 
   return (
     <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
-  
-     
       {/* <div>state - {JSON.stringify(state)}</div>
       <div>props - {JSON.stringify(props)}</div> */}
       <div className="header-container">
@@ -80,7 +77,9 @@ export const Board = (props: any) => {
       >
         <div className="board-content">
           {/* {state.lists.map((list) => List(list))} */}
-          {state.lists.map(({title, cards, id}) => <List key={id} title={title} cards={cards} />)}
+          {state.lists.map(({ title, cards, id }) => (
+            <List key={id} title={title} cards={cards} />
+          ))}
           <div className="add-list">
             <span className="fa-solid fa-plus"></span>
             <span>Add list</span>

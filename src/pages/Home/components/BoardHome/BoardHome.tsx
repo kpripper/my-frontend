@@ -10,7 +10,7 @@ export default function BoardHome(props: { id: number; title: string }) {
  // console.log('BoardHome ', props)
 
   return (
-    <div key={props.id} className="board-home">
+    <div key={props.id} className={`board-home id${props.id}`}>
       <Link
         className="board-link"
         to={{ pathname: '/board/' + props.id }}
@@ -19,8 +19,14 @@ export default function BoardHome(props: { id: number; title: string }) {
         <div className="board-fade">
           <h2 className="board-title">{props.title}</h2>
           <div className="delete-board" id={String(props.id)} onClick={(e) => {
-            e.stopPropagation();
-            // console.log((e.target as HTMLElement).getAttribute('id'))
+            try {
+              e.stopPropagation();
+              alert('stopPropagation')
+            }  catch(err) {
+              alert(err)
+            }
+             
+         //  (document.querySelector(`.id${props.id}`) as HTMLElement).style.pointerEvents = "none"
             deleteBoard((e.target as HTMLElement).getAttribute('id')!)
           }}>Delete board</div>
         </div>
