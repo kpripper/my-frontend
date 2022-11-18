@@ -1,19 +1,17 @@
-//BUG - абсолютний чи відносний шлях
-//import api from '../../../api';
 import instance from '../../../api/request';
 import config from '../../../common/constants/api';
-import {Dispatch} from "redux";
-import {IBoardArray} from '../../../common/interfaces/IBoardArray';
+import {AnyAction, Dispatch} from "redux";
 import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse';
+import api from '../../../api/request';
+import { ThunkAction } from 'redux-thunk';
 
 
 
 export const getBoards = () => async (dispatch: Dispatch) => {
     console.log("getBoards");
     try {
-
         
-        //BUG TS2339: Property 'boards' does not exist on type 'AxiosResponse<any, any>'
+     
        //NOTE Katya               const boardsInGet  = await instance.get<{boards:[]}>("/board"); 
      
      //так тс свариться, але бачить поле boardsInGet.boards
@@ -27,34 +25,40 @@ export const getBoards = () => async (dispatch: Dispatch) => {
 
      //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
      
-    const boardsInGet: BoardsServerResponse  = await instance.get("/board");
-
-   //BUG  Property 'boards' does not exist on type 'AxiosResponse<{ boards: []; }, any>'.
-  // const boardsInGet  = await instance.get <{ boards: [] }>("/board");
-        
-        // {
-        //     "boards": [
-        //         {
-        //             "id": 1668032236310,
-        //             "title": "todos",
-        //             "custom": {
-        //                 "description": "desc"
-        //             }
-        //         },
-        //         {
-        //             "id": 1668068755851,
-        //             "title": "Level 2.6 - CRUD",
-        //             "custom": {
-        //                 "description": "Make a board creation..."
-        //             }
-        //         }
-        //     ]
-        // }
-        console.log(boardsInGet);
+    const boardsInGet: BoardsServerResponse  = await instance.get("/board");   
           
-        await dispatch({type: 'UPDATE_BOARDS', payload: boardsInGet.boards});
+        dispatch({ type: 'UPDATE_BOARDS', payload: boardsInGet.boards });
     } catch (e) {
         console.log(e)
         dispatch({type: 'ERROR_ACTION_TYPE'});
     }
 }
+
+//export const createBoard = (titleName: string): ThunkActionType => async (dispatch): Promise<void> => {
+
+export const createBoard = async (boardTitle: string) =>  {
+    console.log("boardTitle", boardTitle);  
+    console.log("config.boards", config.boards);  
+
+      try {   
+        console.log("try createBoard");
+        const awResp: {result:string, id: number} = await api.post(config.boards, { title: boardTitle });
+        if (awResp.result === 'Created') {getBoards()}
+      } catch (e) {
+          console.log("e createBoard", e);
+      }    
+}
+
+export const deleteBoard = async (boardId: string) =>  {
+console.log("deleteBoard ");
+
+    try {   
+      console.log("deleteBoard ", config.boards+boardId);
+      
+      await api.delete(config.boards+boardId);
+    } catch (e) {
+      console.log("e  deleteBoard ", e);
+    }    
+}
+
+

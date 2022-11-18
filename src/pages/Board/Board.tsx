@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, useParams, RouteProps } from 'react-router-dom'
+import { Link, useParams, RouteProps, useLocation } from 'react-router-dom'
 import List from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
@@ -43,54 +43,51 @@ interface BoardProps {
   // id?: number
 }
 
-export function Board() {
-  console.log(useParams())
+export const Board = (props: any) => {
+  console.log('Board useParams ', useParams())
 
   let { id } = useParams()
-  console.log(id + ' id')
+  // console.log(id + ' id')  
 
-  useEffect(() => {
-    document.body.classList.add("boards");
-    return () => {
-      document.body.classList.remove("boards");
-    };
-  }, []);
-
-  // document.body.classList.add(window.location.pathname === '/' ? 'home' : 'boards');
+  let location = useLocation()
+  console.log('location ', location);
+  
 
   return (
-    <div>
-      <div 
-      // className=
-      >
-        <div className="header-container">
-          <Link className="" to="/">
-            Main
-          </Link>          
-        </div>
-
-        <div className="board-header">
-          <h1 className="board-h1">{state.title} {id}</h1>
-        </div>
-
-        <SimpleBar
-          className="simplebar"
-          direction="rtl"
-          // forceVisible="y"
-          autoHide={false}
-          // style={position: 300 }}
-        >
-          <div className="board-content">
-            {state.lists.map((list) => List(list))}
-            <div className="add-list">
-              <span className="fa-solid fa-plus"></span>
-              <span>Add list</span>
-            </div>
-          </div>
-        </SimpleBar>
+    <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
+  
+     
+      <div>state - {JSON.stringify(state)}</div>
+      <div>props - {JSON.stringify(props)}</div>
+      <div className="header-container">
+        <Link className="" to="/">
+          Main
+        </Link>
       </div>
-    </div>
 
+      <div className="board-header">
+        <h1 className="board-h1">
+          {state.title} {id}
+        </h1>
+      </div>
+
+      <SimpleBar
+        className="simplebar"
+        direction="rtl"
+        // forceVisible="y"
+        autoHide={false}
+        // style={position: 300 }}
+      >
+        <div className="board-content">
+          {/* {state.lists.map((list) => List(list))} */}
+          {state.lists.map(({title, cards, id}) => <List key={id} title={title} cards={cards} />)}
+          <div className="add-list">
+            <span className="fa-solid fa-plus"></span>
+            <span>Add list</span>
+          </div>
+        </div>
+      </SimpleBar>
+    </div>
   )
 }
 

@@ -12,7 +12,7 @@ import { getBoards } from './store/modules/boards/actions'
 
 const props = {
   boards: [],
-  getBoards: () => Promise<void>,
+ // getBoards: () => Promise<void>,
 }
 const state = {}
 
