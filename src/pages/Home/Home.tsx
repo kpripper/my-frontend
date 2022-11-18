@@ -140,13 +140,14 @@ const Home = (props: propsType) => {
        */}
 
         <div className="all-boards">
-          <div className="all-boards">
+          
             {props.boards.map(({ id, title }) => (
               <BoardHome key={id} id={id} title={title} />
             ))}
+            <AddBoard />
           </div>
-          <AddBoard />
-        </div>
+          
+        
       </div>
     </>
   )
