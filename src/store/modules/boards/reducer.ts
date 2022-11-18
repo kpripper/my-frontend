@@ -4,7 +4,12 @@ import { IBoard } from "../../../common/interfaces/IBoard";
 import { createBoard } from "./actions";
 
 const initialState = {
-    boards: [] as IBoard[],
+    boards: [
+        {id: 1, title: "buy"},
+        {id: 2, title: "wedding"},
+        {id: 3, title: "shop"},
+        {id: 4, title: "social"}
+      ]
 };
 
 export default function reducer(state = initialState, action: {type: string, payload?: any}) {

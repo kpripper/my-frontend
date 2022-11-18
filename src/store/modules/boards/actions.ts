@@ -9,8 +9,7 @@ import { ThunkAction } from 'redux-thunk';
 
 export const getBoards = () => async (dispatch: Dispatch) => {
     console.log("getBoards");
-    try {
-        
+    try {       
      
        //NOTE Katya               const boardsInGet  = await instance.get<{boards:[]}>("/board"); 
      
@@ -26,7 +25,8 @@ export const getBoards = () => async (dispatch: Dispatch) => {
      //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
      
     const boardsInGet: BoardsServerResponse  = await instance.get("/board");   
-          
+
+        console.log("await instance.get", boardsInGet)
         dispatch({ type: 'UPDATE_BOARDS', payload: boardsInGet.boards });
     } catch (e) {
         console.log(e)

@@ -9,6 +9,7 @@ import { Board } from '../Board/Board'
 import { connect } from 'react-redux'
 import { getBoards } from '../../store/modules/boards/actions'
 import AddBoard from './components/AddBoard/AddBoard'
+import store from '../../store/store'
 
 type propsType = {
   getBoards: () => Promise<void>
@@ -104,6 +105,8 @@ type stateType = {
 
 const Home = (props: propsType) => {
   console.log('Home useParams ', useParams())
+  console.log('Home store.getState ', store.getState())
+
 
   const { boards } = props
 
