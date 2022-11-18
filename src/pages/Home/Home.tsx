@@ -123,7 +123,7 @@ const Home = (props: propsType) => {
       // className={window.location.pathname === '/' ? 'home' : ''}
       >
         <div className="header-container">
-          <Link to="/">Home</Link>
+          <Link to="/">Home 18.11.22 15:21</Link>
         </div>
         <div className="boards-header">
           <div className="boards-header-item">

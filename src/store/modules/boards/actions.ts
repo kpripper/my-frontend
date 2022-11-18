@@ -50,13 +50,14 @@ export const createBoard = async (boardTitle: string) =>  {
 }
 
 export const deleteBoard = async (boardId: string) =>  {
-console.log("deleteBoard ");
+alert("deleteBoard ");
 
-    try {   
-      console.log("deleteBoard ", config.boards+boardId);
-      
-      await api.delete(config.boards+boardId);
+    try { 
+     const resDelete = await api.delete(config.boards+boardId);
+     alert(resDelete);
+     console.log("deleteBoard ", config.boards+boardId);
     } catch (e) {
+      alert(e);
       console.log("e  deleteBoard ", e);
     }    
 }
