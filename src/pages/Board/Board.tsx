@@ -50,15 +50,15 @@ export const Board = (props: any) => {
   // console.log(id + ' id')  
 
   let location = useLocation()
-  console.log('location ', location);
+  console.log('Board useLocation ', location);
   
 
   return (
     <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
   
      
-      <div>state - {JSON.stringify(state)}</div>
-      <div>props - {JSON.stringify(props)}</div>
+      {/* <div>state - {JSON.stringify(state)}</div>
+      <div>props - {JSON.stringify(props)}</div> */}
       <div className="header-container">
         <Link className="" to="/">
           Main

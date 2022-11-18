@@ -1,9 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { api } from '../common/constants';
 
-console.log("api", api);
-
-
 const instance = axios.create({
   baseURL: api.baseURL,
   headers: {
@@ -11,12 +8,6 @@ const instance = axios.create({
     Authorization: 'Bearer 123', // к этому мы ещё вернёмся как-нибудь потом
   },
 });
-
-console.log("api.baseURL", api.baseURL);
-console.log("instance before interceptor", instance);
-
-
-
 
 //NOTE тут interceptors повертає res.data незрозумілого типу (якщо без AxiosResponse)
 

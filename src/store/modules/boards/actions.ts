@@ -54,7 +54,7 @@ export const deleteBoard = async (boardId: string) =>  {
 alert("deleteBoard ");
 
     try { 
-     const resDelete = await api.delete(config.boards+boardId);
+     const resDelete = await api.delete(config.boards+"/"+boardId);
      alert(resDelete);
      console.log("deleteBoard ", config.boards+boardId);
     } catch (e) {
