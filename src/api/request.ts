@@ -9,6 +9,11 @@ const instance = axios.create({
   },
 });
 
+console.log("api.baseURL", api.baseURL);
+console.log("instance before interceptor", instance);
+
+
+
 
 //BUG тут interceptors повертає res.data незрозумілого типу
 

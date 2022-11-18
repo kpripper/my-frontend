@@ -23,7 +23,8 @@ export const getBoards = () => async (dispatch: Dispatch) => {
      //const boardsInGet  = await instance.get("/board")  as { boards: IBoardArray };
 
      //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
-     
+     console.log("instance", instance)
+
     const boardsInGet: BoardsServerResponse  = await instance.get("/board");   
 
         console.log("await instance.get", boardsInGet)
