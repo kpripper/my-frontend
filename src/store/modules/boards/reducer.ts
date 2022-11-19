@@ -3,13 +3,17 @@ import { ThunkAction } from "redux-thunk";
 import { IBoard } from "../../../common/interfaces/IBoard";
 import { createBoard } from "./actions";
 
+// const initialState = {
+//     boards: [
+//         {id: 1, title: "buy"},
+//         {id: 2, title: "wedding"},
+//         {id: 3, title: "shop"},
+//         {id: 4, title: "social"}
+//       ]
+// };
+
 const initialState = {
-    boards: [
-        {id: 1, title: "buy"},
-        {id: 2, title: "wedding"},
-        {id: 3, title: "shop"},
-        {id: 4, title: "social"}
-      ]
+  boards: []
 };
 
 export default function reducer(state = initialState, action: {type: string, payload?: any}) {
@@ -23,14 +27,22 @@ export default function reducer(state = initialState, action: {type: string, pay
             }  
          
         case 'CREATE_BOARD':
-                console.log("CREATE_BOARD", action.payload);      
+            console.log("CREATE_BOARD", action.payload);      
                 
-                createBoard(action.payload)
+            createBoard(action.payload)
                        
-                return {
-                  ...state,
-                                   
-                }    
+            return {
+            ...state,                                   
+            }  
+
+        case 'MODAL_IS_OPEN': 
+
+            console.log("MODAL_IS_OPEN", action.payload);  
+
+            return {
+            ...state,
+            modalIsOpen: action.payload             
+            }
 
         default: {
             return {...state, ...action.payload};

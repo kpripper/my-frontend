@@ -1,7 +1,9 @@
+import { getStaticContextFromError } from '@remix-run/router'
 import { useState } from 'react'
 import Modal from 'react-modal'
 import ModalAddBoard from '../ModalAddBoard/ModalAddBoard'
 import './addboard.scss'
+import store from '../../../../store/store'
 
 // const addNewBoard = () => {
 //   alert('addNewBoard')
@@ -10,9 +12,72 @@ import './addboard.scss'
 
 
 export default function AddBoard() {
-  // console.log('Modal ')
+
+  const state = store.getState()
+
+  //видає жах
+
+//   {
+//     "board": {
+//         "0": {
+//             "id": 1668032236310,
+//             "title": "todos",
+//             "custom": {
+//                 "description": "desc"
+//             }
+//         },
+//         "1": {
+//             "id": 1668872728878,
+//             "title": "1"
+//         },
+//         "2": {
+//             "id": 1668872749112,
+//             "title": "2"
+//         }
+//     },
+//     "boards": {
+//         "boards": [
+//             {
+//                 "id": 1668032236310,
+//                 "title": "todos",
+//                 "custom": {
+//                     "description": "desc"
+//                 }
+//             },
+//             {
+//                 "id": 1668872728878,
+//                 "title": "1"
+//             },
+//             {
+//                 "id": 1668872749112,
+//                 "title": "2"
+//             }
+//         ]
+//     },
+//     "user": {
+//         "0": {
+//             "id": 1668032236310,
+//             "title": "todos",
+//             "custom": {
+//                 "description": "desc"
+//             }
+//         },
+//         "1": {
+//             "id": 1668872728878,
+//             "title": "1"
+//         },
+//         "2": {
+//             "id": 1668872749112,
+//             "title": "2"
+//         }
+//     }
+// }
+
+  console.log("state AddBoard", state)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  console.log("state AddBoard2", state)
 
   const setModalIsOpenToTrue = () => {
     setModalIsOpen(true)

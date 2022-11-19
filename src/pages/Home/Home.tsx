@@ -107,14 +107,18 @@ const Home = (props: propsType) => {
   console.log('Home useParams ', useParams())
   console.log('Home store.getState ', store.getState())
 
-
   const { boards } = props
 
   const { current: currentBoards } = useRef(boards)
 
-  useEffect(() => {   
-      props.getBoards()   
+  useEffect(() => {
+    props.getBoards()
   }, [currentBoards])
+
+  const dispatch
+
+ // console.log('props.getBoards()', props.getBoards());
+  
 
   return (
     <>
@@ -140,14 +144,11 @@ const Home = (props: propsType) => {
        */}
 
         <div className="all-boards">
-          
-            {props.boards.map(({ id, title }) => (
-              <BoardHome key={id} id={id} title={title} />
-            ))}
-            <AddBoard />
-          </div>
-          
-        
+          {props.boards.map(({ id, title }) => (
+            <BoardHome key={id} id={id} title={title} />
+          ))}
+          <AddBoard />
+        </div>
       </div>
     </>
   )

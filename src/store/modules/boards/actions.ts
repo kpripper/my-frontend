@@ -4,8 +4,14 @@ import {AnyAction, Dispatch} from "redux";
 import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse';
 import api from '../../../api/request';
 import { ThunkAction } from 'redux-thunk';
+import { AppState } from '../../store';
+
+//  ThunkAction <return, state, type of extraArguments, action type defined in application> extends Action
+
+type ThunkActionType = ThunkAction<Promise<void>, AppState, unknown, AnyAction>;
 
 
+//це thunk, тому що виконує асинхронний діспатч
 
 export const getBoards = () => async (dispatch: Dispatch) => {
     console.log("getBoards");
@@ -23,7 +29,7 @@ export const getBoards = () => async (dispatch: Dispatch) => {
      //const boardsInGet  = await instance.get("/board")  as { boards: IBoardArray };
 
      //NOTE https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
-     console.log("instance", instance)
+   //  console.log("instance", instance)
 
     const boardsInGet: BoardsServerResponse  = await instance.get("/board");   
 
@@ -36,19 +42,34 @@ export const getBoards = () => async (dispatch: Dispatch) => {
 }
 
 //export const createBoard = (titleName: string): ThunkActionType => async (dispatch): Promise<void> => {
+//без ThunkActionType не рендерить дошки
+export const createBoard = (boardTitle: string): ThunkActionType =>  {
 
-export const createBoard = async (boardTitle: string) =>  {
-    console.log("boardTitle", boardTitle);  
-    console.log("config.boards", config.boards);  
+  console.log("boardTitle", boardTitle);  
+  console.log("config.boards", config.boards);   
+
+ return async (dispatch: Dispatch) => {
+    
+  console.log("dispatch", dispatch); 
+    dispatch({type: 'MODAL_IS_OPEN', payload: true});
 
       try {   
+      
         console.log("try createBoard");
         const awResp: {result:string, id: number} = await api.post(config.boards, { title: boardTitle });
         if (awResp.result === 'Created') {getBoards()}
+
+
       } catch (e) {
           console.log("e createBoard", e);
       }    
 }
+
+}
+
+
+
+
 
 export const deleteBoard = async (boardId: string) =>  {
 alert("deleteBoard ");
