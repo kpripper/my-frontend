@@ -1,9 +1,11 @@
 import { getStaticContextFromError } from '@remix-run/router'
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import Modal from 'react-modal'
 import ModalAddBoard from '../ModalAddBoard/ModalAddBoard'
 import './addboard.scss'
 import store from '../../../../store/store'
+import { ThunkAction } from 'redux-thunk';
+import reducer from '../../../../store/reducer'
 
 // const addNewBoard = () => {
 //   alert('addNewBoard')
@@ -13,7 +15,7 @@ import store from '../../../../store/store'
 
 export default function AddBoard() {
 
-  const state = store.getState()
+  const stateInit = store.getState()
 
   //видає жах
 
@@ -73,17 +75,19 @@ export default function AddBoard() {
 //     }
 // }
 
-  console.log("state AddBoard", state)
+ // console.log("state AddBoard", state)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [state, dispatch] = useReducer(reducer,stateInit);
+  
 
-  console.log("state AddBoard2", state)
+ console.log("state AddBoard2", state)
 
   const setModalIsOpenToTrue = () => {
     setModalIsOpen(true)
   }
 
-  const setModalIsOpenToFalse = () => {
+const setModalIsOpenToFalse = () => {
     setModalIsOpen(false)
   }
 

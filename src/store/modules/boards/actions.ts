@@ -43,21 +43,25 @@ export const getBoards = () => async (dispatch: Dispatch) => {
 
 //export const createBoard = (titleName: string): ThunkActionType => async (dispatch): Promise<void> => {
 //без ThunkActionType не рендерить дошки
-export const createBoard = (boardTitle: string): ThunkActionType =>  {
+export const createBoard = (boardTitle: string | undefined)  =>  {
 
   console.log("boardTitle", boardTitle);  
   console.log("config.boards", config.boards);   
 
  return async (dispatch: Dispatch) => {
     
-  console.log("dispatch", dispatch); 
-    dispatch({type: 'MODAL_IS_OPEN', payload: true});
+  console.log("dispatch in createBoard", dispatch); 
+    
 
       try {   
-      
+        dispatch({type: 'MODAL_IS_OPEN', payload: true});
         console.log("try createBoard");
         const awResp: {result:string, id: number} = await api.post(config.boards, { title: boardTitle });
-        if (awResp.result === 'Created') {getBoards()}
+        if (awResp.result === 'Created') {
+          console.log("Created"); 
+          getBoards(
+
+          )}
 
 
       } catch (e) {
@@ -65,6 +69,12 @@ export const createBoard = (boardTitle: string): ThunkActionType =>  {
       }    
 }
 
+}
+
+export function showNotificationWithTimeout(text: string) {
+  return function (dispatch: (arg0: { type: string; payload: boolean; }) => void) {
+    dispatch({type: 'MODAL_IS_OPEN', payload: true});
+  }
 }
 
 

@@ -115,8 +115,6 @@ const Home = (props: propsType) => {
     props.getBoards()
   }, [currentBoards])
 
-  const dispatch
-
  // console.log('props.getBoards()', props.getBoards());
   
 
