@@ -1,0 +1,59 @@
+.board-home {
+    height: 100px;
+    width: 170px;
+    margin: 1rem 0 1rem 1rem;
+    color: #fff;
+    background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/480x320/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
+    background-size: cover; 
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.board-fade {
+    height: 100px;
+    width: 170px;
+    background-color: #00000034;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.board-title{
+   // height: 40px;
+    font-size: 16px;
+    font-weight: 700;
+   // word-wrap: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align:left;
+    padding: 5px 0 0 8px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;    
+    -webkit-line-clamp: 2;
+    color: #fff;       
+}
+
+.board-link{
+    text-decoration: none;
+    z-index:10;
+}
+
+.delete-board {
+    display: none;
+    color: #fff; 
+    text-align: right;  
+    padding: 0 5px 5px 0;
+    :hover > & {
+        display: block;          
+    }
+    z-index:100;
+}
+
+// .board-link .board-title:hover ~ .delete-board {
+//     display: block;
+// }
+
+   
+
+
