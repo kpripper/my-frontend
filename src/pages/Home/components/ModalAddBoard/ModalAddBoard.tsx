@@ -26,7 +26,7 @@ export default function ModalAddBoard() {
     // https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-
     if (newBoardValidation(inputRef.current!.value)) {
       console.log(inputRef.current?.value, '))')
-      createBoard(inputRef.current!.value)
+      dispatch<any>(createBoard(inputRef.current!.value))
     } else {
       alert('Name not valid!')
     }

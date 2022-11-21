@@ -1,12 +1,15 @@
 import React from 'react'
 import { AnyAction, Dispatch } from 'redux'
 import { Routes, Route, Link } from 'react-router-dom'
-import { Board } from '../../../Board/Board'
+import  {Board}  from '../../../Board/Board'
 import './boardhome.scss'
 import { deleteBoard } from '../../../../store/modules/boards/actions'
+import { useDispatch } from 'react-redux'
 
 export default function BoardHome(props: { id: number; title: string }) {
   // console.log('BoardHome ', props)
+
+  const dispatch = useDispatch()
 
   return (
     <div key={props.id} className={`board-home id${props.id}`}>
@@ -44,7 +47,9 @@ export default function BoardHome(props: { id: number; title: string }) {
                 alert(err)
               }
               //  (document.querySelector(`.id${props.id}`) as HTMLElement).style.pointerEvents = "none"
-              deleteBoard((e.target as HTMLElement).getAttribute('id')!)
+              dispatch<any>(
+                deleteBoard((e.target as HTMLElement).getAttribute('id')!)
+              ) 
             }}
           >
             Delete board

@@ -1,7 +1,8 @@
 import { ICard } from '../../../../common/interfaces/ICard'
+import { ISimpleCard } from '../../../../common/interfaces/ISimpleCard'
 import './list.scss'
 
-export default function List(props: { title: string; cards: ICard[] }) {
+export default function List(props: { title: string; cards: ISimpleCard[] }) {
   return (
     <div key={props.title} className="list">
       <h2 className="list-title">{props.title}</h2>
