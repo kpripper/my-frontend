@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import List from './components/List/List'
 import SimpleBar from 'simplebar-react'
@@ -6,13 +6,17 @@ import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
 import '../../index.css'
 import { IBoard } from '../../common/interfaces/IBoard'
-import { getBoard } from '../../store/modules/board/actions'
-import { useDispatch } from 'react-redux'
+import { editBoardTitle, getBoard } from '../../store/modules/board/actions'
+import { useDispatch, useSelector } from 'react-redux'
 // import { title } from 'process'
 import { connect } from 'react-redux'
 import store from '../../store/store'
+import { Dispatch } from 'redux'
+import instance from '../../api/request'
+import { idText } from 'typescript'
+import { RootState } from '../../store/store'
 
-const state = {
+const sampleBoardState = {
   title: 'My Board',
   lists: [
     {
@@ -44,89 +48,220 @@ interface BoardState {
   // id: number
 }
 
-interface BoardProps {  
-    getBoard: () => Promise<void>
-    lists: [] 
+interface BoardProps {
+  getBoard: () => Promise<void>
+  lists: []
 }
 
+//const BoardComponent = () => {
 export const Board = () => {
-  const dispatch = useDispatch()
-  console.log('Board useParams ', useParams())
-  const getstate = store.getState()
-  console.log('Board getstate ',getstate)
 
+  function myFunction() {
+    const element = document.activeElement!.tagName;
+    document.getElementById("demo")!.innerHTML = element;
+  }
+
+  let lists: any[] = []
 
   let { id } = useParams()
-  // console.log(id + ' id')  
+  // console.log(typeof id)
 
   if (typeof id !== 'undefined') {
     //var for visibility in getBoard(idNumber)
-    var idNumber: number = +id;
-    dispatch<any>(getBoard(idNumber))
+    var idNumber: number = +id
+    //  dispatch<any>(getBoard(idNumber))
+    console.log(' getBoard(idNumber)')
+
+    //  getBoard(idNumber)
   }
-  
+
+  async function fetchData() {
+    // You can await here
+    const response = await instance.get('/board/' + id)
+    // ...
+    console.log('fetchData response', response)
+    // @ts-ignore
+    console.log('fetchData response', response.title)
+    // @ts-ignore
+    setBoard(response.title)
+    // @ts-ignore
+    lists = response.lists
+  }
+
+  fetchData()
+
+  const [loading, setLoading] = useState(true)
+  const [settedBoard, setBoard] = useState<string | null>(null)
+
+  const dispatch = useDispatch()
+  console.log('Board useParams ', useParams())
+  const getstate = store.getState()
+  console.log('Board getstate ', getstate)
+
+  const boardsFromState = useSelector((state: RootState) => state.boards.boards)
+  console.log('boardsFromState', boardsFromState)
+
+  // let currentBoardTitle = boardsFromState.find(boardObj => {
+  //   return boardObj.id === 6
+  // })
 
   let location = useLocation()
   console.log('Board useLocation ', location)
 
-  
+  // const stateUseSelectorBoardTitle = useSelector((state: IBoard) => state.title)
+  // const gotStateBoard = useSelector((state: IBoard) => state)
+
+  // console.log('stateUseSelectorBoardTitle', stateUseSelectorBoardTitle)
 
   // const gotBoard = (): void => {
-     
-  // }
+  //    getBoard(id)
+  //  }
 
   // console.log('gotBoard', gotBoard)
 
   useEffect(() => {
-    console.log('useEffect board');   
-    
-  });
+    fetchData()
+    setLoading(false)
+  }, []) // Or [] if effect doesn't need props or state
 
+  console.log('settedBoard', settedBoard)
 
-  return (
-    <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
-      {/* <div>state - {JSON.stringify(state)}</div>
+  // let [name, setname] = useState('')
+  /* The handleChange() function to set a new state for input */
+  // const handleChange = (event: {
+  //   target: { value: React.SetStateAction<string> }
+  // }) => {
+  //   setname(event.target.value)
+  // }
+
+  const newBoardValidation = (board: string) => {
+    const pattern = /^[A-Za-z0-9 _\-.]*$/
+    return pattern.test(board)
+  }
+
+  // const editBoardTitleOpen = () => {
+  //   const elemH1 = document.querySelector('.board-h1') as HTMLElement
+  //   elemH1.style.display = 'none'
+  //   const elemInput = document.querySelector('.inp-board-title') as HTMLElement
+  //   elemInput.style.display = 'block'
+  //   elemInput.focus()
+  // }
+
+  const editBoardTitleToggle = () => {
+    const elemH1 = document.querySelector('.board-h1') as HTMLElement
+    const elemInput = document.querySelector('.inp-board-title') as HTMLElement
+
+    if (elemH1.style.display !== 'none') {
+      elemH1.style.display = 'none'
+      elemInput.style.display = 'block'
+      elemInput.focus()
+    } else {
+      elemH1.style.display = 'block'
+      elemInput.style.display = 'none'
+    }
+  }
+
+  const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key === 'Enter') {
+      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+        dispatch<any>(
+          editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
+        )
+        dispatch<any>(getBoard(idNumber))
+      } else {
+        alert('Name not valid!')
+      }
+    }
+  }
+
+  const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
+    if (newBoardValidation(ev.target.value)) {
+      dispatch<any>(editBoardTitle(ev.target.value, idNumber))
+      dispatch<any>(getBoard(idNumber))
+
+      console.log('try setBoard', ev.target.value)
+      setBoard(ev.target.value)
+      console.log('setBoard', getstate.board.title)
+      editBoardTitleToggle()
+    } else {
+      alert('Name not valid!')
+    }
+  }
+
+  const addList = () => {}
+
+  console.log('loading', loading)
+
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
+
+  if (settedBoard) {
+    console.log('try render')
+
+    return (
+      <div onClick={myFunction} className={`${location.pathname !== '/' ? 'boards' : ''}`}>
+        {/* <div>state - {JSON.stringify(state)}</div>
       <div>props - {JSON.stringify(props)}</div> */}
-      <div className="header-container">
-        <Link className="" to="/">
-          Main
-        </Link>
-      </div>
-
-      <div className="board-header">
-        <h1 className="board-h1">
-          {state.title} {id}
-        </h1>
-      </div>
-
-      <SimpleBar
-        className="simplebar"
-        direction="rtl"
-        // forceVisible="y"
-        autoHide={false}
-        // style={position: 300 }}
-      >
-        <div className="board-content">
-          {/* {state.lists.map((list) => List(list))} */}
-          {state.lists.map(({ id, title, cards }) => (
-            <List key={id} title={title} cards={cards} />
-          ))}
-          <div className="add-list">
-            <span className="fa-solid fa-plus"></span>
-            <span>Add list</span>
-          </div>
+        <div className="header-container">
+          <Link className="" to="/">
+            Main
+          </Link>
         </div>
-      </SimpleBar>
-    </div>
-  )
+
+        <div className="board-header">
+          <h1 className="board-h1" onClick={editBoardTitleToggle}>
+            {/* чомусь нічого не виводить
+           {getstate.board.title} */}
+            {settedBoard}
+
+            {/* {gotStateBoard.title} */}
+            {/* {id} */}
+          </h1>
+          <input
+            className="inp-board-title"
+            type="text"
+            onKeyDown={inputKeyDown}
+            onBlur={inputOnBlur}
+          />
+        </div>
+
+        <SimpleBar
+          className="simplebar"
+          direction="rtl"
+          // forceVisible="y"
+          autoHide={false}
+          // style={position: 300 }}
+        >
+          <div className="board-content">
+            {/* {state.lists.map((list) => List(list))} */}
+
+            {
+              // gotStateBoard.lists.map(({ id, title, cards }) => (
+              //   <List key={id} title={title} cards={cards} />
+              // ))
+              lists.map(({ id, title, cards }) => (
+                <List key={id} title={title} cards={cards} />
+              ))
+            }
+            <div className="add-list" onClick={addList}>
+              <span className="fa-solid fa-plus"></span>
+              <span>Add list</span>
+              <span id="demo">focus</span>
+            </div>
+          </div>
+        </SimpleBar>
+      </div>
+    )
+  }
+
+  return null
 }
 
-console.log("state Board", state);
-
 //запускається щоразу при зміні store і повертає щось компоненту
-const mapStateToProps = (state: IBoard) => ({    
-   ...state.lists
-})  
+const mapStateToProps = (state: IBoard) => ({
+  ...state.lists,
+})
 
 //передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
 //якщо другий параметр в фігурних дужках - то це екшнкріейтор
@@ -139,4 +274,4 @@ const mapStateToProps = (state: IBoard) => ({
 //     reset: () => dispatch({ type: 'RESET' }),
 //   }
 
-//export default connect(mapStateToProps, { getBoard })(Board)
+//export const Board = connect(mapStateToProps, { getBoard })(BoardComponent)

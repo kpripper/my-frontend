@@ -3,6 +3,5 @@ import {  ISimpleCard } from './ ISimpleCard';
 
 export interface IBoard {  
     title: string,
-    lists: Array<{ id: number; title: string; cards: ISimpleCard[] }>;  
-     
+    lists: Array<{ id: number; title: string; cards: ISimpleCard[] }>;       
 }

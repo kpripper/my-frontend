@@ -104,18 +104,18 @@ type stateType = {
 // }
 
 const Home = (props: propsType) => {
-  console.log('Home useParams ', useParams())
+ // console.log('Home useParams ', useParams())
   console.log('Home store.getState ', store.getState())
 
   const { boards } = props
 
   const { current: currentBoards } = useRef(boards)
 
+
+//виконується після рендеру компонента
   useEffect(() => {
     props.getBoards()
   }, [currentBoards])
-
-
 
  // console.log('props.getBoards()', props.getBoards());
   

@@ -3,7 +3,7 @@ import { AnyAction, Dispatch } from 'redux'
 import { Routes, Route, Link } from 'react-router-dom'
 import  {Board}  from '../../../Board/Board'
 import './boardhome.scss'
-import { deleteBoard } from '../../../../store/modules/boards/actions'
+import { deleteBoard } from '../../../../store/modules/board/actions'
 import { useDispatch } from 'react-redux'
 
 export default function BoardHome(props: { id: number; title: string }) {

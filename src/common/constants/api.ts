@@ -1,5 +1,5 @@
 export default {
-    baseURL: 'https://trello-back.shpp.me/ipihovych/api/v1' || '',
+    baseURL: process.env.REACT_APP_API_URL || '',
     boards: '/board',
   };
   

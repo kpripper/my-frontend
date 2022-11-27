@@ -2,6 +2,9 @@ import config from '../../../common/constants/api'
 import { Dispatch } from 'redux'
 import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse'
 import instance from '../../../api/request'
+import { useDispatch, useSelector } from 'react-redux'
+import api from '../../../common/constants/api'
+import { getBoards } from '../boards/actions'
 
 export const getBoard = (id: number) => async (dispatch: Dispatch) => {
   console.log('getBoard')
@@ -10,8 +13,88 @@ export const getBoard = (id: number) => async (dispatch: Dispatch) => {
     const boardInGet = await instance.get('/board/' + id)
     console.log('await get board', boardInGet)
     dispatch({ type: 'UPDATE_BOARD', payload: boardInGet })
+    return boardInGet
   } catch (e) {
     console.log(e, 'E UPDATE_BOARD')
     dispatch({ type: 'ERROR_ACTION_TYPE' })
+  }  
+}
+
+export const editBoardTitle =
+  (boardTitleNew: string, id: number) =>
+
+  async (dispatch: Dispatch) => {
+    console.log('dispatch  editBoardTitle', boardTitleNew)
+
+    try {
+      console.log('try editBoardTitle')
+      const awResp: { result: string; id: number } = await instance.put(
+        config.boards +'/'+ id,
+        { title: boardTitleNew }
+      )
+      if (awResp.result === 'Updated') {
+        console.log('board Updated')
+       
+        dispatch<any>(getBoards())
+        dispatch<any>(getBoard(id))
+      }
+    } catch (e) {
+      console.log('e editBoardTitle', e)
+    }
+  }
+
+  //export const createBoard = (titleName: string): ThunkActionType => async (dispatch): Promise<void> => {
+//без ThunkActionType не рендерить дошки
+export const createBoard =
+(boardTitle: string) =>
+// {
+
+//   console.log("boardTitle", boardTitle);
+//   console.log("config.boards", config.boards);
+//  return
+
+async (dispatch: Dispatch) => {
+  console.log('dispatch  createBoard', dispatch)
+
+  try {
+    console.log('try createBoard')
+    const awResp: { result: string; id: number } = await instance.post(
+      config.boards,
+      { title: boardTitle }
+    )
+    if (awResp.result === 'Created') {
+      console.log('Created')
+      dispatch<any>(getBoards())
+    }
+  } catch (e) {
+    console.log('e createBoard', e)
   }
 }
+
+// }
+
+// a hook that can be reused to resolve types
+//const useAppDispatch: () => AppDispatch = useDispatch
+
+
+export const deleteBoard = (boardId: string) =>
+
+
+//alert("deleteBoard ");
+
+async (dispatch: Dispatch) => {
+  console.log('dispatch  deleteBoard', dispatch)
+  
+ 
+
+  try {
+    const resDelete = await instance.delete(config.boards + '/' + boardId)
+    console.log(resDelete)
+    console.log('deleteBoard ', config.boards+ '/' + boardId)
+    dispatch<any>(getBoards())
+  } catch (e) {
+    alert(e)
+    console.log('e  deleteBoard ', e)
+  }
+}
+//}
