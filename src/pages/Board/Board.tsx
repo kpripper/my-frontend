@@ -151,23 +151,36 @@ export const Board = () => {
     const elemH1 = document.querySelector('.board-h1') as HTMLElement
     const elemInput = document.querySelector('.inp-board-title') as HTMLElement
 
+    
+    
+
     if (elemH1.style.display !== 'none') {
+      console.log("editBoardTitleToggle if elemH1.style.display !== 'none", elemH1.style.display, elemInput.style.display);
       elemH1.style.display = 'none'
       elemInput.style.display = 'block'
+      console.log("editBoardTitleToggle if elemH1.style.display !== 'none switch", elemH1.style.display, elemInput.style.display);
       elemInput.focus()
     } else {
+      elemInput.blur()
+      console.log("editBoardTitleToggle else", elemH1.style.display, elemInput.style.display);
       elemH1.style.display = 'block'
       elemInput.style.display = 'none'
+      console.log("editBoardTitleToggle else switch", elemH1.style.display, elemInput.style.display);
+      
     }
   }
 
   const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
+
+    console.log('ev target', (ev.target as HTMLInputElement).value)
+   if (ev.key === 'Enter') {
       if (newBoardValidation((ev.target as HTMLInputElement).value)) {
         dispatch<any>(
           editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
         )
         dispatch<any>(getBoard(idNumber))
+        setBoard((ev.target as HTMLInputElement).value)
+        editBoardTitleToggle()
       } else {
         alert('Name not valid!')
       }
