@@ -1,7 +1,7 @@
 import React from 'react'
 import { AnyAction, Dispatch } from 'redux'
 import { Routes, Route, Link } from 'react-router-dom'
-import  {Board}  from '../../../Board/Board'
+import {Board} from '../../../Board/Board'
 import './boardhome.scss'
 import { deleteBoard } from '../../../../store/modules/board/actions'
 import { useDispatch } from 'react-redux'
@@ -49,7 +49,7 @@ export default function BoardHome(props: { id: number; title: string }) {
               //  (document.querySelector(`.id${props.id}`) as HTMLElement).style.pointerEvents = "none"
               dispatch<any>(
                 deleteBoard((e.target as HTMLElement).getAttribute('id')!)
-              ) 
+              )
             }}
           >
             Delete board

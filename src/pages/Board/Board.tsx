@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import List from './components/List/List'
 import SimpleBar from 'simplebar-react'
@@ -6,7 +6,7 @@ import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
 import '../../index.css'
 import { IBoard } from '../../common/interfaces/IBoard'
-import { editBoardTitle, getBoard } from '../../store/modules/board/actions'
+import { createList, editBoardTitle, getBoard } from '../../store/modules/board/actions'
 import { useDispatch, useSelector } from 'react-redux'
 // import { title } from 'process'
 import { connect } from 'react-redux'
@@ -201,9 +201,77 @@ export const Board = () => {
     }
   }
 
-  const addList = () => {}
+  const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key === 'Enter') {
+      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+        dispatch<any>(
+          createList((ev.target as HTMLInputElement).value, idNumber)
+        )
+        dispatch<any>(getBoard(idNumber))
+      } else {
+        alert('Name not valid!')
+      }
+    }
+  }
 
-  console.log('loading', loading)
+  const addList = (ev: FormEvent<HTMLFormElement>) => {
+    
+      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+        dispatch<any>(
+          createList((ev.target as HTMLInputElement).value, idNumber)
+        )
+        dispatch<any>(getBoard(idNumber))
+      } else {
+        alert('Name not valid!')
+      }
+    
+  }
+
+  const closeAddListForm = () => {
+    ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
+      'none'
+    ;(document.querySelector('.open-add-list') as HTMLElement).style.display =
+      'inline-block'
+  }
+
+  const toggleAddListForm = () => {
+    ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
+      'none'
+  }
+
+  const enterListTitle = () => {
+    const elemOpenAddList = document.querySelector(
+      '.open-add-list'
+    ) as HTMLElement
+    const elemAddListControls = document.querySelector(
+      '.add-list-controls'
+    ) as HTMLElement
+    const elemAddSpan = document.querySelector('.add-list-span') as HTMLElement
+    const elemInpListTitle = document.querySelector(
+      '.inp-list-title'
+    ) as HTMLElement
+    const elemListAddButton = document.querySelector(
+      '.list-add-button'
+    ) as HTMLElement
+    const elemAddListForm = document.querySelector(
+      '.add-list-form'
+    ) as HTMLElement
+    const elemList = document.querySelector(
+      '.list'
+    ) as HTMLElement
+
+    if (elemOpenAddList.style.display !== 'none') {
+      elemOpenAddList.style.display = 'none'
+      elemAddListForm.style.display = 'flex'
+      elemInpListTitle.focus()
+      elemList.classList.add('active-list');
+    } else {
+      elemInpListTitle.blur()
+      elemOpenAddList.style.display = 'inline-block'
+      elemAddListForm.style.display = 'none'
+      elemList.classList.remove('active-list');
+    }
+  }
 
   if (loading) {
     return <h1>Loading...</h1>
@@ -213,7 +281,10 @@ export const Board = () => {
     console.log('try render')
 
     return (
-      <div onClick={myFunction} className={`${location.pathname !== '/' ? 'boards' : ''}`}>
+      <div
+        onClick={myFunction}
+        className={`${location.pathname !== '/' ? 'boards' : ''}`}
+      >
         {/* <div>state - {JSON.stringify(state)}</div>
       <div>props - {JSON.stringify(props)}</div> */}
         <div className="header-container">
@@ -257,10 +328,34 @@ export const Board = () => {
                 <List key={id} title={title} cards={cards} />
               ))
             }
-            <div className="add-list" onClick={addList}>
-              <span className="fa-solid fa-plus"></span>
-              <span>Add list</span>
-              <span id="demo">focus</span>
+            <div className="list">
+              <div className="open-add-list" onClick={enterListTitle}>
+                <span className="fa-solid fa-plus"></span>
+                <span className="add-list-span">Add list</span>
+              </div>
+              <div className="add-list-form">
+                <input
+                  className="inp-list-title"
+                  type="text"
+                  onKeyDown={addListOnEnter}
+                  placeholder='Enter list title...'
+                />
+                <div className="add-list-controls">
+                  <form onSubmit={addList}>
+                    <input
+                      className="list-add-button"
+                      type="submit"
+                      value="Add list"                      
+                    ></input>
+                  </form>
+                  <span
+                    onClick={closeAddListForm}
+                    className="fa-solid fa-xmark"
+                  ></span>
+                </div>
+              </div>
+
+              {/* <span id="demo">focus</span> */}
             </div>
           </div>
         </SimpleBar>
@@ -287,4 +382,4 @@ const mapStateToProps = (state: IBoard) => ({
 //     reset: () => dispatch({ type: 'RESET' }),
 //   }
 
-//export const Board = connect(mapStateToProps, { getBoard })(BoardComponent)
+//export default Board = connect(mapStateToProps, { getBoard })(Board)

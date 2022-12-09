@@ -5,7 +5,7 @@ import BoardHome from './components/BoardHome/BoardHome'
 import 'simplebar-react/dist/simplebar.min.css'
 import './home.scss'
 import '../../index.css'
-import  {Board}  from '../Board/Board'
+import {Board} from '../Board/Board'
 import { connect } from 'react-redux'
 import { getBoards } from '../../store/modules/boards/actions'
 import AddBoard from './components/AddBoard/AddBoard'
@@ -104,21 +104,19 @@ type stateType = {
 // }
 
 const Home = (props: propsType) => {
- // console.log('Home useParams ', useParams())
+  // console.log('Home useParams ', useParams())
   console.log('Home store.getState ', store.getState())
 
   const { boards } = props
 
   const { current: currentBoards } = useRef(boards)
 
-
-//виконується після рендеру компонента
+  //виконується після рендеру компонента
   useEffect(() => {
     props.getBoards()
   }, [currentBoards])
 
- // console.log('props.getBoards()', props.getBoards());
-  
+  // console.log('props.getBoards()', props.getBoards());
 
   return (
     <>
@@ -154,14 +152,10 @@ const Home = (props: propsType) => {
   )
 }
 
-
-
 //запускається щоразу при зміні store і повертає щось компоненту
 const mapStateToProps = (state: stateType) => ({
   ...state.boards,
 })
-
-
 
 //передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
 //якщо другий параметр в фігурних дужках - то це екшнкріейтор

@@ -62,6 +62,7 @@ async (dispatch: Dispatch) => {
       config.boards,
       { title: boardTitle }
     )
+    console.log('awResp', awResp)
     if (awResp.result === 'Created') {
       console.log('Created')
       dispatch<any>(getBoards())
@@ -83,14 +84,14 @@ export const deleteBoard = (boardId: string) =>
 //alert("deleteBoard ");
 
 async (dispatch: Dispatch) => {
-  console.log('dispatch  deleteBoard', dispatch)
+ // console.log('dispatch  deleteBoard', dispatch)
   
  
 
   try {
     const resDelete = await instance.delete(config.boards + '/' + boardId)
-    console.log(resDelete)
-    console.log('deleteBoard ', config.boards+ '/' + boardId)
+  //  console.log(resDelete)
+   // console.log('deleteBoard ', config.boards+ '/' + boardId)
     dispatch<any>(getBoards())
   } catch (e) {
     alert(e)
@@ -98,3 +99,24 @@ async (dispatch: Dispatch) => {
   }
 }
 //}
+
+export const createList = (listTitle: string, boardId: number) => async (dispatch: Dispatch) => {
+
+  console.log(config.boards + '/' + boardId + '/' + listTitle)
+  try {
+    const currentBoard : { lists: [] } =  await instance.get('/board/' + boardId)
+    console.log(currentBoard, "currentBoard")
+    const rescreateList = await instance.post(config.boards + '/' + boardId + '/list',
+     { title: listTitle,
+       position: currentBoard.lists.length
+     })
+    console.log(rescreateList)
+    console.log('rescreateList ', config.boards+ '/' + boardId + '/' + listTitle)
+    dispatch<any>(getBoards())
+  } catch (e) {
+    alert(e)
+    console.log('e createList ', e)
+  }
+
+  
+}

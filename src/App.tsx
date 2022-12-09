@@ -12,7 +12,7 @@ import { getBoards } from './store/modules/boards/actions'
 
 const props = {
   boards: [],
- // getBoards: () => Promise<void>,
+  // getBoards: () => Promise<void>,
 }
 const state = {}
 
@@ -27,7 +27,7 @@ function App() {
        <Route path="/dashboard" element={<Dashboard authed={true} />} />
        */}
 
-      <Route  path="/" element={ <Home boards={[]}  />}  />
+      <Route path="/" element={<Home boards={[]} />} />
       <Route path="/board/:id" element={<Board />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

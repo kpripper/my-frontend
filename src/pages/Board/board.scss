@@ -1,3 +1,5 @@
+$base-blue-color: #026AA7;
+
 .boards {
     height: 100%;
     background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
@@ -6,41 +8,49 @@
 
 .board {
     padding-left: 16px;
-    background-color: #0000003d;    
-    background:linear-gradient(to bottom,
-    rgba(81, 81, 81, 0.832),
-    rgba(109, 109, 109, 0.257),
-    rgba(212, 212, 212, 0.041))
+    background-color: #0000003d;
+    background: linear-gradient(to bottom,
+            rgba(81, 81, 81, 0.832),
+            rgba(109, 109, 109, 0.257),
+            rgba(212, 212, 212, 0.041))
 }
 
 .board-content {
     white-space: nowrap;
+    padding: 0 10px;
 }
 
 h1 {
-   padding: 0 0 0 30px; 
-   color: white;
+    padding: 0 0 0 30px;
+    color: white;
 }
 
-.add-list {
+.list {
     display: inline-block;
+    margin: 0 4px;
+    padding: 4px;
     background-color: #ffffff3d;
     border-radius: 3px;
+    color: rgb(255, 255, 255);
     min-height: 32px;
     width: 272px;
-    color: rgb(255, 255, 255);
-    padding: 5px 10px;
+
     //same for text vertical centering
-    height: 40px;
-    line-height: 40px;
+   // height: 30px;
+   // line-height: 30px;
+
     &:hover {
-        background-color: #ffffff82;
+        background-color: #ffffff3d;
         cursor: pointer;
     }
 }
 
+.active-list {
+    background-color: #e8e8e83d;
+}
+
 .fa-plus {
-     margin: 0 5px 0 0;
+    margin: 0 5px 0 10px;
 }
 
 .board-h1 {
@@ -48,9 +58,55 @@ h1 {
 }
 
 .inp-board-title {
-    display:none;
+    display: none;
     margin: 30px;
-    background-color: rgba(255, 255, 255, 0.18);
+    //   background-color: rgba(255, 255, 255, 0.18);
     font-size: 30px;
 }
 
+.inp-list-title {
+   // display: block;
+    width: 100%;
+    line-height: 20px;
+    border-radius: 3px;    
+    box-shadow: inset 0 0 0 2px $base-blue-color;   
+    box-sizing: border-box; 
+    margin: 0 auto 3px;
+    padding: 8px 12px;
+    border: hidden;
+    outline: none;
+
+}
+
+.fa-xmark {
+    color: #5b6c89;
+    font-size: 25px;
+    height: 32px;
+    line-height: 32px !important;
+    width: 32px;
+}
+
+
+.list-add-button {
+    float: left;
+}
+
+.add-list-form {
+    display: none;
+    flex-direction: column;
+//align-items: flex-start;    
+}
+
+.list-add-button {
+    height: 32px;
+    padding: 4px 8px;   
+    margin: 0 5px 0 0; 
+    color: #fff;
+    background-color: $base-blue-color;
+    border: none;
+    border-radius: 3px;
+}
+
+.open-add-list {
+    width:100%;  
+}
