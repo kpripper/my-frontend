@@ -23,6 +23,8 @@ export const getBoard = (id: number) => async (dispatch: Dispatch) => {
 export const editBoardTitle =
   (boardTitleNew: string, id: number) =>
 
+ 
+
   async (dispatch: Dispatch) => {
     console.log('dispatch  editBoardTitle', boardTitleNew)
 
@@ -39,7 +41,7 @@ export const editBoardTitle =
         dispatch<any>(getBoard(id))
       }
     } catch (e) {
-      console.log('e editBoardTitle', e)
+      console.log(boardTitleNew, 'e editBoardTitle', e)
     }
   }
 

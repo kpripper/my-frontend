@@ -6,7 +6,11 @@ import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
 import '../../index.css'
 import { IBoard } from '../../common/interfaces/IBoard'
-import { createList, editBoardTitle, getBoard } from '../../store/modules/board/actions'
+import {
+  createList,
+  editBoardTitle,
+  getBoard,
+} from '../../store/modules/board/actions'
 import { useDispatch, useSelector } from 'react-redux'
 // import { title } from 'process'
 import { connect } from 'react-redux'
@@ -15,6 +19,7 @@ import { Dispatch } from 'redux'
 import instance from '../../api/request'
 import { idText } from 'typescript'
 import { RootState } from '../../store/store'
+import { AxiosResponse } from 'axios'
 
 const sampleBoardState = {
   title: 'My Board',
@@ -49,17 +54,18 @@ interface BoardState {
 }
 
 interface BoardProps {
-  getBoard: () => Promise<void>
-  lists: []
+  getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
+  boardTitle: string
+  boardLists:[]
 }
 
-//const BoardComponent = () => {
-export const Board = () => {
+const BoardComponent = (props: BoardProps) => {
+  //const Board = () => {
 
-  function myFunction() {
-    const element = document.activeElement!.tagName;
-    document.getElementById("demo")!.innerHTML = element;
-  }
+  // function myFunction() {
+  //   const element = document.activeElement!.tagName;
+  //   document.getElementById("demo")!.innerHTML = element;
+  // }
 
   let lists: any[] = []
 
@@ -71,9 +77,10 @@ export const Board = () => {
     var idNumber: number = +id
     //  dispatch<any>(getBoard(idNumber))
     console.log(' getBoard(idNumber)')
-
-    //  getBoard(idNumber)
+   // props.getBoard(idNumber)    
   }
+
+  
 
   async function fetchData() {
     // You can await here
@@ -83,15 +90,20 @@ export const Board = () => {
     // @ts-ignore
     console.log('fetchData response', response.title)
     // @ts-ignore
-    setBoard(response.title)
+    setBoardTitle(response.title)
     // @ts-ignore
-    lists = response.lists
+    let lists = response.lists
+    setBoardLists(lists)
+    console.log('fetchData lists', lists)
+
   }
 
-  fetchData()
+  //fetchData()
+
 
   const [loading, setLoading] = useState(true)
-  const [settedBoard, setBoard] = useState<string | null>(null)
+  const [settedBoard, setBoardTitle] = useState<string | null>(null)
+  const [settedBoardLists, setBoardLists] = useState<[]>([])
 
   const dispatch = useDispatch()
   console.log('Board useParams ', useParams())
@@ -151,35 +163,47 @@ export const Board = () => {
     const elemH1 = document.querySelector('.board-h1') as HTMLElement
     const elemInput = document.querySelector('.inp-board-title') as HTMLElement
 
-    
-    
-
     if (elemH1.style.display !== 'none') {
-      console.log("editBoardTitleToggle if elemH1.style.display !== 'none", elemH1.style.display, elemInput.style.display);
+      console.log(
+        "editBoardTitleToggle if elemH1.style.display !== 'none",
+        elemH1.style.display,
+        elemInput.style.display
+      )
       elemH1.style.display = 'none'
       elemInput.style.display = 'block'
-      console.log("editBoardTitleToggle if elemH1.style.display !== 'none switch", elemH1.style.display, elemInput.style.display);
+      console.log(
+        "editBoardTitleToggle if elemH1.style.display !== 'none switch",
+        elemH1.style.display,
+        elemInput.style.display
+      )
       elemInput.focus()
     } else {
       elemInput.blur()
-      console.log("editBoardTitleToggle else", elemH1.style.display, elemInput.style.display);
+      console.log(
+        'editBoardTitleToggle else',
+        elemH1.style.display,
+        elemInput.style.display
+      )
       elemH1.style.display = 'block'
       elemInput.style.display = 'none'
-      console.log("editBoardTitleToggle else switch", elemH1.style.display, elemInput.style.display);
-      
+      console.log(
+        'editBoardTitleToggle else switch',
+        elemH1.style.display,
+        elemInput.style.display
+      )
     }
   }
 
   const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-
     console.log('ev target', (ev.target as HTMLInputElement).value)
-   if (ev.key === 'Enter') {
-      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+    if (ev.key === 'Enter') {
+      if (newBoardValidation((ev.target as HTMLInputElement).value)) && ev.target as HTMLInputElement).value !== "" {
+        alert('Name good key!')
         dispatch<any>(
           editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
         )
         dispatch<any>(getBoard(idNumber))
-        setBoard((ev.target as HTMLInputElement).value)
+        setBoardTitle((ev.target as HTMLInputElement).value)
         editBoardTitleToggle()
       } else {
         alert('Name not valid!')
@@ -188,12 +212,13 @@ export const Board = () => {
   }
 
   const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-    if (newBoardValidation(ev.target.value)) {
+
+    if (newBoardValidation(ev.target.value) && ev.target.value !== "" ) {
+      alert('Name good blur!')
       dispatch<any>(editBoardTitle(ev.target.value, idNumber))
       dispatch<any>(getBoard(idNumber))
-
       console.log('try setBoard', ev.target.value)
-      setBoard(ev.target.value)
+      setBoardTitle(ev.target.value)
       console.log('setBoard', getstate.board.title)
       editBoardTitleToggle()
     } else {
@@ -215,16 +240,12 @@ export const Board = () => {
   }
 
   const addList = (ev: FormEvent<HTMLFormElement>) => {
-    
-      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
-        dispatch<any>(
-          createList((ev.target as HTMLInputElement).value, idNumber)
-        )
-        dispatch<any>(getBoard(idNumber))
-      } else {
-        alert('Name not valid!')
-      }
-    
+    if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+      dispatch<any>(createList((ev.target as HTMLInputElement).value, idNumber))
+      dispatch<any>(getBoard(idNumber))
+    } else {
+      alert('Name not valid!')
+    }
   }
 
   const closeAddListForm = () => {
@@ -256,20 +277,18 @@ export const Board = () => {
     const elemAddListForm = document.querySelector(
       '.add-list-form'
     ) as HTMLElement
-    const elemList = document.querySelector(
-      '.list'
-    ) as HTMLElement
+    const elemList = document.querySelector('.list') as HTMLElement
 
     if (elemOpenAddList.style.display !== 'none') {
       elemOpenAddList.style.display = 'none'
       elemAddListForm.style.display = 'flex'
       elemInpListTitle.focus()
-      elemList.classList.add('active-list');
+      elemList.classList.add('active-list')
     } else {
       elemInpListTitle.blur()
       elemOpenAddList.style.display = 'inline-block'
       elemAddListForm.style.display = 'none'
-      elemList.classList.remove('active-list');
+      elemList.classList.remove('active-list')
     }
   }
 
@@ -282,7 +301,7 @@ export const Board = () => {
 
     return (
       <div
-        onClick={myFunction}
+        // onClick={myFunction}
         className={`${location.pathname !== '/' ? 'boards' : ''}`}
       >
         {/* <div>state - {JSON.stringify(state)}</div>
@@ -324,9 +343,15 @@ export const Board = () => {
               // gotStateBoard.lists.map(({ id, title, cards }) => (
               //   <List key={id} title={title} cards={cards} />
               // ))
-              lists.map(({ id, title, cards }) => (
+
+              settedBoardLists.map(({ id, title, cards }) => (
                 <List key={id} title={title} cards={cards} />
               ))
+
+
+              // lists.map(({ id, title, cards }) => (
+              //   <List key={id} title={title} cards={cards} />
+              // ))
             }
             <div className="list">
               <div className="open-add-list" onClick={enterListTitle}>
@@ -338,14 +363,14 @@ export const Board = () => {
                   className="inp-list-title"
                   type="text"
                   onKeyDown={addListOnEnter}
-                  placeholder='Enter list title...'
+                  placeholder="Enter list title..."
                 />
                 <div className="add-list-controls">
                   <form onSubmit={addList}>
                     <input
                       className="list-add-button"
                       type="submit"
-                      value="Add list"                      
+                      value="Add list"
                     ></input>
                   </form>
                   <span
@@ -366,10 +391,20 @@ export const Board = () => {
   return null
 }
 
+let gs = store.getState()
+
+console.log("gs",gs);
+
+
 //запускається щоразу при зміні store і повертає щось компоненту
-const mapStateToProps = (state: IBoard) => ({
-  ...state.lists,
-})
+
+//const mapStateToProps = (state: IBoard) => state
+
+ const mapStateToProps = (state: any) => {
+   const {title: boardTitle, lists: boardLists} = state
+   return {boardTitle, boardLists}  
+  //return state
+ }
 
 //передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
 //якщо другий параметр в фігурних дужках - то це екшнкріейтор
@@ -383,3 +418,5 @@ const mapStateToProps = (state: IBoard) => ({
 //   }
 
 //export default Board = connect(mapStateToProps, { getBoard })(Board)
+
+export const Board = connect(mapStateToProps, { getBoard })(BoardComponent)

@@ -152,10 +152,14 @@ const Home = (props: propsType) => {
   )
 }
 
+
+
 //запускається щоразу при зміні store і повертає щось компоненту
-const mapStateToProps = (state: stateType) => ({
+const mapStateToProps = (state: stateType) => ({  
   ...state.boards,
 })
+
+
 
 //передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
 //якщо другий параметр в фігурних дужках - то це екшнкріейтор
