@@ -5,7 +5,12 @@ import './list.scss'
 export default function List(props: { title: string; cards: ISimpleCard[] }) {
   return (
     <div key={props.title} className="list">
+      <div className="list-header">
       <h2 className="list-title">{props.title}</h2>
+      <div className="list-menu"><i className="icon-dots-three"></i></div>
+      </div>
+
+      
       {props.cards.map((card, index) => (
         <li key={index} className="list-card">
           {card.title}

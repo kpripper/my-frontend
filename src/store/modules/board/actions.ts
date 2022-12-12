@@ -104,7 +104,7 @@ async (dispatch: Dispatch) => {
 
 export const createList = (listTitle: string, boardId: number) => async (dispatch: Dispatch) => {
 
-  console.log(config.boards + '/' + boardId + '/' + listTitle)
+  console.log("createList", config.boards + '/' + boardId + '/ listTitle' + listTitle)
   try {
     const currentBoard : { lists: [] } =  await instance.get('/board/' + boardId)
     console.log(currentBoard, "currentBoard")

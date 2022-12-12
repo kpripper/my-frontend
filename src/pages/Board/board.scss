@@ -36,8 +36,8 @@ h1 {
     width: 272px;
 
     //same for text vertical centering
-   // height: 30px;
-   // line-height: 30px;
+    // height: 30px;
+    // line-height: 30px;
 
     &:hover {
         background-color: #ffffff3d;
@@ -55,6 +55,8 @@ h1 {
 
 .board-h1 {
     color: #000;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .inp-board-title {
@@ -64,13 +66,19 @@ h1 {
     font-size: 30px;
 }
 
+.list-title {
+    color: #000;
+    font-size: 20px;
+    font-weight: 400;
+}
+
 .inp-list-title {
-   // display: block;
+    // display: block;
     width: 100%;
     line-height: 20px;
-    border-radius: 3px;    
-    box-shadow: inset 0 0 0 2px $base-blue-color;   
-    box-sizing: border-box; 
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 2px $base-blue-color;
+    box-sizing: border-box;
     margin: 0 auto 3px;
     padding: 8px 12px;
     border: hidden;
@@ -94,13 +102,13 @@ h1 {
 .add-list-form {
     display: none;
     flex-direction: column;
-//align-items: flex-start;    
+    //align-items: flex-start;    
 }
 
 .list-add-button {
     height: 32px;
-    padding: 4px 8px;   
-    margin: 0 5px 0 0; 
+    padding: 4px 8px;
+    margin: 0 5px 0 0;
     color: #fff;
     background-color: $base-blue-color;
     border: none;
@@ -108,5 +116,13 @@ h1 {
 }
 
 .open-add-list {
-    width:100%;  
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.icon-close-addlist {
+    color: #2e2c2c;
+    font-size:27px; 
+    padding: 3px 0 0 0 !important;   
 }

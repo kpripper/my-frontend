@@ -132,8 +132,8 @@ const Home = (props: propsType) => {
         </div>
         <div className="boards-header">
           <div className="boards-header-item">
-            <span className="fa-solid fa-table"></span>
-            <span>Your boards</span>
+            <span className="icon-boards"></span>
+            <span className="your-boards">Your boards</span>
           </div>
         </div>
         {/* <div>

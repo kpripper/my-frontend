@@ -105,6 +105,7 @@ const BoardComponent = (props: BoardProps) => {
   const [settedBoard, setBoardTitle] = useState<string | null>(null)
   const [settedBoardLists, setBoardLists] = useState<[]>([])
 
+
   const dispatch = useDispatch()
   console.log('Board useParams ', useParams())
   const getstate = store.getState()
@@ -147,8 +148,9 @@ const BoardComponent = (props: BoardProps) => {
   // }
 
   const newBoardValidation = (board: string) => {
+    
     const pattern = /^[A-Za-z0-9 _\-.]*$/
-    return pattern.test(board)
+    return (board !== '') ? pattern.test(board) : false   
   }
 
   // const editBoardTitleOpen = () => {
@@ -197,7 +199,7 @@ const BoardComponent = (props: BoardProps) => {
   const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     console.log('ev target', (ev.target as HTMLInputElement).value)
     if (ev.key === 'Enter') {
-      if (newBoardValidation((ev.target as HTMLInputElement).value)) && ev.target as HTMLInputElement).value !== "" {
+      if (newBoardValidation((ev.target as HTMLInputElement).value)){
         alert('Name good key!')
         dispatch<any>(
           editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
@@ -213,7 +215,7 @@ const BoardComponent = (props: BoardProps) => {
 
   const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
 
-    if (newBoardValidation(ev.target.value) && ev.target.value !== "" ) {
+    if (newBoardValidation(ev.target.value)) {
       alert('Name good blur!')
       dispatch<any>(editBoardTitle(ev.target.value, idNumber))
       dispatch<any>(getBoard(idNumber))
@@ -239,9 +241,21 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-  const addList = (ev: FormEvent<HTMLFormElement>) => {
-    if (newBoardValidation((ev.target as HTMLInputElement).value)) {
-      dispatch<any>(createList((ev.target as HTMLInputElement).value, idNumber))
+  const addList = (ev: any) => {
+    const formElem = document.querySelector('add-list-form'); 
+    
+   console.log("ev.target.newlist.value", ev.target.newlist.value);
+   
+    if (newBoardValidation((ev.target as HTMLFormElement).value)) {
+      //// 👈️ prevent page refresh
+     //щоб не перенаправляло на урл зі знаком питання в кінці     
+      ev.preventDefault();    
+      
+     // const formData = new FormData(formElem);
+      
+      dispatch<any>(
+        createList((ev.target as HTMLInputElement).value, idNumber)
+        )
       dispatch<any>(getBoard(idNumber))
     } else {
       alert('Name not valid!')
@@ -252,7 +266,7 @@ const BoardComponent = (props: BoardProps) => {
     ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
       'none'
     ;(document.querySelector('.open-add-list') as HTMLElement).style.display =
-      'inline-block'
+      'flex'
   }
 
   const toggleAddListForm = () => {
@@ -286,7 +300,7 @@ const BoardComponent = (props: BoardProps) => {
       elemList.classList.add('active-list')
     } else {
       elemInpListTitle.blur()
-      elemOpenAddList.style.display = 'inline-block'
+      elemOpenAddList.style.display = 'flex'
       elemAddListForm.style.display = 'none'
       elemList.classList.remove('active-list')
     }
@@ -324,6 +338,8 @@ const BoardComponent = (props: BoardProps) => {
           <input
             className="inp-board-title"
             type="text"
+            //коли додав пусти плейсхолдер, то при появі інпута там поточна назва дошки
+            placeholder=''
             onKeyDown={inputKeyDown}
             onBlur={inputOnBlur}
           />
@@ -355,27 +371,32 @@ const BoardComponent = (props: BoardProps) => {
             }
             <div className="list">
               <div className="open-add-list" onClick={enterListTitle}>
-                <span className="fa-solid fa-plus"></span>
+                <span className="icon-plus"></span>
                 <span className="add-list-span">Add list</span>
               </div>
               <div className="add-list-form">
+                {/* //TODO якщо перемістити цей інпут в форму add-list-form, то тоді значення передається
+                //TODO але перестає працювати відправка назви по ентеру */}
                 <input
                   className="inp-list-title"
                   type="text"
+                  name="newlist"
                   onKeyDown={addListOnEnter}
                   placeholder="Enter list title..."
                 />
                 <div className="add-list-controls">
-                  <form onSubmit={addList}>
+                  {/* <form className="" onSubmit={addList}>
                     <input
                       className="list-add-button"
-                      type="submit"
-                      value="Add list"
-                    ></input>
-                  </form>
+                      type="text"
+                      name="newlist2"
+                    ></input>   
+                                  
+                  </form> */}
+                  <button className="list-add-button" type="submit">Add list</button>   
                   <span
                     onClick={closeAddListForm}
-                    className="fa-solid fa-xmark"
+                    className="icon-close icon-close-addlist"
                   ></span>
                 </div>
               </div>
@@ -391,15 +412,12 @@ const BoardComponent = (props: BoardProps) => {
   return null
 }
 
-let gs = store.getState()
-
-console.log("gs",gs);
-
 
 //запускається щоразу при зміні store і повертає щось компоненту
 
 //const mapStateToProps = (state: IBoard) => state
 
+//unknown не підходить
  const mapStateToProps = (state: any) => {
    const {title: boardTitle, lists: boardLists} = state
    return {boardTitle, boardLists}  

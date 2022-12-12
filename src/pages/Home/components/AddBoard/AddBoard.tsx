@@ -11,68 +11,7 @@ import { createBoard } from '../../../../store/modules/board/actions'
 // }
 
 export default function AddBoard() {
-//  const state = store.getState()
 
-
-  //видає жах
-
-  //   {
-  //     "board": {
-  //         "0": {
-  //             "id": 1668032236310,
-  //             "title": "todos",
-  //             "custom": {
-  //                 "description": "desc"
-  //             }
-  //         },
-  //         "1": {
-  //             "id": 1668872728878,
-  //             "title": "1"
-  //         },
-  //         "2": {
-  //             "id": 1668872749112,
-  //             "title": "2"
-  //         }
-  //     },
-  //     "boards": {
-  //         "boards": [
-  //             {
-  //                 "id": 1668032236310,
-  //                 "title": "todos",
-  //                 "custom": {
-  //                     "description": "desc"
-  //                 }
-  //             },
-  //             {
-  //                 "id": 1668872728878,
-  //                 "title": "1"
-  //             },
-  //             {
-  //                 "id": 1668872749112,
-  //                 "title": "2"
-  //             }
-  //         ]
-  //     },
-  //     "user": {
-  //         "0": {
-  //             "id": 1668032236310,
-  //             "title": "todos",
-  //             "custom": {
-  //                 "description": "desc"
-  //             }
-  //         },
-  //         "1": {
-  //             "id": 1668872728878,
-  //             "title": "1"
-  //         },
-  //         "2": {
-  //             "id": 1668872749112,
-  //             "title": "2"
-  //         }
-  //     }
-  // }
-
-  // console.log("state AddBoard", state)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
@@ -126,7 +65,7 @@ export default function AddBoard() {
   return (
     <div className="add-board">
       <div className="add-board-button" onClick={setModalIsOpenToTrue}>
-        <span className="fa-solid fa-plus"></span>
+        <span className="icon-plus"></span>
         {/* <span className="">Add board</span> */}
         <div className="add-board-new-board">Add board</div>
       </div>
@@ -136,7 +75,9 @@ export default function AddBoard() {
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       >
-        <button onClick={setModalIsOpenToFalse}>x</button>
+        <div className="whole-modal">
+        <div className="button-modal-close"><button className="icon-close" onClick={setModalIsOpenToFalse}></button></div>
+        
         {/* <ModalAddBoard /> */}
         <div className="">
           <div className="add-board-input-container">
@@ -156,6 +97,9 @@ export default function AddBoard() {
             {/* <button onClick={() => dispatch(({ type: 'CREATE_BOARD', payload: inputRef.current?.value }))}>thunkDispatch</button> */}
           </div>
         </div>
+
+        </div>
+
       </Modal>
     </div>
   )
