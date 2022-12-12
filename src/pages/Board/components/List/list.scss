@@ -1,6 +1,6 @@
 .list {
     box-sizing: border-box;
-    display: inline-block;
+   // display: inline-block;
     height: 100%;
     margin: 0 4px;
     vertical-align: top;
@@ -44,6 +44,7 @@ h2 {
 }
 
 .add-card {
+    display: flex;
     //same for text vertical centering
     height: 40px;
     line-height: 40px;
@@ -58,4 +59,34 @@ h2 {
         color: rgb(61, 61, 61)
     }
 
+}
+
+.list-actions {
+    color: rgb(61, 61, 61);
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 8px 16px -4px #091e4240,0 0 0 1px #091e4214;
+    // display: none;
+    // overflow: hidden;
+    // position: absolute;
+    // right: -9999px;
+    // top: -9999px;
+    //-webkit-transform: translateZ(0);
+    width: 255px;
+    padding:5px;
+    // position: absolute;
+    // top: 54px;
+}
+
+.list-actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 3px 3px 0 0;
+}
+
+.list-actions-title {
+    padding: 0 0 0 9px;
+    font-weight: 400;
+    font-size: 19px;
 }

@@ -122,3 +122,20 @@ export const createList = (listTitle: string, boardId: number) => async (dispatc
 
   
 }
+
+export const deleteList = (boardId: string, listId: number) =>
+
+async (dispatch: Dispatch) => {
+
+  console.log(' deleteList ')
+  
+  try {
+    const resDelete = await instance.delete(
+      config.boards + '/' + boardId + '/list/' + listId
+      )
+      console.log('resDelete  deleteList ', resDelete)
+    dispatch<any>(getBoards())
+  } catch (e) {
+    console.log('e  deleteList ', e)
+  }
+}

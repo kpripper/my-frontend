@@ -21,33 +21,33 @@ import { idText } from 'typescript'
 import { RootState } from '../../store/store'
 import { AxiosResponse } from 'axios'
 
-const sampleBoardState = {
-  title: 'My Board',
-  lists: [
-    {
-      id: 1,
-      title: 'To Do',
-      cards: [
-        { id: 1, title: 'wash the cat' },
-        { id: 2, title: 'make soup' },
-        { id: 3, title: 'go to the store' },
-      ],
-    },
-    {
-      id: 2,
-      title: 'Doing',
-      cards: [{ id: 4, title: 'watch the series' }],
-    },
-    {
-      id: 3,
-      title: 'Done',
-      cards: [
-        { id: 5, title: 'do homework' },
-        { id: 6, title: 'walk the dog' },
-      ],
-    },
-  ],
-}
+// const sampleBoardState = {
+//   title: 'My Board',
+//   lists: [
+//     {
+//       id: 1,
+//       title: 'To Do',
+//       cards: [
+//         { id: 1, title: 'wash the cat' },
+//         { id: 2, title: 'make soup' },
+//         { id: 3, title: 'go to the store' },
+//       ],
+//     },
+//     {
+//       id: 2,
+//       title: 'Doing',
+//       cards: [{ id: 4, title: 'watch the series' }],
+//     },
+//     {
+//       id: 3,
+//       title: 'Done',
+//       cards: [
+//         { id: 5, title: 'do homework' },
+//         { id: 6, title: 'walk the dog' },
+//       ],
+//     },
+//   ],
+// }
 
 interface BoardState {
   // id: number
@@ -60,6 +60,10 @@ interface BoardProps {
 }
 
 const BoardComponent = (props: BoardProps) => {
+
+  const [loading, setLoading] = useState(true)
+  const [settedBoard, setBoardTitle] = useState<string | null>(null)
+  const [settedBoardLists, setBoardLists] = useState<[]>([])
   //const Board = () => {
 
   // function myFunction() {
@@ -67,7 +71,7 @@ const BoardComponent = (props: BoardProps) => {
   //   document.getElementById("demo")!.innerHTML = element;
   // }
 
-  let lists: any[] = []
+ // let lists: any[] = []
 
   let { id } = useParams()
   // console.log(typeof id)
@@ -86,24 +90,26 @@ const BoardComponent = (props: BoardProps) => {
     // You can await here
     const response = await instance.get('/board/' + id)
     // ...
-    console.log('fetchData response', response)
+    //console.log('fetchData response', response)
     // @ts-ignore
-    console.log('fetchData response', response.title)
+    //console.log('fetchData response', response.title)
     // @ts-ignore
     setBoardTitle(response.title)
     // @ts-ignore
     let lists = response.lists
     setBoardLists(lists)
     console.log('fetchData lists', lists)
+   
 
   }
 
-  //fetchData()
 
 
-  const [loading, setLoading] = useState(true)
-  const [settedBoard, setBoardTitle] = useState<string | null>(null)
-  const [settedBoardLists, setBoardLists] = useState<[]>([])
+
+  
+
+
+
 
 
   const dispatch = useDispatch()
@@ -111,8 +117,8 @@ const BoardComponent = (props: BoardProps) => {
   const getstate = store.getState()
   console.log('Board getstate ', getstate)
 
-  const boardsFromState = useSelector((state: RootState) => state.boards.boards)
-  console.log('boardsFromState', boardsFromState)
+ // const boardsFromState = useSelector((state: RootState) => state.boards.boards)
+ // console.log('boardsFromState', boardsFromState) // []
 
   // let currentBoardTitle = boardsFromState.find(boardObj => {
   //   return boardObj.id === 6
@@ -134,6 +140,7 @@ const BoardComponent = (props: BoardProps) => {
 
   useEffect(() => {
     fetchData()
+
     setLoading(false)
   }, []) // Or [] if effect doesn't need props or state
 
@@ -173,6 +180,7 @@ const BoardComponent = (props: BoardProps) => {
       )
       elemH1.style.display = 'none'
       elemInput.style.display = 'block'
+      //elemInput. = elemH1.textContent
       console.log(
         "editBoardTitleToggle if elemH1.style.display !== 'none switch",
         elemH1.style.display,
@@ -208,7 +216,8 @@ const BoardComponent = (props: BoardProps) => {
         setBoardTitle((ev.target as HTMLInputElement).value)
         editBoardTitleToggle()
       } else {
-        alert('Name not valid!')
+        alert('Name not valid inputKeyDown!')
+        editBoardTitleToggle()
       }
     }
   }
@@ -224,7 +233,8 @@ const BoardComponent = (props: BoardProps) => {
       console.log('setBoard', getstate.board.title)
       editBoardTitleToggle()
     } else {
-      alert('Name not valid!')
+     // alert('Name not valid inputOnBlur!')
+      editBoardTitleToggle()
     }
   }
 
@@ -241,26 +251,26 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-  const addList = (ev: any) => {
-    const formElem = document.querySelector('add-list-form'); 
+  // const addList = (ev: any) => {
+  //   const formElem = document.querySelector('add-list-form'); 
     
-   console.log("ev.target.newlist.value", ev.target.newlist.value);
+  //  console.log("ev.target.newlist.value", ev.target.newlist.value);
    
-    if (newBoardValidation((ev.target as HTMLFormElement).value)) {
-      //// 👈️ prevent page refresh
-     //щоб не перенаправляло на урл зі знаком питання в кінці     
-      ev.preventDefault();    
+  //   if (newBoardValidation((ev.target as HTMLFormElement).value)) {
+  //     //// 👈️ prevent page refresh
+  //    //щоб не перенаправляло на урл зі знаком питання в кінці     
+  //     ev.preventDefault();    
       
-     // const formData = new FormData(formElem);
+  //    // const formData = new FormData(formElem);
       
-      dispatch<any>(
-        createList((ev.target as HTMLInputElement).value, idNumber)
-        )
-      dispatch<any>(getBoard(idNumber))
-    } else {
-      alert('Name not valid!')
-    }
-  }
+  //     dispatch<any>(
+  //       createList((ev.target as HTMLInputElement).value, idNumber)
+  //       )
+  //     dispatch<any>(getBoard(idNumber))
+  //   } else {
+  //     alert('Name not valid!')
+  //   }
+  // }
 
   const closeAddListForm = () => {
     ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
@@ -269,10 +279,10 @@ const BoardComponent = (props: BoardProps) => {
       'flex'
   }
 
-  const toggleAddListForm = () => {
-    ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
-      'none'
-  }
+  // const toggleAddListForm = () => {
+  //   ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
+  //     'none'
+  // }
 
   const enterListTitle = () => {
     const elemOpenAddList = document.querySelector(
@@ -360,8 +370,9 @@ const BoardComponent = (props: BoardProps) => {
               //   <List key={id} title={title} cards={cards} />
               // ))
 
-              settedBoardLists.map(({ id, title, cards }) => (
-                <List key={id} title={title} cards={cards} />
+              settedBoardLists.map(({ id, title, cards }) => (              
+                
+                <List id={id} title={title} cards={cards} />
               ))
 
 
