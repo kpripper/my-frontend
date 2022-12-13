@@ -20,7 +20,6 @@ export default function reducer(state = initialState, action: {type: string, pay
     switch (action.type) {
         case 'UPDATE_BOARDS':
             console.log("UPDATE_BOARDS", action.payload);  
-
                    
             return {
               ...state,

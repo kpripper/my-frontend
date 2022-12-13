@@ -5,6 +5,7 @@ import instance from '../../../api/request'
 import { useDispatch, useSelector } from 'react-redux'
 import api from '../../../common/constants/api'
 import { getBoards } from '../boards/actions'
+import store from '../../store'
 
 export const getBoard = (id: number) => async (dispatch: Dispatch) => {
   console.log('getBoard')
@@ -12,7 +13,9 @@ export const getBoard = (id: number) => async (dispatch: Dispatch) => {
   try {
     const boardInGet = await instance.get('/board/' + id)
     console.log('await get board', boardInGet)
+    console.log('state before disp', store.getState())
     dispatch({ type: 'UPDATE_BOARD', payload: boardInGet })
+    console.log('state after disp', store.getState())
     return boardInGet
   } catch (e) {
     console.log(e, 'E UPDATE_BOARD')
@@ -82,41 +85,36 @@ async (dispatch: Dispatch) => {
 
 export const deleteBoard = (boardId: string) =>
 
-
-//alert("deleteBoard ");
-
 async (dispatch: Dispatch) => {
  // console.log('dispatch  deleteBoard', dispatch)
-  
- 
-
   try {
     const resDelete = await instance.delete(config.boards + '/' + boardId)
   //  console.log(resDelete)
    // console.log('deleteBoard ', config.boards+ '/' + boardId)
     dispatch<any>(getBoards())
   } catch (e) {
-    alert(e)
+   // alert(e)
     console.log('e  deleteBoard ', e)
   }
 }
-//}
+
 
 export const createList = (listTitle: string, boardId: number) => async (dispatch: Dispatch) => {
 
   console.log("createList", config.boards + '/' + boardId + '/ listTitle' + listTitle)
   try {
     const currentBoard : { lists: [] } =  await instance.get('/board/' + boardId)
-    console.log(currentBoard, "currentBoard")
+    //console.log(currentBoard, "currentBoard")
     const rescreateList = await instance.post(config.boards + '/' + boardId + '/list',
      { title: listTitle,
        position: currentBoard.lists.length
      })
     console.log(rescreateList)
     console.log('rescreateList ', config.boards+ '/' + boardId + '/' + listTitle)
-    dispatch<any>(getBoards())
+    dispatch<any>(getBoard(boardId))
+    
   } catch (e) {
-    alert(e)
+  //  alert(e)
     console.log('e createList ', e)
   }
 
@@ -128,13 +126,13 @@ export const deleteList = (boardId: string, listId: number) =>
 async (dispatch: Dispatch) => {
 
   console.log(' deleteList ')
-  
+
   try {
     const resDelete = await instance.delete(
       config.boards + '/' + boardId + '/list/' + listId
       )
       console.log('resDelete  deleteList ', resDelete)
-    dispatch<any>(getBoards())
+    dispatch<any>(getBoard(+boardId))
   } catch (e) {
     console.log('e  deleteList ', e)
   }

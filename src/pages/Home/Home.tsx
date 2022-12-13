@@ -111,8 +111,11 @@ const Home = (props: propsType) => {
 
   const { current: currentBoards } = useRef(boards)
 
-  //виконується після рендеру компонента
+
+
+  //виконується після рендеру компонента, i без цього нема ререндера
   useEffect(() => {
+    console.log("useEffect home");
     props.getBoards()
   }, [currentBoards])
 

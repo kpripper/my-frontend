@@ -1,6 +1,6 @@
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
-import List from './components/List/List'
+import { List } from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
@@ -56,22 +56,13 @@ interface BoardState {
 interface BoardProps {
   getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
   boardTitle: string
-  boardLists:[]
+  boardLists: []
 }
 
 const BoardComponent = (props: BoardProps) => {
-
   const [loading, setLoading] = useState(true)
   const [settedBoard, setBoardTitle] = useState<string | null>(null)
-  const [settedBoardLists, setBoardLists] = useState<[]>([])
-  //const Board = () => {
-
-  // function myFunction() {
-  //   const element = document.activeElement!.tagName;
-  //   document.getElementById("demo")!.innerHTML = element;
-  // }
-
- // let lists: any[] = []
+  const [settedBoardLists, setBoardLists] = useState<[]>([])  
 
   let { id } = useParams()
   // console.log(typeof id)
@@ -81,10 +72,8 @@ const BoardComponent = (props: BoardProps) => {
     var idNumber: number = +id
     //  dispatch<any>(getBoard(idNumber))
     console.log(' getBoard(idNumber)')
-   // props.getBoard(idNumber)    
+    // props.getBoard(idNumber)
   }
-
-  
 
   async function fetchData() {
     // You can await here
@@ -99,33 +88,22 @@ const BoardComponent = (props: BoardProps) => {
     let lists = response.lists
     setBoardLists(lists)
     console.log('fetchData lists', lists)
-   
-
   }
-
-
-
-
-  
-
-
-
-
 
   const dispatch = useDispatch()
   console.log('Board useParams ', useParams())
   const getstate = store.getState()
-  console.log('Board getstate ', getstate)
+  console.log('Board store.getState() ', getstate)
 
- // const boardsFromState = useSelector((state: RootState) => state.boards.boards)
- // console.log('boardsFromState', boardsFromState) // []
+  // const boardsFromState = useSelector((state: RootState) => state.boards.boards)
+  // console.log('boardsFromState', boardsFromState) // []
 
   // let currentBoardTitle = boardsFromState.find(boardObj => {
   //   return boardObj.id === 6
   // })
 
   let location = useLocation()
-  console.log('Board useLocation ', location)
+ // console.log('Board useLocation ', location)
 
   // const stateUseSelectorBoardTitle = useSelector((state: IBoard) => state.title)
   // const gotStateBoard = useSelector((state: IBoard) => state)
@@ -140,9 +118,13 @@ const BoardComponent = (props: BoardProps) => {
 
   useEffect(() => {
     fetchData()
-
+    props.getBoard(+id!)
     setLoading(false)
+    
   }, []) // Or [] if effect doesn't need props or state
+
+
+
 
   console.log('settedBoard', settedBoard)
 
@@ -155,9 +137,8 @@ const BoardComponent = (props: BoardProps) => {
   // }
 
   const newBoardValidation = (board: string) => {
-    
     const pattern = /^[A-Za-z0-9 _\-.]*$/
-    return (board !== '') ? pattern.test(board) : false   
+    return board !== '' ? pattern.test(board) : false
   }
 
   // const editBoardTitleOpen = () => {
@@ -207,8 +188,8 @@ const BoardComponent = (props: BoardProps) => {
   const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     console.log('ev target', (ev.target as HTMLInputElement).value)
     if (ev.key === 'Enter') {
-      if (newBoardValidation((ev.target as HTMLInputElement).value)){
-        alert('Name good key!')
+      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+        // alert('Name good key!')
         dispatch<any>(
           editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
         )
@@ -223,9 +204,8 @@ const BoardComponent = (props: BoardProps) => {
   }
 
   const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-
     if (newBoardValidation(ev.target.value)) {
-      alert('Name good blur!')
+      //  alert('Name good blur!')
       dispatch<any>(editBoardTitle(ev.target.value, idNumber))
       dispatch<any>(getBoard(idNumber))
       console.log('try setBoard', ev.target.value)
@@ -233,7 +213,7 @@ const BoardComponent = (props: BoardProps) => {
       console.log('setBoard', getstate.board.title)
       editBoardTitleToggle()
     } else {
-     // alert('Name not valid inputOnBlur!')
+      // alert('Name not valid inputOnBlur!')
       editBoardTitleToggle()
     }
   }
@@ -241,28 +221,47 @@ const BoardComponent = (props: BoardProps) => {
   const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
       if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+        closeAddListForm()
         dispatch<any>(
           createList((ev.target as HTMLInputElement).value, idNumber)
         )
-        dispatch<any>(getBoard(idNumber))
+        dispatch<any>(getBoard(idNumber))        
       } else {
         alert('Name not valid!')
       }
     }
   }
 
-  // const addList = (ev: any) => {
-  //   const formElem = document.querySelector('add-list-form'); 
-    
-  //  console.log("ev.target.newlist.value", ev.target.newlist.value);
+  const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
+
+    const elemInpListTitle = document.querySelector(
+      '.inp-list-title'
+    ) as HTMLInputElement
    
+      if (newBoardValidation(elemInpListTitle.value)) {
+        closeAddListForm()
+        dispatch<any>(
+          createList(elemInpListTitle.value, idNumber)
+        )
+        dispatch<any>(getBoard(idNumber))        
+      } else {
+        alert('Name not valid!')
+      }
+    
+  }
+
+  // const addList = (ev: any) => {
+  //   const formElem = document.querySelector('add-list-form');
+
+  //  console.log("ev.target.newlist.value", ev.target.newlist.value);
+
   //   if (newBoardValidation((ev.target as HTMLFormElement).value)) {
   //     //// 👈️ prevent page refresh
-  //    //щоб не перенаправляло на урл зі знаком питання в кінці     
-  //     ev.preventDefault();    
-      
+  //    //щоб не перенаправляло на урл зі знаком питання в кінці
+  //     ev.preventDefault();
+
   //    // const formData = new FormData(formElem);
-      
+
   //     dispatch<any>(
   //       createList((ev.target as HTMLInputElement).value, idNumber)
   //       )
@@ -338,8 +337,6 @@ const BoardComponent = (props: BoardProps) => {
 
         <div className="board-header">
           <h1 className="board-h1" onClick={editBoardTitleToggle}>
-            {/* чомусь нічого не виводить
-           {getstate.board.title} */}
             {settedBoard}
 
             {/* {gotStateBoard.title} */}
@@ -349,7 +346,7 @@ const BoardComponent = (props: BoardProps) => {
             className="inp-board-title"
             type="text"
             //коли додав пусти плейсхолдер, то при появі інпута там поточна назва дошки
-            placeholder=''
+            placeholder=""
             onKeyDown={inputKeyDown}
             onBlur={inputOnBlur}
           />
@@ -358,32 +355,16 @@ const BoardComponent = (props: BoardProps) => {
         <SimpleBar
           className="simplebar"
           direction="rtl"
-          // forceVisible="y"
           autoHide={false}
-          // style={position: 300 }}
         >
           <div className="board-content">
-            {/* {state.lists.map((list) => List(list))} */}
-
-            {
-              // gotStateBoard.lists.map(({ id, title, cards }) => (
-              //   <List key={id} title={title} cards={cards} />
-              // ))
-
-              settedBoardLists.map(({ id, title, cards }) => (              
-                
+            {settedBoardLists.map(({ id, title, cards }) => (
                 <List id={id} title={title} cards={cards} />
-              ))
-
-
-              // lists.map(({ id, title, cards }) => (
-              //   <List key={id} title={title} cards={cards} />
-              // ))
-            }
+              ))}
             <div className="list">
               <div className="open-add-list" onClick={enterListTitle}>
                 <span className="icon-plus"></span>
-                <span className="add-list-span">Add list</span>
+                <span className="add-list-span">Add new list</span>
               </div>
               <div className="add-list-form">
                 {/* //TODO якщо перемістити цей інпут в форму add-list-form, то тоді значення передається
@@ -396,15 +377,9 @@ const BoardComponent = (props: BoardProps) => {
                   placeholder="Enter list title..."
                 />
                 <div className="add-list-controls">
-                  {/* <form className="" onSubmit={addList}>
-                    <input
-                      className="list-add-button"
-                      type="text"
-                      name="newlist2"
-                    ></input>   
-                                  
-                  </form> */}
-                  <button className="list-add-button" type="submit">Add list</button>   
+                  <button className="list-add-button" onClick={addListOnButton} >
+                    Add list
+                  </button>
                   <span
                     onClick={closeAddListForm}
                     className="icon-close icon-close-addlist"
@@ -423,17 +398,14 @@ const BoardComponent = (props: BoardProps) => {
   return null
 }
 
-
 //запускається щоразу при зміні store і повертає щось компоненту
-
-//const mapStateToProps = (state: IBoard) => state
-
 //unknown не підходить
- const mapStateToProps = (state: any) => {
-   const {title: boardTitle, lists: boardLists} = state
-   return {boardTitle, boardLists}  
+const mapStateToProps = (state: any) => {
+ // console.log('board state', state) - пусті значення
+  const { title: boardTitle, lists: boardLists } = state
+  return { boardTitle, boardLists }
   //return state
- }
+}
 
 //передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
 //якщо другий параметр в фігурних дужках - то це екшнкріейтор

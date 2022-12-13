@@ -1,5 +1,5 @@
 import { IBoard } from '../../../common/interfaces/IBoard'
-import { createBoard } from '../board/actions';
+import { createBoard } from '../board/actions'
 
 export interface BoardState {
   title: string
@@ -16,19 +16,19 @@ export default function reducer(
 ) {
   switch (action.type) {
     case 'UPDATE_BOARD':
-      console.log('UPDATE_BOARD', action.payload.title)
+      console.log('UPDATE_BOARD', action.payload)
 
       return {
         ...state,
         title: action.payload.title,
-       // users: action.payload.users,
-       // lists: action.payload.lists,
+        // users: action.payload.users,
+        lists: action.payload.lists,
       }
 
     case 'CREATE_BOARD':
       console.log('CREATE_BOARD', action.payload)
 
-    //  createBoard(action.payload)
+      //  createBoard(action.payload)
 
       return {
         ...state,
