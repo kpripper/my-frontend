@@ -1,13 +1,15 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducer';
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import rootReducer from './reducer'
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 
 export interface AppState {
-    boards: [];
-    modal: boolean;
-  }
+  board: { title: string; lists: [] }
+  boards: { boards: [] }
+  user: {}
+  //modal: boolean;
+}
 
 // const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -16,7 +18,6 @@ const store = configureStore({
   middleware: [thunk],
 })
 
-
 export type AppDispatch = typeof store.dispatch // you can use this Dispatch type in your thunks
 export const useAppDispatch = () => useDispatch<AppDispatch>() // Export a hook that can be reused to resolve types
 
@@ -24,5 +25,4 @@ export const useAppDispatch = () => useDispatch<AppDispatch>() // Export a hook 
 //for useSelector((state: RootState) => state.boards)
 export type RootState = ReturnType<typeof store.getState>
 
-export default store;
-
+export default store

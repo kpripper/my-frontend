@@ -16,18 +16,13 @@ export const List = (props: {
   cards: ISimpleCard[]
   //getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
 }) => {
-  // console.log(props)
-  //console.log('list useParams ', useParams())
 
   const { id: boardId } = useParams()
 
   const [listActionsShown, setListActionsShown] = useState(false)
 
   const handleListActionsClick = () => {
-    // 👇️ toggle shown state
     setListActionsShown((current) => !current)
-
-    // 👇️ or simply set it to true
     // setListActionsShown(true);
   }
 
@@ -119,8 +114,8 @@ function ListActions({
 
 // const mapStateToProps = (state: any) => {
 //   console.log('list state', state)
-//   const { id, title, cards } = state
-//   console.log('List is state to props', title)
+//   const { lists } = state
+//   console.log('List is state to props', lists)
 
 //   return state
 //   //return state

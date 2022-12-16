@@ -11,14 +11,14 @@ import {
   editBoardTitle,
   getBoard,
 } from '../../store/modules/board/actions'
-import { useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 // import { title } from 'process'
 import { connect } from 'react-redux'
 import store from '../../store/store'
 import { Dispatch } from 'redux'
 import instance from '../../api/request'
 import { idText } from 'typescript'
-import { RootState } from '../../store/store'
+import { RootState, AppState } from '../../store/store'
 import { AxiosResponse } from 'axios'
 
 // const sampleBoardState = {
@@ -49,10 +49,6 @@ import { AxiosResponse } from 'axios'
 //   ],
 // }
 
-interface BoardState {
-  // id: number
-}
-
 interface BoardProps {
   getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
   boardTitle: string
@@ -60,6 +56,12 @@ interface BoardProps {
 }
 
 const BoardComponent = (props: BoardProps) => {
+  console.log("board props", props)
+
+  const listsSelector = useSelector((state: AppState) => state.board.lists, shallowEqual)
+
+  console.log("listsSelector",listsSelector)
+
   const [loading, setLoading] = useState(true)
   const [settedBoard, setBoardTitle] = useState<string | null>(null)
   const [settedBoardLists, setBoardLists] = useState<[]>([])  
@@ -75,13 +77,8 @@ const BoardComponent = (props: BoardProps) => {
     // props.getBoard(idNumber)
   }
 
-  async function fetchData() {
-    // You can await here
+async function fetchData() {
     const response = await instance.get('/board/' + id)
-    // ...
-    //console.log('fetchData response', response)
-    // @ts-ignore
-    //console.log('fetchData response', response.title)
     // @ts-ignore
     setBoardTitle(response.title)
     // @ts-ignore
@@ -103,18 +100,6 @@ const BoardComponent = (props: BoardProps) => {
   // })
 
   let location = useLocation()
- // console.log('Board useLocation ', location)
-
-  // const stateUseSelectorBoardTitle = useSelector((state: IBoard) => state.title)
-  // const gotStateBoard = useSelector((state: IBoard) => state)
-
-  // console.log('stateUseSelectorBoardTitle', stateUseSelectorBoardTitle)
-
-  // const gotBoard = (): void => {
-  //    getBoard(id)
-  //  }
-
-  // console.log('gotBoard', gotBoard)
 
   useEffect(() => {
     fetchData()
@@ -128,26 +113,11 @@ const BoardComponent = (props: BoardProps) => {
 
   console.log('settedBoard', settedBoard)
 
-  // let [name, setname] = useState('')
-  /* The handleChange() function to set a new state for input */
-  // const handleChange = (event: {
-  //   target: { value: React.SetStateAction<string> }
-  // }) => {
-  //   setname(event.target.value)
-  // }
 
   const newBoardValidation = (board: string) => {
     const pattern = /^[A-Za-z0-9 _\-.]*$/
     return board !== '' ? pattern.test(board) : false
   }
-
-  // const editBoardTitleOpen = () => {
-  //   const elemH1 = document.querySelector('.board-h1') as HTMLElement
-  //   elemH1.style.display = 'none'
-  //   const elemInput = document.querySelector('.inp-board-title') as HTMLElement
-  //   elemInput.style.display = 'block'
-  //   elemInput.focus()
-  // }
 
   const editBoardTitleToggle = () => {
     const elemH1 = document.querySelector('.board-h1') as HTMLElement
@@ -278,11 +248,6 @@ const BoardComponent = (props: BoardProps) => {
       'flex'
   }
 
-  // const toggleAddListForm = () => {
-  //   ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
-  //     'none'
-  // }
-
   const enterListTitle = () => {
     const elemOpenAddList = document.querySelector(
       '.open-add-list'
@@ -358,7 +323,7 @@ const BoardComponent = (props: BoardProps) => {
           autoHide={false}
         >
           <div className="board-content">
-            {settedBoardLists.map(({ id, title, cards }) => (
+            {listsSelector.map(({ id, title, cards } : {id: number, title:string, cards: []}) => (
                 <List id={id} title={title} cards={cards} />
               ))}
             <div className="list">
@@ -401,8 +366,9 @@ const BoardComponent = (props: BoardProps) => {
 //запускається щоразу при зміні store і повертає щось компоненту
 //unknown не підходить
 const mapStateToProps = (state: any) => {
- // console.log('board state', state) - пусті значення
+  console.log('board state bef', state) 
   const { title: boardTitle, lists: boardLists } = state
+  console.log('board state', state) 
   return { boardTitle, boardLists }
   //return state
 }
