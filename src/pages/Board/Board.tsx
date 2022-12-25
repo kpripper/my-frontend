@@ -20,6 +20,8 @@ import instance from '../../api/request'
 import { idText } from 'typescript'
 import { RootState, AppState } from '../../store/store'
 import { AxiosResponse } from 'axios'
+import { newNameValidation } from '../../common/functions/functions'
+
 
 // const sampleBoardState = {
 //   title: 'My Board',
@@ -56,15 +58,18 @@ interface BoardProps {
 }
 
 const BoardComponent = (props: BoardProps) => {
-  console.log("board props", props)
+  console.log('board props', props)
 
-  const listsSelector = useSelector((state: AppState) => state.board.lists, shallowEqual)
+  const listsSelector = useSelector(
+    (state: AppState) => state.board.lists,
+    shallowEqual
+  )
 
-  console.log("listsSelector",listsSelector)
+  //console.log('listsSelector', listsSelector)
 
   const [loading, setLoading] = useState(true)
   const [settedBoard, setBoardTitle] = useState<string | null>(null)
-  const [settedBoardLists, setBoardLists] = useState<[]>([])  
+  //const [settedBoardLists, setBoardLists] = useState<[]>([])
 
   let { id } = useParams()
   // console.log(typeof id)
@@ -73,17 +78,17 @@ const BoardComponent = (props: BoardProps) => {
     //var for visibility in getBoard(idNumber)
     var idNumber: number = +id
     //  dispatch<any>(getBoard(idNumber))
-    console.log(' getBoard(idNumber)')
+    //console.log(' getBoard(idNumber)')
     // props.getBoard(idNumber)
   }
 
-async function fetchData() {
+  async function fetchData() {
     const response = await instance.get('/board/' + id)
     // @ts-ignore
     setBoardTitle(response.title)
     // @ts-ignore
     let lists = response.lists
-    setBoardLists(lists)
+    // setBoardLists(lists)
     console.log('fetchData lists', lists)
   }
 
@@ -105,19 +110,9 @@ async function fetchData() {
     fetchData()
     props.getBoard(+id!)
     setLoading(false)
-    
   }, []) // Or [] if effect doesn't need props or state
 
-
-
-
   console.log('settedBoard', settedBoard)
-
-
-  const newBoardValidation = (board: string) => {
-    const pattern = /^[A-Za-z0-9 _\-.]*$/
-    return board !== '' ? pattern.test(board) : false
-  }
 
   const editBoardTitleToggle = () => {
     const elemH1 = document.querySelector('.board-h1') as HTMLElement
@@ -158,7 +153,7 @@ async function fetchData() {
   const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     console.log('ev target', (ev.target as HTMLInputElement).value)
     if (ev.key === 'Enter') {
-      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+      if (newNameValidation((ev.target as HTMLInputElement).value)) {
         // alert('Name good key!')
         dispatch<any>(
           editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
@@ -174,7 +169,7 @@ async function fetchData() {
   }
 
   const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-    if (newBoardValidation(ev.target.value)) {
+    if (newNameValidation(ev.target.value)) {
       //  alert('Name good blur!')
       dispatch<any>(editBoardTitle(ev.target.value, idNumber))
       dispatch<any>(getBoard(idNumber))
@@ -190,12 +185,12 @@ async function fetchData() {
 
   const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
-      if (newBoardValidation((ev.target as HTMLInputElement).value)) {
+      if (newNameValidation((ev.target as HTMLInputElement).value)) {
         closeAddListForm()
         dispatch<any>(
           createList((ev.target as HTMLInputElement).value, idNumber)
         )
-        dispatch<any>(getBoard(idNumber))        
+        dispatch<any>(getBoard(idNumber))
       } else {
         alert('Name not valid!')
       }
@@ -203,43 +198,19 @@ async function fetchData() {
   }
 
   const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
-
     const elemInpListTitle = document.querySelector(
       '.inp-list-title'
     ) as HTMLInputElement
-   
-      if (newBoardValidation(elemInpListTitle.value)) {
-        closeAddListForm()
-        dispatch<any>(
-          createList(elemInpListTitle.value, idNumber)
-        )
-        dispatch<any>(getBoard(idNumber))        
-      } else {
-        alert('Name not valid!')
-      }
-    
+
+    if (newNameValidation(elemInpListTitle.value)) {
+      closeAddListForm()
+      dispatch<any>(createList(elemInpListTitle.value, idNumber))
+      dispatch<any>(getBoard(idNumber))
+    } else {
+      alert('Name not valid!')
+    }
   }
 
-  // const addList = (ev: any) => {
-  //   const formElem = document.querySelector('add-list-form');
-
-  //  console.log("ev.target.newlist.value", ev.target.newlist.value);
-
-  //   if (newBoardValidation((ev.target as HTMLFormElement).value)) {
-  //     //// 👈️ prevent page refresh
-  //    //щоб не перенаправляло на урл зі знаком питання в кінці
-  //     ev.preventDefault();
-
-  //    // const formData = new FormData(formElem);
-
-  //     dispatch<any>(
-  //       createList((ev.target as HTMLInputElement).value, idNumber)
-  //       )
-  //     dispatch<any>(getBoard(idNumber))
-  //   } else {
-  //     alert('Name not valid!')
-  //   }
-  // }
 
   const closeAddListForm = () => {
     ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
@@ -252,16 +223,16 @@ async function fetchData() {
     const elemOpenAddList = document.querySelector(
       '.open-add-list'
     ) as HTMLElement
-    const elemAddListControls = document.querySelector(
-      '.add-list-controls'
-    ) as HTMLElement
-    const elemAddSpan = document.querySelector('.add-list-span') as HTMLElement
+    // const elemAddListControls = document.querySelector(
+    //   '.add-list-controls'
+    // ) as HTMLElement
+    // const elemAddSpan = document.querySelector('.add-list-span') as HTMLElement
     const elemInpListTitle = document.querySelector(
       '.inp-list-title'
     ) as HTMLElement
-    const elemListAddButton = document.querySelector(
-      '.list-add-button'
-    ) as HTMLElement
+    // const elemListAddButton = document.querySelector(
+    //   '.list-add-button'
+    // ) as HTMLElement
     const elemAddListForm = document.querySelector(
       '.add-list-form'
     ) as HTMLElement
@@ -317,15 +288,21 @@ async function fetchData() {
           />
         </div>
 
-        <SimpleBar
-          className="simplebar"
-          direction="rtl"
-          autoHide={false}
-        >
+        <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
           <div className="board-content">
-            {listsSelector.map(({ id, title, cards } : {id: number, title:string, cards: []}) => (
+            {listsSelector.map(
+              ({
+                id,
+                title,
+                cards,
+              }: {
+                id: number
+                title: string
+                cards: []
+              }) => (
                 <List id={id} title={title} cards={cards} />
-              ))}
+              )
+            )}
             <div className="list">
               <div className="open-add-list" onClick={enterListTitle}>
                 <span className="icon-plus"></span>
@@ -342,13 +319,14 @@ async function fetchData() {
                   placeholder="Enter list title..."
                 />
                 <div className="add-list-controls">
-                  <button className="list-add-button" onClick={addListOnButton} >
+                  <button className="list-add-button" onClick={addListOnButton}>
                     Add list
                   </button>
                   <span
                     onClick={closeAddListForm}
                     className="icon-close icon-close-addlist"
                   ></span>
+                  
                 </div>
               </div>
 
@@ -366,9 +344,9 @@ async function fetchData() {
 //запускається щоразу при зміні store і повертає щось компоненту
 //unknown не підходить
 const mapStateToProps = (state: any) => {
-  console.log('board state bef', state) 
+  console.log('board state bef', state)
   const { title: boardTitle, lists: boardLists } = state
-  console.log('board state', state) 
+  console.log('board state', state)
   return { boardTitle, boardLists }
   //return state
 }

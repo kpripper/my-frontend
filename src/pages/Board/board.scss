@@ -34,9 +34,9 @@ h1 {
     display: inline-block;
     margin: 0 4px;
     padding: 4px;
-    background-color: #ffffff3d;
+    background-color: #ffffff90;
     border-radius: 3px;
-    color: rgb(255, 255, 255);
+    color: rgb(61, 61, 61);
     min-height: 32px;
     width: 272px;
 
@@ -45,7 +45,7 @@ h1 {
     // line-height: 30px;
 
     &:hover {
-        background-color: #ffffff3d;
+        background-color: #ffffffa9;
         cursor: pointer;
     }
 }
@@ -88,7 +88,6 @@ h1 {
     padding: 8px 12px;
     border: hidden;
     outline: none;
-
 }
 
 .fa-xmark {

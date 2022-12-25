@@ -110,6 +110,70 @@ export const createList =
     }
   }
 
+export const addCard =
+  (cardTitle: string, boardId: number, listID: number, position: number) =>
+  async (dispatch: Dispatch) => {
+    console.log(
+      'dispatch addCard',
+      'cardTitl',
+      cardTitle,
+      'boardId',
+      boardId,
+      'listID',
+      listID,
+      'position',
+      position
+    )
+
+    try {
+      // console.log('try createBoard')
+      const addCardResp: { result: string; id: number } = await instance.post(
+        config.boards + '/' + boardId + '/card',
+        { title: cardTitle, list_id: listID, position: position }
+      )
+      console.log('addCardResp', addCardResp)
+      if (addCardResp.result === 'Created') {
+        // console.log('Created')
+        dispatch<any>(getBoard(boardId))
+        // dispatch<any>(getBoards())
+      }
+    } catch (e) {
+      console.log('e addCard', e)
+    }
+  }
+
+export const delCard =
+  (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
+    try {
+      const delCardResp: { result: string } = await instance.delete(
+        config.boards + '/' + boardId + '/card/' + cardID
+      )
+      console.log('delCardResp', delCardResp)
+      if (delCardResp.result === 'Deleted') {
+        dispatch<any>(getBoard(Number(boardId)))
+      }
+    } catch (e) {
+      console.log('e delCard', e)
+    }
+  }
+
+export const edCard =
+  (boardId: string, listID: number, cardID: string, cardTitle: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      const edCardResp: { result: string } = await instance.put(
+        config.boards + '/' + boardId + '/card/' + cardID,
+        { title: cardTitle, list_id: listID }
+      )
+      console.log(cardID, 'edCardResp', edCardResp)
+      if (edCardResp.result === 'Updated') {
+        dispatch<any>(getBoard(Number(boardId)))
+      }
+    } catch (e) {
+      console.log('e edCard', e)
+    }
+  }
+
 export const deleteList =
   (boardId: string, listId: number) => async (dispatch: Dispatch) => {
     console.log(' deleteList ')

@@ -1,4 +1,7 @@
 export interface ISimpleCard {  
     id: number, 
-    title: string
+    title: string,
+    position?: number,
+    description?: string,
+    deadline?: string
 }
