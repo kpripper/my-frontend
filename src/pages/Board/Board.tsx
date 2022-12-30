@@ -12,7 +12,6 @@ import {
   getBoard,
 } from '../../store/modules/board/actions'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-// import { title } from 'process'
 import { connect } from 'react-redux'
 import store from '../../store/store'
 import { Dispatch } from 'redux'
@@ -24,34 +23,6 @@ import { newNameValidation } from '../../common/functions/functions'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
 import { SnackBar } from '../SnackBar/SnackBar'
 import SimpleSnackbar from '../SnackBar/SimpleSnackbar'
-
-// const sampleBoardState = {
-//   title: 'My Board',
-//   lists: [
-//     {
-//       id: 1,
-//       title: 'To Do',
-//       cards: [
-//         { id: 1, title: 'wash the cat' },
-//         { id: 2, title: 'make soup' },
-//         { id: 3, title: 'go to the store' },
-//       ],
-//     },
-//     {
-//       id: 2,
-//       title: 'Doing',
-//       cards: [{ id: 4, title: 'watch the series' }],
-//     },
-//     {
-//       id: 3,
-//       title: 'Done',
-//       cards: [
-//         { id: 5, title: 'do homework' },
-//         { id: 6, title: 'walk the dog' },
-//       ],
-//     },
-//   ],
-// }
 
 interface BoardProps {
   getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
@@ -331,8 +302,7 @@ const BoardComponent = (props: BoardProps) => {
         </div>
       </SimpleBar>
 
- 
-     {/* скорочений варіант, як з прогрес-баром не працює */}
+      {/* скорочений варіант, як з прогрес-баром не працює */}
       {selectError.isError ? (
         <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
       ) : (
