@@ -37,11 +37,6 @@ function App() {
   //   setLoading(loadingState)
   // }, [loadingState])
 
-  {
-    /* @ts-ignore */
-  }
-  console.log('loadingState', loadingState.loading)
-
   // const keys = Object.keys(loadingState);
 
   return (
