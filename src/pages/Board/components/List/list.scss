@@ -1,11 +1,13 @@
+$base-blue-color: #026AA7;
+
 .list {
     box-sizing: border-box;
-    display: inline-block;
+    // display: inline-block;
     height: 100%;
     margin: 0 4px;
     vertical-align: top;
     width: 272px;
-    background-color:#ebecf0;
+    background-color: #ebecf0;
     border-radius: 3px;
 }
 
@@ -17,27 +19,180 @@ h2 {
     margin: 0 0 8px;
 }
 
+.list-header {
+    display: flex;
+    justify-content: space-between
+}
+
+.list-menu {
+    color: black;
+    font-size: 21px;
+    padding: 0px 7px 0 0;
+}
+
+.list-menu .fa-solid {
+    color: black;
+    font-size: 18px;
+    font-stretch: ultra-expanded;
+}
+
 .list-card {
+    position: relative;
     list-style: none;
-    padding: 0 0 5px 10px;
-    background-color: #fff;
+    padding: 2px 0 5px 10px;
+    background-color: rgb(246, 246, 246);
     border-radius: 3px;
-    box-shadow: var(--ds-shadow-raised,0 1px 0 #091e4240);
+    box-shadow: 0 1px 0 #091e4240;
     margin: 8px;
+    color: #2e2c2c;
+    white-space: break-spaces;
+
+    p {
+        margin: 0;
+    }
+
+    &:hover {
+        .icon-card-edit {
+            display: block;
+        }
+
+        &:focus {
+            .icon-card-edit {
+                display: none;
+            }
+        }
+
+    }
 }
 
 .add-card {
+    display: flex;
     //same for text vertical centering
     height: 40px;
     line-height: 40px;
     margin: 8px;
     list-style-type: none;
     padding: 0 0 0 10px;
-    color:rgb(108, 108, 108);
+    color: rgb(59, 59, 59);
     border-radius: 5px;
-    &:hover {
-        background-color: rgb(164, 164, 164);
-        color:rgb(61, 61, 61)
-    }
 
+    &:hover {
+        background-color: rgb(200 198 198);
+        color: rgb(61, 61, 61);
+    }
+}
+
+.list-actions {
+    color: rgb(61, 61, 61);
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 8px 16px -4px #091e4240, 0 0 0 1px #091e4214;
+    // display: none;
+    // overflow: hidden;
+    // position: absolute;
+    // right: -9999px;
+    // top: -9999px;
+    //-webkit-transform: translateZ(0);
+    width: 255px;
+    padding: 5px;
+    // position: absolute;
+    // top: 54px;
+}
+
+.list-actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 3px 3px 0 0;
+}
+
+.list-actions-title {
+    padding: 0 0 0 9px;
+    font-weight: 400;
+    font-size: 19px;
+}
+
+.inp-cardtitle {
+    width: 100%;
+    line-height: 20px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 2px $base-blue-color;
+    box-sizing: border-box;
+    margin: 0 auto 3px;
+    padding: 8px 12px;
+    border: hidden;
+    outline: none;
+}
+
+.add-cardtitle-controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cardtitle-add-button {
+    height: 32px;
+    padding: 4px 8px;
+    margin: 0 5px 0 0;
+    color: #fff;
+    background-color: $base-blue-color;
+    border: none;
+    border-radius: 3px;
+}
+
+.icon-close-cardtitle {
+    color: #2e2c2c;
+    font-size: 27px;
+    padding: 3px 0 0 0 !important;
+}
+
+.icon-card-edit {
+    display: none;
+    color: #333333b6;
+    font-size: 21px;
+    position: absolute;
+    left: 223px;
+    top: 0px;
+
+}
+
+.list-card {
+    &:focus {
+        background-color: #ffffff;
+        width: 90%;
+        border: none;
+        border-radius: 2px;
+        box-shadow: 0 0 0 2px $base-blue-color;
+        ;
+        outline: none;
+        transition: .1s;
+    }
+}
+
+.delete-card {
+    height: 32px;
+    min-width: 60px;
+    padding: 4px 8px;
+    margin: 0 0 0 10px;
+    color: #fff;
+    background-color: #026AA7;
+    border: none;
+    border-radius: 3px;
+}
+
+.save-card-edit {
+    height: 32px;
+    min-width: 60px;
+    padding: 4px 8px;
+    margin: 0 10px 0px;
+    color: #fff;
+    background-color: #026AA7;
+    border: none;
+    border-radius: 3px;
+}
+
+
+
+.add-cardtitle-form {
+    margin: 7px 8px;
 }

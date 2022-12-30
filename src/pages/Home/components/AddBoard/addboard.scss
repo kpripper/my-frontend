@@ -1,0 +1,31 @@
+.add-board-button {
+    display: flex;
+    align-items: center;
+}
+
+.button-modal-close {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+}
+
+.icon-close {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    padding: 2px;
+}
+
+.add-board-input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.whole-modal {
+    display: flex;
+    flex-direction: column;
+}
+
+#addBoardInput {
+    margin-bottom: 20px;
+}

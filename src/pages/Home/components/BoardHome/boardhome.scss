@@ -14,6 +14,9 @@
     width: 170px;
     background-color: #00000034;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .board-title{
@@ -33,8 +36,23 @@
 
 .board-link{
     text-decoration: none;
+    z-index:10;
 }
 
+.delete-board {
+    display: none;
+    color: #fff; 
+    text-align: right;  
+    padding: 0 5px 5px 0;
+    :hover > & {
+        display: block;          
+    }
+    z-index:100;
+}
+
+// .board-link .board-title:hover ~ .delete-board {
+//     display: block;
+// }
 
    
 

@@ -1,18 +1,21 @@
-import React from 'react'
-import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react'
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import SimpleBar from 'simplebar-react'
 import BoardHome from './components/BoardHome/BoardHome'
 import 'simplebar-react/dist/simplebar.min.css'
 import './home.scss'
 import '../../index.css'
-import { Board } from '../Board/Board'
-import { connect } from 'react-redux'
+import {Board} from '../Board/Board'
+import { connect, useSelector } from 'react-redux'
 import { getBoards } from '../../store/modules/boards/actions'
-
+import AddBoard from './components/AddBoard/AddBoard'
+import store, { RootState } from '../../store/store'
+import SimpleSnackbar from '../SnackBar/SimpleSnackbar'
+import { ProgressBar } from '../ProgressBar/ProgressBar'
 
 type propsType = {
-  boards: []
   getBoards: () => Promise<void>
+  boards: { id: number; title: string }[]
 }
 type stateType = {
   boards: []
@@ -27,93 +30,161 @@ type stateType = {
 //   ],
 // }
 
-// export default class Home extends React.Component {
+// class Home extends React.Component <propsType, stateType> {
 
-class Home extends React.Component <propsType, stateType> {
-  //без цього рендерять просто дужки {}
-  async componentDidMount() {
-    console.log('componentDidMount')
+//   //без цього рендерять просто дужки {}
+//    componentDidMount() {
+//     console.log('componentDidMount')
 
-    // getBoards нічого не повертає, undefined
-    await this.props.getBoards()
-    
-  }
+//     // getBoards нічого не повертає, undefined
+//      this.props.getBoards()
 
-  render() {
-    // NOTE          return (<div>{JSON.stringify(this.props)}</div>);
+//   }
 
-    //   {
-    //     "boards": {
-    //         "boards": [
-    //             {
-    //                 "id": 1668032236310,
-    //                 "title": "todos",
-    //                 "custom": {
-    //                     "description": "desc"
-    //                 }
-    //             },
-    //             {
-    //                 "id": 1668068755851,
-    //                 "title": "Level 2.6 - CRUD",
-    //                 "custom": {
-    //                     "description": "Make a board creation..."
-    //                 }
-    //             }
-    //         ]
-    //     }
-    // }
-    console.log(this.props)
+//   render() {
+//     // NOTE          return (<div>{JSON.stringify(this.props)}</div>);
+
+//     //   {
+//     //     "boards": {
+//     //         "boards": [
+//     //             {
+//     //                 "id": 1668032236310,
+//     //                 "title": "todos",
+//     //                 "custom": {
+//     //                     "description": "desc"
+//     //                 }
+//     //             },
+//     //             {
+//     //                 "id": 1668068755851,
+//     //                 "title": "Level 2.6 - CRUD",
+//     //                 "custom": {
+//     //                     "description": "Make a board creation..."
+//     //                 }
+//     //             }
+//     //         ]
+//     //     }
+//     // }
+//     console.log(this.props)
+
+//     //об'єкт з одним ключом boards значенням якого є масив також з назвою boards
+//    // console.log(boards)
+
+//     return (
+//       <>
+//         <div>{JSON.stringify(this.props)}</div>
+//         <div>{JSON.stringify(this.props.boards)}</div>
+//         <div>{JSON.stringify(this.state)}</div>
+//         <div className={window.location.pathname === '/' ? 'home' : ''}>
+//           <div className="header-container">
+//             <Link to="/">Home</Link>
+//           </div>
+//           <div className="boards-header">
+//             <div className="boards-header-item">
+//               <span className="fa-solid fa-table"></span>
+//               <span>Your boards</span>
+//             </div>
+//           </div>
+//           {/* <div>
+//           <Link to="/board">board</Link>
+//         </div>
+//          */}
+
+//           <div className="all-boards">
+//           <div>{this.props.boards.map(({ id, title }) => <BoardHome id={id} title={title} />)}</div>
+//              {/* <div className="all-boards">{this.props.boards.map((elem) => BoardHome(elem))}</div>   */}
+//                        <div className="add-board">
+//               <div className="add-board-button">
+//                 <span className="fa-solid fa-plus"></span>
+//                 <span className="">Add board</span>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </>
+//     )
+//   }
+// }
+
+const Home = (props: propsType) => {
+  // console.log('Home useParams ', useParams())
+  console.log('Home store.getState ', store.getState())
+
+  const selectLoadingState = useSelector((state: RootState) => state.loading)
+  const selectError = useSelector((state: RootState) => state.error)
+
+  const { boards } = props
+
+  const { current: currentBoards } = useRef(boards)
 
 
 
-    //об'єкт з одним ключом boards значенням якого є масив також з назвою boards
-   // console.log(boards)
+  //виконується після рендеру компонента, i без цього нема ререндера
+  useEffect(() => {
+    console.log("useEffect home");
+    props.getBoards()
+  }, [currentBoards])
 
-    return (
-      <>
-        <div>{JSON.stringify(this.props)}</div>
-        <div>{JSON.stringify(this.props.boards)}</div>
-        <div>{JSON.stringify(this.state)}</div>
-        <div className={window.location.pathname === '/' ? 'home' : ''}>
-          <div className="header-container">
-            <a href="/">Home</a>
-          </div>
-          <div className="boards-header">
-            <div className="boards-header-item">
-              <span className="fa-solid fa-table"></span>
-              <span>Your boards</span>
-            </div>
-          </div>
-          {/* <div>
-          <Link to="/board">board</Link>
+  // console.log('props.getBoards()', props.getBoards());
+
+  return (
+    <>
+      {/* <div>{JSON.stringify(props.boards)}</div> */}
+      {/* <div>state - {JSON.stringify(state)}</div> */}
+
+      {/* <div>{JSON.stringify(state)}</div> */}
+      <div
+      // className={window.location.pathname === '/' ? 'home' : ''}
+      >
+        <div className="header-container">
+          <Link to="/">Home</Link>
         </div>
-         */}
-
-          <div className="all-boards">
-            <div>
-              {/* {this.props.boards.boards.map(b => <div>{b}</div>)}                */}
-            </div>
-            <div>{this.props.boards.map((elem) => BoardHome(elem))}</div> 
-                       <div className="add-board">
-              <div className="add-board-button">
-                <span className="fa-solid fa-plus"></span>
-                <span className="">Add board</span>
-              </div>
-            </div>
+        <div className="boards-header">
+          <div className="boards-header-item">
+            <span className="icon-boards"></span>
+            <span className="your-boards">Your boards</span>
           </div>
-          {/* <div>{window.location.pathname}</div> */}
         </div>
-      </>
-    )
-  }
+        {/* <div>
+        <Link to="/board">board</Link>
+      </div>
+       */}
+
+        <div className="all-boards">
+          {props.boards.map(({ id, title }) => (
+            <BoardHome key={id} id={id} title={title} />
+          ))}
+          <AddBoard />
+        </div>
+        {selectError.isError ? (
+        <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
+      ) : (
+        ''
+      )}
+      {/* {selectLoadingState.loading ? <ProgressBar /> : ''} */}
+      {selectLoadingState.loading && <ProgressBar />}
+      </div>
+    </>
+  )
 }
 
-//BUG TS7006: Parameter 'state' implicitly has an 'any' type.
-//NOTE - додав :stateType до state - правильно?
-//TS2339: Property 'boards' does not exist on type 'stateType'.
 
-const mapStateToProps = (state: stateType) => ({
+
+//запускається щоразу при зміні store і повертає щось компоненту
+const mapStateToProps = (state: stateType) => ({  
   ...state.boards,
 })
+
+
+
+//передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
+//якщо другий параметр в фігурних дужках - то це екшнкріейтор
+//якщо ні, то щось таке
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     // dispatching plain actions
+//     increment: () => dispatch({ type: 'INCREMENT' }),
+//     decrement: () => dispatch({ type: 'DECREMENT' }),
+//     reset: () => dispatch({ type: 'RESET' }),
+//   }
 
 export default connect(mapStateToProps, { getBoards })(Home)
