@@ -1,3 +1,4 @@
+import React from 'react'
 import config from '../../../common/constants/api'
 import { Dispatch } from 'redux'
 import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse'
@@ -6,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import api from '../../../common/constants/api'
 import { getBoards } from '../boards/actions'
 import store from '../../store'
+import { ProgressBar } from '../../../pages/ProgressBar/ProgressBar'
+
 
 export const getBoard = (id: number) => async (dispatch: Dispatch) => {
   console.log('getBoard')
@@ -157,15 +160,18 @@ export const delCard =
     }
   }
 
+const errorTest = "error string"
+
 export const edCard =
   (boardId: string, listID: number, cardID: string, cardTitle: string) =>
   async (dispatch: Dispatch) => {
     try {
       const edCardResp: { result: string } = await instance.put(
         config.boards + '/' + boardId + '/card/' + cardID,
-        { title: cardTitle, list_id: listID }
+        { title: cardTitle, list_id: listID, errorTest } 
       )
       console.log(cardID, 'edCardResp', edCardResp)
+
       if (edCardResp.result === 'Updated') {
         dispatch<any>(getBoard(Number(boardId)))
       }

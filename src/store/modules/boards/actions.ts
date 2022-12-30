@@ -4,13 +4,13 @@ import { AnyAction, Dispatch } from 'redux'
 import { BoardsServerResponse } from '../../../common/interfaces/BoardsServerResponse'
 import api from '../../../api/request'
 import { ThunkAction } from 'redux-thunk'
-import { AppState } from '../../store'
-import type { AppDispatch } from '../../store'
+// import { AppState } from '../../store'
+import type { AppDispatch, RootState } from '../../store'
 import { useDispatch } from 'react-redux'
 
 //  ThunkAction <return, state, type of extraArguments, action type defined in application> extends Action
 
-type ThunkActionType = ThunkAction<Promise<void>, AppState, unknown, AnyAction>
+type ThunkActionType = ThunkAction<Promise<void>, RootState, unknown, AnyAction>
 
 //це thunk, тому що виконує асинхронний діспатч
 

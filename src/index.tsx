@@ -3,14 +3,38 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import {Board} from './pages/Board/Board' // Import a component from another file
+import { Board } from './pages/Board/Board' // Import a component from another file
 import { Provider } from 'react-redux'
 import store from './store/store'
+import {
+  createRoutesFromElements,
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom'
+import ErrorPage from './pages/ErrorRouterPage/error-page'
 
 import './index.css'
-import './css/iconsfont.css'
+import './iconfont/iconsfont.css'
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/board/:id',
+    element: <Board />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+  },
+])
+
 root.render(
   //BUG
   //  <React.StrictMode>
@@ -56,16 +80,13 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       {/* Без <BrowserRouter> - Error: useRoutes() may be used only in the context of a <Router> component */}
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <App />
-      </BrowserRouter>
-    </Provider>
-    ,
-  </React.StrictMode>
+      </BrowserRouter> */}
 
-  // <BrowserRouter>
-  //   <App />
-  // </BrowserRouter>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
 )
 
 // If you want to start measuring performance in your app, pass a function

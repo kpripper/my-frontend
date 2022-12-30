@@ -4,18 +4,11 @@ import rootReducer from './reducer'
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 
-export interface AppState {
-  board: { title: string; lists: [] }
-  boards: { boards: [] }
-  user: {}
-  //modal: boolean;
-}
-
 // const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: [thunk],
+ // middleware: [thunk],
 })
 
 export type AppDispatch = typeof store.dispatch // you can use this Dispatch type in your thunks

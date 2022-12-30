@@ -4,7 +4,6 @@ import { isNullishCoalesce } from 'typescript'
 import {  getBoards} from '../../../../store/modules/boards/actions'
 import './modaladdboard.scss'
 import { Dispatch } from 'redux'
-import { thunkDispatch } from '../../../../asyncActions/asyncAction'
 import { createBoard } from '../../../../store/modules/board/actions'
 
 export default function ModalAddBoard() {

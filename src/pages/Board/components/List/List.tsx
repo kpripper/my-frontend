@@ -16,7 +16,7 @@ import { getBoard } from '../../../../store/modules/board/actions'
 import { AxiosResponse } from 'axios'
 import { newNameValidation } from '../../../../common/functions/functions'
 import { createNoSubstitutionTemplateLiteral } from 'typescript'
-import { AppState } from '../../../../store/store'
+
 
 export const List = (props: {
   id: number

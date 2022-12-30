@@ -6,10 +6,12 @@ import 'simplebar-react/dist/simplebar.min.css'
 import './home.scss'
 import '../../index.css'
 import {Board} from '../Board/Board'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { getBoards } from '../../store/modules/boards/actions'
 import AddBoard from './components/AddBoard/AddBoard'
-import store from '../../store/store'
+import store, { RootState } from '../../store/store'
+import SimpleSnackbar from '../SnackBar/SimpleSnackbar'
+import { ProgressBar } from '../ProgressBar/ProgressBar'
 
 type propsType = {
   getBoards: () => Promise<void>
@@ -107,6 +109,9 @@ const Home = (props: propsType) => {
   // console.log('Home useParams ', useParams())
   console.log('Home store.getState ', store.getState())
 
+  const selectLoadingState = useSelector((state: RootState) => state.loading)
+  const selectError = useSelector((state: RootState) => state.error)
+
   const { boards } = props
 
   const { current: currentBoards } = useRef(boards)
@@ -150,6 +155,13 @@ const Home = (props: propsType) => {
           ))}
           <AddBoard />
         </div>
+        {selectError.isError ? (
+        <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
+      ) : (
+        ''
+      )}
+      {/* {selectLoadingState.loading ? <ProgressBar /> : ''} */}
+      {selectLoadingState.loading && <ProgressBar />}
       </div>
     </>
   )

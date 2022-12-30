@@ -18,10 +18,12 @@ import store from '../../store/store'
 import { Dispatch } from 'redux'
 import instance from '../../api/request'
 import { idText } from 'typescript'
-import { RootState, AppState } from '../../store/store'
+import { RootState } from '../../store/store'
 import { AxiosResponse } from 'axios'
 import { newNameValidation } from '../../common/functions/functions'
-
+import { ProgressBar } from '../ProgressBar/ProgressBar'
+import { SnackBar } from '../SnackBar/SnackBar'
+import SimpleSnackbar from '../SnackBar/SimpleSnackbar'
 
 // const sampleBoardState = {
 //   title: 'My Board',
@@ -61,11 +63,15 @@ const BoardComponent = (props: BoardProps) => {
   console.log('board props', props)
 
   const listsSelector = useSelector(
-    (state: AppState) => state.board.lists,
+    (state: RootState) => state.board.lists,
     shallowEqual
   )
 
   //console.log('listsSelector', listsSelector)
+  const selectLoadingState = useSelector((state: RootState) => state.loading)
+  const selectError = useSelector((state: RootState) => state.error)
+  //@ts-ignore
+  console.log('selectErrorState.errorText', selectError.errorText)
 
   const [loading, setLoading] = useState(true)
   const [settedBoard, setBoardTitle] = useState<string | null>(null)
@@ -84,6 +90,7 @@ const BoardComponent = (props: BoardProps) => {
 
   async function fetchData() {
     const response = await instance.get('/board/' + id)
+    console.log('await instance.get board')
     // @ts-ignore
     setBoardTitle(response.title)
     // @ts-ignore
@@ -211,7 +218,6 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-
   const closeAddListForm = () => {
     ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
       'none'
@@ -251,94 +257,91 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-  if (loading) {
-    return <h1>Loading...</h1>
-  }
-
-  if (settedBoard) {
-    console.log('try render')
-
-    return (
-      <div
-        // onClick={myFunction}
-        className={`${location.pathname !== '/' ? 'boards' : ''}`}
-      >
-        {/* <div>state - {JSON.stringify(state)}</div>
+  return (
+    <div
+      // onClick={myFunction}
+      className={`${location.pathname !== '/' ? 'boards' : ''}`}
+    >
+      {/* <div>state - {JSON.stringify(state)}</div>
       <div>props - {JSON.stringify(props)}</div> */}
-        <div className="header-container">
-          <Link className="" to="/">
-            Main
-          </Link>
-        </div>
+      <div className="header-container">
+        <Link className="" to="/">
+          Main
+        </Link>
+      </div>
 
-        <div className="board-header">
-          <h1 className="board-h1" onClick={editBoardTitleToggle}>
-            {settedBoard}
+      <div className="board-header">
+        <h1 className="board-h1" onClick={editBoardTitleToggle}>
+          {settedBoard}
 
-            {/* {gotStateBoard.title} */}
-            {/* {id} */}
-          </h1>
-          <input
-            className="inp-board-title"
-            type="text"
-            //коли додав пусти плейсхолдер, то при появі інпута там поточна назва дошки
-            placeholder=""
-            onKeyDown={inputKeyDown}
-            onBlur={inputOnBlur}
-          />
-        </div>
+          {/* {gotStateBoard.title} */}
+          {/* {id} */}
+        </h1>
+        <input
+          className="inp-board-title"
+          type="text"
+          //коли додав пусти плейсхолдер, то при появі інпута там поточна назва дошки
+          placeholder=""
+          onKeyDown={inputKeyDown}
+          onBlur={inputOnBlur}
+        />
+      </div>
 
-        <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
-          <div className="board-content">
-            {listsSelector.map(
-              ({
-                id,
-                title,
-                cards,
-              }: {
-                id: number
-                title: string
-                cards: []
-              }) => (
-                <List id={id} title={title} cards={cards} />
-              )
-            )}
-            <div className="list">
-              <div className="open-add-list" onClick={enterListTitle}>
-                <span className="icon-plus"></span>
-                <span className="add-list-span">Add new list</span>
-              </div>
-              <div className="add-list-form">
-                {/* //TODO якщо перемістити цей інпут в форму add-list-form, то тоді значення передається
+      <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
+        <div className="board-content">
+          {listsSelector.map(
+            ({
+              id,
+              title,
+              cards,
+            }: {
+              id: number
+              title: string
+              cards: []
+            }) => (
+              <List id={id} title={title} cards={cards} />
+            )
+          )}
+          <div className="list">
+            <div className="open-add-list" onClick={enterListTitle}>
+              <span className="icon-plus"></span>
+              <span className="add-list-span">Add new list</span>
+            </div>
+            <div className="add-list-form">
+              {/* //TODO якщо перемістити цей інпут в форму add-list-form, то тоді значення передається
                 //TODO але перестає працювати відправка назви по ентеру */}
-                <input
-                  className="inp-list-title"
-                  type="text"
-                  name="newlist"
-                  onKeyDown={addListOnEnter}
-                  placeholder="Enter list title..."
-                />
-                <div className="add-list-controls">
-                  <button className="list-add-button" onClick={addListOnButton}>
-                    Add list
-                  </button>
-                  <span
-                    onClick={closeAddListForm}
-                    className="icon-close icon-close-addlist"
-                  ></span>
-                  
-                </div>
+              <input
+                className="inp-list-title"
+                type="text"
+                name="newlist"
+                onKeyDown={addListOnEnter}
+                placeholder="Enter list title..."
+              />
+              <div className="add-list-controls">
+                <button className="list-add-button" onClick={addListOnButton}>
+                  Add list
+                </button>
+                <span
+                  onClick={closeAddListForm}
+                  className="icon-close icon-close-addlist"
+                ></span>
               </div>
-
-              {/* <span id="demo">focus</span> */}
             </div>
           </div>
-        </SimpleBar>
-      </div>
-    )
-  }
+        </div>
+      </SimpleBar>
 
-  return null
+ 
+     {/* скорочений варіант, як з прогрес-баром не працює */}
+      {selectError.isError ? (
+        <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
+      ) : (
+        ''
+      )}
+      {/* {selectLoadingState.loading ? <ProgressBar /> : ''} */}
+      {selectLoadingState.loading && <ProgressBar />}
+    </div>
+  )
 }
 
 //запускається щоразу при зміні store і повертає щось компоненту
