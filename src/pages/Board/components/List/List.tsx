@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   addCard,
@@ -35,6 +35,28 @@ export const List = (props: ListType) => {
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [isErrorCardValidation, setErrorCardValidationOpen] = useState(false)
   const [errorText, setErrorText] = useState('Error: ' + selectError.errorText)
+
+  const inputRef = useCallback((input: HTMLInputElement) => {
+    if (input) {
+      input.focus()
+      input.select()
+            // input.scrollIntoView({
+      //   behavior: 'smooth',
+      // })
+      // input.scrollTop = 250
+
+      var headerOffset = 45
+      var elementPosition = input.getBoundingClientRect().top
+      var offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      console.log('offsetPosition', offsetPosition)
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    }
+  }, [])
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setListName(ev.target.value)
@@ -203,7 +225,8 @@ export const List = (props: ListType) => {
               name="new-card"
               onKeyDown={addCardOnEnter}
               placeholder="Enter card title..."
-              autoFocus
+              //autoFocus
+              ref={inputRef}
             />
             <div className="add-cardtitle-controls">
               <button

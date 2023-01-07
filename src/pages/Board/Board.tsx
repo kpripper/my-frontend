@@ -33,6 +33,7 @@ const BoardComponent = (props: BoardProps) => {
   const direction = Math.round(Math.random() * 360)
   const hue = Math.random() * (192 - 212) + 212;
   const randomAlpha = Math.random() * (0.6 - 0.4) + 0.8
+
   const style = {
     background: `linear-gradient(${direction}deg, hsla(192, 98%, 33%,${randomAlpha}), hsla(${
       hue 

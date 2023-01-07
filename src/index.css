@@ -24,9 +24,16 @@ code {
     monospace;
 }
 
-/* for 100% height of root child element */
-html, body, #root { 
+html { 
    min-height: 100%;   
+}
+
+body { 
+  height: 100%;   
+}
+
+#root { 
+  height: 100%;   
 }
 
 .home {

@@ -1,26 +1,33 @@
 import { Alert, Snackbar } from '@mui/material'
-import {
-  useCallback,
-  useState,
-} from 'react'
+import { useCallback, useState } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
 import { CardType } from '../../../../common/types'
-import {
-  edCard,
-  delCard
-} from '../../../../store/modules/board/actions'
+import { edCard, delCard } from '../../../../store/modules/board/actions'
 import store from '../../../../store/store'
 import './card.scss'
 
 export const Card = (props: CardType) => {
-
-  console.log(props);
-  
+  // console.log(props)
 
   const inputRef = useCallback((input: HTMLInputElement) => {
     if (input) {
       input.focus()
       input.select()
+            // input.scrollIntoView({
+      //   behavior: 'smooth',
+      // })
+      // input.scrollTop = 250
+
+      var headerOffset = 45
+      var elementPosition = input.getBoundingClientRect().top
+      var offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      console.log('offsetPosition', offsetPosition)
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
     }
   }, [])
 
@@ -47,8 +54,8 @@ export const Card = (props: CardType) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log('handleKeyDown', cardName);
-    
+    console.log('handleKeyDown', cardName)
+
     if (event.key === 'Enter') {
       if (newNameValidation(cardName!)) {
         setCardName(cardName)
@@ -64,7 +71,7 @@ export const Card = (props: CardType) => {
     if (isInputCardName) {
       setCardName(initCardName)
       toggleInputCardName()
-    } 
+    }
   }
 
   var blurTimer: NodeJS.Timeout | null = null
