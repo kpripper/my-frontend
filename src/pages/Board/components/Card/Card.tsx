@@ -14,6 +14,9 @@ import './card.scss'
 
 export const Card = (props: CardType) => {
 
+  console.log(props);
+  
+
   const inputRef = useCallback((input: HTMLInputElement) => {
     if (input) {
       input.focus()
@@ -44,6 +47,8 @@ export const Card = (props: CardType) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log('handleKeyDown', cardName);
+    
     if (event.key === 'Enter') {
       if (newNameValidation(cardName!)) {
         setCardName(cardName)
