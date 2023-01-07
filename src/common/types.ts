@@ -1,8 +1,17 @@
+import { AxiosResponse } from "axios"
+
 export type BoardResponse = {
   title: string
   users: []
   lists: []
 }
+
+export type BoardProps = {
+  getBoard: (id: string) => Promise<AxiosResponse<any, any> | undefined>
+  boardTitle: string
+  boardLists: []
+}
+
 
 export type BoardState = {
   title: string

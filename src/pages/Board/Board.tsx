@@ -15,19 +15,12 @@ import { connect } from 'react-redux'
 import store from '../../store/store'
 import instance from '../../api/request'
 import { RootState } from '../../store/store'
-import { AxiosResponse } from 'axios'
 import { newNameValidation } from '../../common/functions/functions'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
 import { Alert, Snackbar } from '@mui/material'
-import { BoardResponse, ListType } from '../../common/types'
+import { BoardProps, BoardResponse, ListType } from '../../common/types'
 import {} from '@mui/material'
 import { clearError } from '../../store/modules/errorHandlers/actions'
-
-type BoardProps = {
-  getBoard: (id: string) => Promise<AxiosResponse<any, any> | undefined>
-  boardTitle: string
-  boardLists: []
-}
 
 const BoardComponent = (props: BoardProps) => {
   let boardId = useParams().id as string
@@ -37,7 +30,17 @@ const BoardComponent = (props: BoardProps) => {
     shallowEqual
   )
 
+  const direction = Math.round(Math.random() * 360)
+  const hue = Math.floor(Math.random() * 360)
+  const randomAlpha = Math.round(Math.random() * 20) / 10
+  const style = {
+    background: `linear-gradient(${direction}deg, hsla(${hue}, 50%, 50%,${randomAlpha}), hsla(${
+      hue + 60
+    }, 50%, 50%,${randomAlpha}))`,
+  }
+
   const [boardName, setBoardName] = useState('')
+  const [color, setColor] = useState(style)
   const [listName, setListName] = useState('')
   const [isInputBoardName, setInputBoardNameVisibity] = useState(false)
   const [isInputListName, setInputListNameVisibity] = useState(false)
@@ -164,7 +167,7 @@ const BoardComponent = (props: BoardProps) => {
   }, [selectError.isError])
 
   return (
-    <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
+    <div style={color} className={`${location.pathname !== '/' ? 'boards' : ''}`}>
       <div className="header-container">
         <Link className="" to="/">
           Main
