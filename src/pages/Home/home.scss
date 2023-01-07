@@ -1,3 +1,5 @@
+$base-blue-color: #026AA7;
+
 .boards-header {
     display: flex;
     padding: 15px 0 0 16px;
@@ -54,3 +56,39 @@
     padding: 0 5px 0 0;
 }
 
+#addBoardInput {
+    height: 28px;
+   // margin: 5px 4px;
+    width: 100%;
+    line-height: 20px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 2px #026aa7;
+    box-sizing: border-box;
+    padding: 6px;
+    border: hidden;
+    outline: none;
+}
+
+.create-new-board {
+    height: 28px;
+    padding: 4px;
+   // margin: 0 5px 0 0;
+    color: #fff;
+    background-color: $base-blue-color;
+    border: none;
+    border-radius: 3px;
+}
+
+.icon-close {
+   // height: 28px;
+    // margin: 5px 4px;
+    // width: 100%;
+     line-height: 20px;
+     border-radius: 3px;
+     color: #303030;
+     box-shadow: inset 0 0 0 1px #737373;
+     box-sizing: border-box;
+     padding: 6px;
+     border: hidden;
+     outline: none;
+}

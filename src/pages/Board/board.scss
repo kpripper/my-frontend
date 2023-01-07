@@ -3,8 +3,8 @@ $base-blue-color: #026AA7;
 .boards {
     height: 100%;
     background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
-  // background-image: url(../../img/fon.png);
-   background-size: cover;
+    // background-image: url(../../img/fon.png);
+    background-size: cover;
 }
 
 .board {
@@ -16,8 +16,16 @@ $base-blue-color: #026AA7;
             rgba(212, 212, 212, 0.041))
 }
 
+.board-header {
+    height: 78px;
+    padding: 0 0 0 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .simplebar {
-     //якщо розкоментувати, знизу сторінки біла полоска пікселів на 100
+    //якщо розкоментувати, знизу сторінки біла полоска пікселів на 100
     // height: 100%;
 }
 
@@ -65,11 +73,18 @@ h1 {
     font-weight: 600;
 }
 
-.inp-board-title {
-    display: none;
-    margin: 30px;
+.input-board-title {
+   // display: none;
+    margin: 3px;
     //   background-color: rgba(255, 255, 255, 0.18);
-    font-size: 30px;
+    font-size: 17px;
+   // line-height: 10px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 2px #026aa7;
+    box-sizing: border-box;
+    padding: 8px;
+    border: hidden;
+    outline: none;
 }
 
 .list-title {
@@ -128,6 +143,9 @@ h1 {
 
 .icon-close-addlist {
     color: #2e2c2c;
-    font-size:27px; 
-    padding: 3px 0 0 0 !important;   
+    font-size: 27px;
+}
+
+.add-list-controls {
+    display: flex;
 }

@@ -8,9 +8,9 @@ import api from '../../../common/constants/api'
 import { getBoards } from '../boards/actions'
 import store from '../../store'
 import { ProgressBar } from '../../../pages/ProgressBar/ProgressBar'
+import { clearError } from '../errorHandlers/actions'
 
-
-export const getBoard = (id: number) => async (dispatch: Dispatch) => {
+export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   console.log('getBoard')
 
   try {
@@ -27,67 +27,68 @@ export const getBoard = (id: number) => async (dispatch: Dispatch) => {
 }
 
 export const editBoardTitle =
-  (boardTitleNew: string, id: number) => async (dispatch: Dispatch) => {
-    console.log('dispatch  editBoardTitle', boardTitleNew)
-
+  (boardTitleNew: string, id: string) => async (dispatch: Dispatch) => {
     try {
-      console.log('try editBoardTitle')
       const awResp: { result: string; id: number } = await instance.put(
-        config.boards + '/' + id,
-        { title: boardTitleNew }
+        config.boards + "/" + id,
+        { title: boardTitleNew}
       )
       if (awResp.result === 'Updated') {
-        console.log('board Updated')
-
-        dispatch<any>(getBoards())
-        dispatch<any>(getBoard(id))
+        store.dispatch(getBoards())
+        store.dispatch(getBoard(id))
       }
     } catch (e) {
       console.log(boardTitleNew, 'e editBoardTitle', e)
     }
   }
 
-//export const createBoard = (titleName: string): ThunkActionType => async (dispatch): Promise<void> => {
-//без ThunkActionType не рендерить дошки
+export const editListTitle =
+  (listName: string, boardId: string, position: string) =>
+  async (dispatch: Dispatch) => {
+    try {
+      const editListTitleResp: { result: string; id: number } =
+        await instance.put(config.boards + '/' + boardId + '/list', {
+          title: listName,
+          position: position,
+        })
+        
+
+      if (editListTitleResp.result === 'Updated') {
+        // store.dispatch(getBoards())
+        store.dispatch(getBoard(boardId))
+      }
+    } catch (e) {
+            console.log('e editListTitle', e)         
+    }
+  }
+
 export const createBoard =
   (boardTitle: string) => async (dispatch: Dispatch) => {
-    console.log('dispatch  createBoard', dispatch)
-
     try {
-      console.log('try createBoard')
       const awResp: { result: string; id: number } = await instance.post(
         config.boards,
         { title: boardTitle }
       )
-      console.log('awResp', awResp)
+
       if (awResp.result === 'Created') {
-        console.log('Created')
-        dispatch<any>(getBoards())
+        store.dispatch(getBoards())
       }
     } catch (e) {
       console.log('e createBoard', e)
     }
   }
 
-// }
-
-// a hook that can be reused to resolve types
-//const useAppDispatch: () => AppDispatch = useDispatch
-
 export const deleteBoard = (boardId: string) => async (dispatch: Dispatch) => {
-  // console.log('dispatch  deleteBoard', dispatch)
   try {
-    const resDelete = await instance.delete(config.boards + '/' + boardId)
-    //  console.log(resDelete)
-    // console.log('deleteBoard ', config.boards+ '/' + boardId)
-    dispatch<any>(getBoards())
+    await instance.delete(config.boards + '/' + boardId)
+    store.dispatch(getBoards())
   } catch (e) {
     console.log('e  deleteBoard ', e)
   }
 }
 
 export const createList =
-  (listTitle: string, boardId: number) => async (dispatch: Dispatch) => {
+  (listTitle: string, boardId: string) => async (dispatch: Dispatch) => {
     console.log(
       'createList',
       config.boards + '/' + boardId + '/ listTitle' + listTitle
@@ -114,31 +115,16 @@ export const createList =
   }
 
 export const addCard =
-  (cardTitle: string, boardId: number, listID: number, position: number) =>
+  (cardTitle: string, boardId: string, listID: string, position: string) =>
   async (dispatch: Dispatch) => {
-    console.log(
-      'dispatch addCard',
-      'cardTitl',
-      cardTitle,
-      'boardId',
-      boardId,
-      'listID',
-      listID,
-      'position',
-      position
-    )
-
     try {
-      // console.log('try createBoard')
       const addCardResp: { result: string; id: number } = await instance.post(
         config.boards + '/' + boardId + '/card',
         { title: cardTitle, list_id: listID, position: position }
       )
-      console.log('addCardResp', addCardResp)
+
       if (addCardResp.result === 'Created') {
-        // console.log('Created')
-        dispatch<any>(getBoard(boardId))
-        // dispatch<any>(getBoards())
+        store.dispatch(getBoard(boardId))
       }
     } catch (e) {
       console.log('e addCard', e)
@@ -151,46 +137,48 @@ export const delCard =
       const delCardResp: { result: string } = await instance.delete(
         config.boards + '/' + boardId + '/card/' + cardID
       )
-      console.log('delCardResp', delCardResp)
       if (delCardResp.result === 'Deleted') {
-        dispatch<any>(getBoard(Number(boardId)))
+        console.log("delCard", delCardResp.result);
+        
+        store.dispatch(getBoard(boardId))
       }
     } catch (e) {
       console.log('e delCard', e)
     }
   }
 
-const errorTest = "error string"
+// add to config for error test const errorTest = 'error string'
 
 export const edCard =
-  (boardId: string, listID: number, cardID: string, cardTitle: string) =>
+  (boardId: string, listID: string, cardID: string, cardTitle: string) =>
   async (dispatch: Dispatch) => {
+    console.log( config.boards + '/' + boardId + '/card/' + cardID,
+    { title: cardTitle, list_id: listID });
+    
+    
     try {
       const edCardResp: { result: string } = await instance.put(
         config.boards + '/' + boardId + '/card/' + cardID,
-        { title: cardTitle, list_id: listID, errorTest } 
+        { title: cardTitle, list_id: listID }
       )
-      console.log(cardID, 'edCardResp', edCardResp)
-
       if (edCardResp.result === 'Updated') {
-        dispatch<any>(getBoard(Number(boardId)))
+        store.dispatch(getBoard(boardId))
       }
     } catch (e) {
+      console.log("edCard cardTitle ", cardTitle);
       console.log('e edCard', e)
     }
   }
 
 export const deleteList =
-  (boardId: string, listId: number) => async (dispatch: Dispatch) => {
-    console.log(' deleteList ')
-
+  (boardId: string, listId: string) => async (dispatch: Dispatch) => {
     try {
       const resDelete = await instance.delete(
         config.boards + '/' + boardId + '/list/' + listId
       )
-      console.log('resDelete  deleteList ', resDelete)
-      dispatch<any>(getBoard(+boardId))
-      dispatch<any>(getBoards())
+
+      store.dispatch(getBoard(boardId))
+      store.dispatch(getBoards())
     } catch (e) {
       console.log('e  deleteList ', e)
     }

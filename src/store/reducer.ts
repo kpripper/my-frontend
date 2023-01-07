@@ -3,7 +3,7 @@ import boardReducer from './modules/board/reducer'
 import boardsReducer from './modules/boards/reducer'
 import userReducer from './modules/user/reducer'
 import loadingReducer from './modules/loading/reducer'
-import errorReducer from './modules/handlers/reducer'
+import errorReducer from './modules/errorHandlers/reducer'
 
 export default combineReducers({
   boards: boardsReducer,

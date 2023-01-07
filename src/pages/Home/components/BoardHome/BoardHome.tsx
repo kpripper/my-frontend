@@ -7,7 +7,7 @@ import { deleteBoard } from '../../../../store/modules/board/actions'
 import { useDispatch } from 'react-redux'
 
 export default function BoardHome(props: { id: number; title: string }) {
-  // console.log('BoardHome ', props)
+   console.log('BoardHome ', props)
 
   const dispatch = useDispatch()
 
@@ -23,16 +23,6 @@ export default function BoardHome(props: { id: number; title: string }) {
           <div
             className="delete-board"
             id={String(props.id)}
-            // onClick={(e) => {
-            //   try {
-            //     e.stopPropagation()
-            //     alert('stopPropagation')
-            //   } catch (err) {
-            //     alert(err)
-            //   }
-            //   //  (document.querySelector(`.id${props.id}`) as HTMLElement).style.pointerEvents = "none"
-            //   deleteBoard((e.target as HTMLElement).getAttribute('id')!)
-            // }}
             onClick={(e) => {
               e.preventDefault()
               try {
@@ -46,9 +36,9 @@ export default function BoardHome(props: { id: number; title: string }) {
               } catch (err) {
                 alert(err)
               }
-              //  (document.querySelector(`.id${props.id}`) as HTMLElement).style.pointerEvents = "none"
+             
               dispatch<any>(
-                deleteBoard((e.target as HTMLElement).getAttribute('id')!)
+                deleteBoard(String(props.id))
               )
             }}
           >

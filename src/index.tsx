@@ -11,11 +11,11 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom'
-import ErrorPage from './pages/ErrorRouterPage/error-page'
+import ErrorPage from './pages/ErrorPages/error-page'
 
 import './index.css'
 import './iconfont/iconsfont.css'
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
+import NotFoundPage from './pages/ErrorPages/NotFoundPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 

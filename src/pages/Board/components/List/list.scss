@@ -20,8 +20,27 @@ h2 {
 }
 
 .list-header {
+    width: 100%;
     display: flex;
-    justify-content: space-between
+    justify-content: space-between;
+}
+
+.input-list-title {
+    height: 32px;
+    margin: 0 0 5px 0;
+    width: 100%;
+    line-height: 20px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 2px #026aa7;
+    box-sizing: border-box;
+    padding: 6px;
+    border: hidden;
+    outline: none;
+}
+
+.input-container {
+    display: flex;
+    padding: 3px;
 }
 
 .list-menu {
@@ -143,7 +162,7 @@ h2 {
 .icon-close-cardtitle {
     color: #2e2c2c;
     font-size: 27px;
-    padding: 3px 0 0 0 !important;
+    // padding: 3px 0 0 0 !important;
 }
 
 .icon-card-edit {
@@ -173,7 +192,7 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-    margin: 0 0 0 10px;
+   // margin: 0 0 0 10px;
     color: #fff;
     background-color: #026AA7;
     border: none;
@@ -184,7 +203,7 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-    margin: 0 10px 0px;
+  //  margin: 0 10px 0px;
     color: #fff;
     background-color: #026AA7;
     border: none;

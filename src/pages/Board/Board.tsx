@@ -1,176 +1,107 @@
-import React, { FormEvent, useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { List } from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
 import '../../index.css'
-import { IBoard } from '../../common/interfaces/IBoard'
 import {
   createList,
   editBoardTitle,
   getBoard,
 } from '../../store/modules/board/actions'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { shallowEqual, useSelector } from 'react-redux'
 import { connect } from 'react-redux'
 import store from '../../store/store'
-import { Dispatch } from 'redux'
 import instance from '../../api/request'
-import { idText } from 'typescript'
 import { RootState } from '../../store/store'
 import { AxiosResponse } from 'axios'
 import { newNameValidation } from '../../common/functions/functions'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
-import { SnackBar } from '../SnackBar/SnackBar'
-import SimpleSnackbar from '../SnackBar/SimpleSnackbar'
+import { Alert, Snackbar } from '@mui/material'
+import { BoardResponse, ListType } from '../../common/types'
+import {} from '@mui/material'
+import { clearError } from '../../store/modules/errorHandlers/actions'
 
-interface BoardProps {
-  getBoard: (id: number) => Promise<AxiosResponse<any, any> | undefined>
+type BoardProps = {
+  getBoard: (id: string) => Promise<AxiosResponse<any, any> | undefined>
   boardTitle: string
   boardLists: []
 }
 
 const BoardComponent = (props: BoardProps) => {
-  console.log('board props', props)
+  let boardId = useParams().id as string
+
+  const selectError = useSelector(
+    (state: RootState) => state.error,
+    shallowEqual
+  )
+
+  const [boardName, setBoardName] = useState('')
+  const [listName, setListName] = useState('')
+  const [isInputBoardName, setInputBoardNameVisibity] = useState(false)
+  const [isInputListName, setInputListNameVisibity] = useState(false)
+  const [isErrorValidation, setErrorValidationOpen] = useState(false)
+  const [isErrorListValidation, setErrorListValidationOpen] = useState(false)
+  const [errorText, setErrorText] = useState('Error: ' + selectError.errorText)
+
+  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setBoardName(ev.target.value)
+  }
+
+  const handleListChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setListName(ev.target.value)
+  }
+
+  const toggleInputBoardName = () => {
+    setInputBoardNameVisibity(!isInputBoardName)
+  }
+
+  const toggleInputListName = () => {
+    setInputListNameVisibity(!isInputBoardName)
+  }
+
+  const handleSnackbarClose = () => {
+    store.dispatch(clearError())
+    setErrorValidationOpen(false)
+    setErrorListValidationOpen(false)
+    fetchData()
+    setInputBoardNameVisibity(false)
+    setInputListNameVisibity(false)
+  }
 
   const listsSelector = useSelector(
     (state: RootState) => state.board.lists,
     shallowEqual
   )
 
-  //console.log('listsSelector', listsSelector)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
-  const selectError = useSelector((state: RootState) => state.error)
-  //@ts-ignore
-  console.log('selectErrorState.errorText', selectError.errorText)
-
-  const [loading, setLoading] = useState(true)
-  const [settedBoard, setBoardTitle] = useState<string | null>(null)
-  //const [settedBoardLists, setBoardLists] = useState<[]>([])
-
-  let { id } = useParams()
-  // console.log(typeof id)
-
-  if (typeof id !== 'undefined') {
-    //var for visibility in getBoard(idNumber)
-    var idNumber: number = +id
-    //  dispatch<any>(getBoard(idNumber))
-    //console.log(' getBoard(idNumber)')
-    // props.getBoard(idNumber)
-  }
 
   async function fetchData() {
-    const response = await instance.get('/board/' + id)
-    console.log('await instance.get board')
-    // @ts-ignore
-    setBoardTitle(response.title)
-    // @ts-ignore
-    let lists = response.lists
-    // setBoardLists(lists)
-    console.log('fetchData lists', lists)
+    const response: BoardResponse = await instance.get('/board/' + boardId)
+    setBoardName(response.title)
   }
-
-  const dispatch = useDispatch()
-  console.log('Board useParams ', useParams())
-  const getstate = store.getState()
-  console.log('Board store.getState() ', getstate)
-
-  // const boardsFromState = useSelector((state: RootState) => state.boards.boards)
-  // console.log('boardsFromState', boardsFromState) // []
-
-  // let currentBoardTitle = boardsFromState.find(boardObj => {
-  //   return boardObj.id === 6
-  // })
 
   let location = useLocation()
 
   useEffect(() => {
     fetchData()
-    props.getBoard(+id!)
-    setLoading(false)
-  }, []) // Or [] if effect doesn't need props or state
-
-  console.log('settedBoard', settedBoard)
-
-  const editBoardTitleToggle = () => {
-    const elemH1 = document.querySelector('.board-h1') as HTMLElement
-    const elemInput = document.querySelector('.inp-board-title') as HTMLElement
-
-    if (elemH1.style.display !== 'none') {
-      console.log(
-        "editBoardTitleToggle if elemH1.style.display !== 'none",
-        elemH1.style.display,
-        elemInput.style.display
-      )
-      elemH1.style.display = 'none'
-      elemInput.style.display = 'block'
-      //elemInput. = elemH1.textContent
-      console.log(
-        "editBoardTitleToggle if elemH1.style.display !== 'none switch",
-        elemH1.style.display,
-        elemInput.style.display
-      )
-      elemInput.focus()
-    } else {
-      elemInput.blur()
-      console.log(
-        'editBoardTitleToggle else',
-        elemH1.style.display,
-        elemInput.style.display
-      )
-      elemH1.style.display = 'block'
-      elemInput.style.display = 'none'
-      console.log(
-        'editBoardTitleToggle else switch',
-        elemH1.style.display,
-        elemInput.style.display
-      )
-    }
-  }
-
-  const inputKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log('ev target', (ev.target as HTMLInputElement).value)
-    if (ev.key === 'Enter') {
-      if (newNameValidation((ev.target as HTMLInputElement).value)) {
-        // alert('Name good key!')
-        dispatch<any>(
-          editBoardTitle((ev.target as HTMLInputElement).value, idNumber)
-        )
-        dispatch<any>(getBoard(idNumber))
-        setBoardTitle((ev.target as HTMLInputElement).value)
-        editBoardTitleToggle()
-      } else {
-        alert('Name not valid inputKeyDown!')
-        editBoardTitleToggle()
-      }
-    }
-  }
-
-  const inputOnBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
-    if (newNameValidation(ev.target.value)) {
-      //  alert('Name good blur!')
-      dispatch<any>(editBoardTitle(ev.target.value, idNumber))
-      dispatch<any>(getBoard(idNumber))
-      console.log('try setBoard', ev.target.value)
-      setBoardTitle(ev.target.value)
-      console.log('setBoard', getstate.board.title)
-      editBoardTitleToggle()
-    } else {
-      // alert('Name not valid inputOnBlur!')
-      editBoardTitleToggle()
-    }
-  }
+    store.dispatch(getBoard(boardId))
+  }, [])
 
   const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
       if (newNameValidation((ev.target as HTMLInputElement).value)) {
-        closeAddListForm()
-        dispatch<any>(
-          createList((ev.target as HTMLInputElement).value, idNumber)
+        setInputListNameVisibity(false)
+        store.dispatch(
+          createList((ev.target as HTMLInputElement).value, boardId)
         )
-        dispatch<any>(getBoard(idNumber))
+        store.dispatch(getBoard(boardId))
       } else {
-        alert('Name not valid!')
+        setErrorText(
+          'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
+        )
+        setErrorListValidationOpen(true)
       }
     }
   }
@@ -181,60 +112,59 @@ const BoardComponent = (props: BoardProps) => {
     ) as HTMLInputElement
 
     if (newNameValidation(elemInpListTitle.value)) {
-      closeAddListForm()
-      dispatch<any>(createList(elemInpListTitle.value, idNumber))
-      dispatch<any>(getBoard(idNumber))
+      setInputListNameVisibity(false)
+      store.dispatch(createList(elemInpListTitle.value, boardId))
+      store.dispatch(getBoard(boardId))
     } else {
-      alert('Name not valid!')
+      setErrorText('List name ' + elemInpListTitle.value + ' is not valid')
+      setErrorListValidationOpen(true)
     }
   }
 
-  const closeAddListForm = () => {
-    ;(document.querySelector('.add-list-form') as HTMLElement).style.display =
-      'none'
-    ;(document.querySelector('.open-add-list') as HTMLElement).style.display =
-      'flex'
-  }
-
-  const enterListTitle = () => {
-    const elemOpenAddList = document.querySelector(
-      '.open-add-list'
-    ) as HTMLElement
-    // const elemAddListControls = document.querySelector(
-    //   '.add-list-controls'
-    // ) as HTMLElement
-    // const elemAddSpan = document.querySelector('.add-list-span') as HTMLElement
-    const elemInpListTitle = document.querySelector(
-      '.inp-list-title'
-    ) as HTMLElement
-    // const elemListAddButton = document.querySelector(
-    //   '.list-add-button'
-    // ) as HTMLElement
-    const elemAddListForm = document.querySelector(
-      '.add-list-form'
-    ) as HTMLElement
-    const elemList = document.querySelector('.list') as HTMLElement
-
-    if (elemOpenAddList.style.display !== 'none') {
-      elemOpenAddList.style.display = 'none'
-      elemAddListForm.style.display = 'flex'
-      elemInpListTitle.focus()
-      elemList.classList.add('active-list')
-    } else {
-      elemInpListTitle.blur()
-      elemOpenAddList.style.display = 'flex'
-      elemAddListForm.style.display = 'none'
-      elemList.classList.remove('active-list')
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (newNameValidation(boardName)) {
+        setBoardName(boardName)
+        setInputBoardNameVisibity(false)
+        store.dispatch(editBoardTitle(boardName, boardId))
+      } else {
+        setErrorValidationOpen(true)
+      }
     }
   }
+
+  const handleBlur = () => {
+    if (newNameValidation(boardName)) {
+      setBoardName(boardName)
+      setInputBoardNameVisibity(false)
+      store.dispatch(editBoardTitle(boardName, boardId))
+    } else {
+      setErrorValidationOpen(true)
+    }
+  }
+
+  const handleListBlur = () => {
+    if (newNameValidation(listName)) {
+      setListName(listName)
+      setInputListNameVisibity(false)
+      store.dispatch(createList(listName, boardId))
+      store.dispatch(getBoard(boardId))
+    } else {
+      setErrorValidationOpen(true)
+    }
+  }
+
+  const showSnackbar =
+    selectError.isError || isErrorValidation || isErrorListValidation
+
+  useEffect(() => {
+    if (selectError.isError) {
+      setErrorText('Error: ' + selectError.errorText)
+    }
+  }, [selectError.isError])
 
   return (
-    <div
-      // onClick={myFunction}
-      className={`${location.pathname !== '/' ? 'boards' : ''}`}
-    >
-      {/* <div>state - {JSON.stringify(state)}</div>
-      <div>props - {JSON.stringify(props)}</div> */}
+    <div className={`${location.pathname !== '/' ? 'boards' : ''}`}>
       <div className="header-container">
         <Link className="" to="/">
           Main
@@ -242,99 +172,93 @@ const BoardComponent = (props: BoardProps) => {
       </div>
 
       <div className="board-header">
-        <h1 className="board-h1" onClick={editBoardTitleToggle}>
-          {settedBoard}
-
-          {/* {gotStateBoard.title} */}
-          {/* {id} */}
-        </h1>
-        <input
-          className="inp-board-title"
-          type="text"
-          //коли додав пусти плейсхолдер, то при появі інпута там поточна назва дошки
-          placeholder=""
-          onKeyDown={inputKeyDown}
-          onBlur={inputOnBlur}
-        />
+        <div>
+          {isInputBoardName ? (
+            <input
+              className="input-board-title"
+              type="text"
+              value={boardName}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              onBlur={handleBlur}
+              autoFocus
+            />
+          ) : (
+            <h1 className="board-h1" onClick={toggleInputBoardName}>
+              {boardName}
+            </h1>
+          )}
+        </div>
       </div>
 
       <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
         <div className="board-content">
-          {listsSelector.map(
-            ({
-              id,
-              title,
-              cards,
-            }: {
-              id: number
-              title: string
-              cards: []
-            }) => (
-              <List id={id} title={title} cards={cards} />
-            )
-          )}
+          {listsSelector.map((list: ListType, index: string) => (
+            <List {...list} />
+          ))}
           <div className="list">
-            <div className="open-add-list" onClick={enterListTitle}>
-              <span className="icon-plus"></span>
-              <span className="add-list-span">Add new list</span>
-            </div>
-            <div className="add-list-form">
-              {/* //TODO якщо перемістити цей інпут в форму add-list-form, то тоді значення передається
-                //TODO але перестає працювати відправка назви по ентеру */}
-              <input
-                className="inp-list-title"
-                type="text"
-                name="newlist"
-                onKeyDown={addListOnEnter}
-                placeholder="Enter list title..."
-              />
-              <div className="add-list-controls">
-                <button className="list-add-button" onClick={addListOnButton}>
-                  Add list
-                </button>
-                <span
-                  onClick={closeAddListForm}
-                  className="icon-close icon-close-addlist"
-                ></span>
-              </div>
+            <div>
+              {isInputListName ? (
+                <>
+                  <input
+                    className="input-list-title"
+                    type="text"
+                    value={listName}
+                    onChange={handleListChange}
+                    onKeyDown={addListOnEnter}
+                    onBlur={handleListBlur}
+                    autoFocus
+                  />
+                  <div className="add-list-controls">
+                    <button
+                      className="list-add-button"
+                      onClick={addListOnButton}
+                    >
+                      Add list
+                    </button>
+                    <span
+                      onClick={toggleInputListName}
+                      className="icon-close icon-close-addlist"
+                    ></span>
+                  </div>
+                </>
+              ) : (
+                <div className="open-add-list" onClick={toggleInputListName}>
+                  <span className="icon-plus"></span>
+                  <span className="add-list-span">Add new list</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </SimpleBar>
+        <Snackbar open={showSnackbar} message={errorText}>
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: '100%' }}
+          >
+            {errorText}
+          </Alert>
+        </Snackbar>
 
-      {/* скорочений варіант, як з прогрес-баром не працює */}
-      {selectError.isError ? (
-        <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
-      ) : (
-        ''
-      )}
-      {/* {selectLoadingState.loading ? <ProgressBar /> : ''} */}
+        <Snackbar open={isErrorValidation}>
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            sx={{ width: '100%' }}
+          >
+            {'Board name ' + boardName + ' is not valid'}
+          </Alert>
+        </Snackbar>
+      </SimpleBar>
       {selectLoadingState.loading && <ProgressBar />}
     </div>
   )
 }
 
-//запускається щоразу при зміні store і повертає щось компоненту
-//unknown не підходить
 const mapStateToProps = (state: any) => {
-  console.log('board state bef', state)
   const { title: boardTitle, lists: boardLists } = state
-  console.log('board state', state)
   return { boardTitle, boardLists }
-  //return state
 }
-
-//передає в пропси компонента Home ті дані, які повернув mapStateToProps, другий параметр - методи
-//якщо другий параметр в фігурних дужках - то це екшнкріейтор
-//якщо ні, то щось таке
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     // dispatching plain actions
-//     increment: () => dispatch({ type: 'INCREMENT' }),
-//     decrement: () => dispatch({ type: 'DECREMENT' }),
-//     reset: () => dispatch({ type: 'RESET' }),
-//   }
-
-//export default Board = connect(mapStateToProps, { getBoard })(Board)
 
 export const Board = connect(mapStateToProps, { getBoard })(BoardComponent)

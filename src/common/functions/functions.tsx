@@ -1,4 +1,4 @@
-export const newNameValidation = (board: string) => {
+export const newNameValidation = (text: string) => {
     const pattern = /^[A-Za-z0-9 _\-.]*$/
-    return board !== '' ? pattern.test(board) : false
+    return text !== '' ? pattern.test(text) : false
   }
