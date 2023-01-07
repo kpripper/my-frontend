@@ -24,7 +24,6 @@ export default function AddBoard() {
 
   const createNewBoard = (): void => {
     if (newNameValidation(inputRef.current!.value)) {
-      console.log(inputRef.current?.value, '))')
       store.dispatch(createBoard(inputRef.current!.value))
       setModalIsOpenToFalse()
     } else {      
@@ -32,10 +31,22 @@ export default function AddBoard() {
     }
   }
 
+  const handleKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key === 'Enter') {
+      if (newNameValidation((ev.target as HTMLInputElement).value)) {
+        store.dispatch(createBoard(inputRef.current!.value))
+        setModalIsOpenToFalse()
+      } else {
+        setErrorValidationOpen(true)
+      }
+    }
+  }
+
   const handleSnackbarClose = () => {
     setErrorValidationOpen(false)    
   }
 
+  
   const customModalStyles = {
     content: {
       top: '50%',
@@ -79,6 +90,8 @@ export default function AddBoard() {
                 onChange={(e) => {
                   setBoardName(e.target.value)
                 }}
+                onKeyDown={handleKeyDown}
+                autoFocus
               />
               <button className="create-new-board" onClick={createNewBoard}>
                 Create board

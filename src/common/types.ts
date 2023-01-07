@@ -4,6 +4,10 @@ export type BoardResponse = {
   lists: []
 }
 
+export type BoardState = {
+  title: string
+}
+
 export type CardType = {
   id?: string
   title?: string

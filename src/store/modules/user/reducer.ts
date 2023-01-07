@@ -5,8 +5,7 @@ export default function reducer(
   action: { type: string; payload?: any }
 ) {
   switch (action.type) {
-    default: {
-      //  return {...state, ...action.payload};
+    default: {     
       return { ...state }
     }
   }
