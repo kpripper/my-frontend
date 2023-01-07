@@ -40,7 +40,7 @@ export const List = (props: ListType) => {
     if (input) {
       input.focus()
       input.select()
-            // input.scrollIntoView({
+      // input.scrollIntoView({
       //   behavior: 'smooth',
       // })
       // input.scrollTop = 250
@@ -195,25 +195,25 @@ export const List = (props: ListType) => {
         </li>
       )}
 
-      {listActionsShown && (   
-            <div className="list-actions">
-              <div className="list-actions-header">
-                <h2 className="list-actions-title">List Actions</h2>
-                <div className="icon-close" onClick={showListActions}></div>
-              </div>
-              <div className="list-list-actions">
-                <ul>
-                  <li
-                    onClick={(e) => {
-                      store.dispatch(deleteList(boardId, props.id))
-                      showListActions()
-                    }}
-                  >
-                    Delete list
-                  </li>
-                </ul>
-              </div>
-            </div>          
+      {listActionsShown && (
+        <div className="list-actions">
+          <div className="list-actions-header">
+            <h2 className="list-actions-title">List Actions</h2>
+            <div className="icon-close" onClick={showListActions}></div>
+          </div>
+          <div className="list-list-actions">
+            <ul>
+              <li
+                onClick={(e) => {
+                  store.dispatch(deleteList(boardId, props.id))
+                  showListActions()
+                }}
+              >
+                Delete list
+              </li>
+            </ul>
+          </div>
+        </div>
       )}
 
       {addCardActionsShown && (
@@ -225,7 +225,6 @@ export const List = (props: ListType) => {
               name="new-card"
               onKeyDown={addCardOnEnter}
               placeholder="Enter card title..."
-              //autoFocus
               ref={inputRef}
             />
             <div className="add-cardtitle-controls">
