@@ -111,9 +111,8 @@ const BoardComponent = (props: BoardProps) => {
 
   const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
     const elemInpListTitle = document.querySelector(
-      '.inp-list-title'
+      '.input-list-title'
     ) as HTMLInputElement
-
     if (newNameValidation(elemInpListTitle.value)) {
       setInputListNameVisibity(false)
       store.dispatch(createList(elemInpListTitle.value, boardId))
@@ -136,14 +135,14 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-  const handleBlur = () => {
-    if (newNameValidation(boardName)) {
-      setBoardName(boardName)
-      setInputBoardNameVisibity(false)
-      store.dispatch(editBoardTitle(boardName, boardId))
-    } else {
-      setErrorValidationOpen(true)
-    }
+  const handleBlur = () => {  
+      if (newNameValidation(boardName)) {
+        setBoardName(boardName)
+        setInputBoardNameVisibity(false)
+        store.dispatch(editBoardTitle(boardName, boardId))
+      } else {
+        setErrorValidationOpen(true)
+      }
   }
 
   const handleListBlur = () => {
@@ -153,7 +152,7 @@ const BoardComponent = (props: BoardProps) => {
       store.dispatch(createList(listName, boardId))
       store.dispatch(getBoard(boardId))
     } else {
-      setErrorValidationOpen(true)
+      setErrorListValidationOpen(true)
     }
   }
 
@@ -167,7 +166,10 @@ const BoardComponent = (props: BoardProps) => {
   }, [selectError.isError])
 
   return (
-    <div style={color} className={`${location.pathname !== '/' ? 'boards' : ''}`}>
+    <div
+      style={color}
+      className={`${location.pathname !== '/' ? 'boards' : ''}`}
+    >
       <div className="header-container">
         <Link className="" to="/">
           Main
