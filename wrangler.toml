@@ -1,2 +1,0 @@
-[env.local]
-vars = { REACT_APP_API_URL = "https://my-trello-back.kowo.space/ipigovyvh/api/v1"}
