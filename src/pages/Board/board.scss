@@ -1,3 +1,5 @@
+@import url('../../index.css');
+
 $base-blue-color: #026AA7;
 
 .boards {
@@ -71,6 +73,7 @@ h1 {
     color: #000;
     font-size: 24px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .input-board-title {

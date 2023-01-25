@@ -81,7 +81,9 @@ export const List = (props: ListType) => {
       if (newNameValidation(listName)) {
         setListName(listName)
         setEditListNameVisibity(false)
-        store.dispatch(editListTitle(listName, boardId, props.position))
+        console.log(listName, boardId, props.position, props.id);
+        
+        store.dispatch(editListTitle(listName, boardId, props.position, props.id))
       } else {
         setEditListNameVisibity(false)
         setListName(initListName)

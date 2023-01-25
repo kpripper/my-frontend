@@ -1,4 +1,10 @@
-import { AxiosResponse } from "axios"
+import { AlertTitleClassKey } from '@mui/material'
+import { AxiosResponse } from 'axios'
+
+export type BoardType = {
+  id: string
+  title: string
+}
 
 export type BoardResponse = {
   title: string
@@ -12,6 +18,7 @@ export type BoardProps = {
   boardLists: []
 }
 
+export type Boards = BoardType[]
 
 export type BoardState = {
   title: string
@@ -40,4 +47,3 @@ export type propsHomeType = {
 export type stateType = {
   boards: []
 }
-

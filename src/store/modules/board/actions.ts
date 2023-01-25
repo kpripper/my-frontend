@@ -16,48 +16,35 @@ export const getBoard = (id: string) => async (dispatch: Dispatch) => {
 }
 
 export const editBoardTitle =
-  (boardTitleNew: string, id: string) => async (dispatch: Dispatch) => {
+  (boardTitleNew: string, id: string) => async () => {
     try {
-      const awResp: { result: string; id: number } = await instance.put(
-        config.boards + "/" + id,
-        { title: boardTitleNew}
-      )
-      if (awResp.result === 'Updated') {
-        store.dispatch(getBoards())
-        store.dispatch(getBoard(id))
-      }
+      await instance.put(config.boards + '/' + id, { title: boardTitleNew })
+      store.dispatch(getBoards())
+      store.dispatch(getBoard(id))
     } catch (e) {
       handleAxiosError(e)
     }
   }
 
 export const editListTitle =
-  (listName: string, boardId: string, position: string) =>
-  async (dispatch: Dispatch) => {
+  (listName: string, boardId: string, position: string, listId: string) =>
+  async () => {
     try {
-      const editListTitleResp: { result: string; id: number } =
-        await instance.put(config.boards + '/' + boardId + '/list', {
-          title: listName,
-          position: position,
-        })  
-      if (editListTitleResp.result === 'Updated') {
-        store.dispatch(getBoard(boardId))
-      }
+      await instance.put(config.boards + '/' + boardId + '/list/' + listId, {
+        title: listName,
+        position: position,
+      })
+      store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e) 
+      handleAxiosError(e)
     }
   }
 
 export const createBoard =
-  (boardTitle: string) => async (dispatch: Dispatch) => {
+  (boardTitle: string) => async () => {
     try {
-      const awResp: { result: string; id: number } = await instance.post(
-        config.boards,
-        { title: boardTitle }
-      )
-      if (awResp.result === 'Created') {
-        store.dispatch(getBoards())
-      }
+      await instance.post(config.boards, { title: boardTitle })
+      store.dispatch(getBoards())
     } catch (e) {
       handleAxiosError(e)
     }
@@ -75,14 +62,12 @@ export const deleteBoard = (boardId: string) => async (dispatch: Dispatch) => {
 export const createList =
   (listTitle: string, boardId: string) => async (dispatch: Dispatch) => {
     try {
-      const currentBoard: { lists: [] } = await instance.get(
-        '/board/' + boardId
-      )
-      const rescreateList = await instance.post(
-        config.boards + '/' + boardId + '/list',
-        { title: listTitle, position: currentBoard.lists.length }
-      )
-      store.dispatch(getBoard(boardId))
+      const currentBoard: { lists: [] } = await instance.get('/board/' + boardId)
+      await instance.post(config.boards + '/' + boardId + '/list', {
+        title: listTitle,
+        position: currentBoard.lists.length,
+      })
+     store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
     }
@@ -92,14 +77,13 @@ export const addCard =
   (cardTitle: string, boardId: string, listID: string, position: string) =>
   async (dispatch: Dispatch) => {
     try {
-      const addCardResp: { result: string; id: number } = await instance.post(
-        config.boards + '/' + boardId + '/card',
-        { title: cardTitle, list_id: listID, position: position }
-      )
+      await instance.post(config.boards + '/' + boardId + '/card', {
+        title: cardTitle,
+        list_id: listID,
+        position: position,
+      })
 
-      if (addCardResp.result === 'Created') {
-        store.dispatch(getBoard(boardId))
-      }
+      store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
     }
@@ -108,12 +92,9 @@ export const addCard =
 export const delCard =
   (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
     try {
-      const delCardResp: { result: string } = await instance.delete(
-        config.boards + '/' + boardId + '/card/' + cardID
-      )
-      if (delCardResp.result === 'Deleted') {       
-        store.dispatch(getBoard(boardId))
-      }
+      await instance.delete(config.boards + '/' + boardId + '/card/' + cardID)
+
+      store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
     }
@@ -124,17 +105,18 @@ export const delCard =
 export const edCard =
   (boardId: string, listID: string, cardID: string, cardTitle: string) =>
   async (dispatch: Dispatch) => {
-    console.log( config.boards + '/' + boardId + '/card/' + cardID,
-    { title: cardTitle, list_id: listID });   
-    
+    console.log(config.boards + '/' + boardId + '/card/' + cardID, {
+      title: cardTitle,
+      list_id: listID,
+    })
+
     try {
-      const edCardResp: { result: string } = await instance.put(
-        config.boards + '/' + boardId + '/card/' + cardID,
-        { title: cardTitle, list_id: listID }
-      )
-      if (edCardResp.result === 'Updated') {
-        store.dispatch(getBoard(boardId))
-      }
+      await instance.put(config.boards + '/' + boardId + '/card/' + cardID, {
+        title: cardTitle,
+        list_id: listID,
+      })
+
+      store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
     }
@@ -143,9 +125,7 @@ export const edCard =
 export const deleteList =
   (boardId: string, listId: string) => async (dispatch: Dispatch) => {
     try {
-      const resDelete = await instance.delete(
-        config.boards + '/' + boardId + '/list/' + listId
-      )
+      await instance.delete(config.boards + '/' + boardId + '/list/' + listId)
       store.dispatch(getBoard(boardId))
       store.dispatch(getBoards())
     } catch (e) {

@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/*" element={<Home boards={[]} />} />
+        <Route path="/*" element={<Home />} />
         <Route path="/board/:id" element={<Board />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

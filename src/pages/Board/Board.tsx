@@ -4,7 +4,6 @@ import { List } from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
-import '../../index.css'
 import {
   createList,
   editBoardTitle,
@@ -18,11 +17,13 @@ import { RootState } from '../../store/store'
 import { newNameValidation } from '../../common/functions/functions'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
 import { Alert, Snackbar } from '@mui/material'
-import { BoardProps, BoardResponse, ListType } from '../../common/types'
-import {} from '@mui/material'
-import { clearError } from '../../store/modules/errorHandlers/actions'
 
-const BoardComponent = (props: BoardProps) => {
+import { BoardProps, BoardResponse, ListType } from '../../common/types'
+import { clearError } from '../../store/modules/errorHandlers/actions'
+import { useBackgroundColor } from './useBackgroundColor'
+import { InputName } from '../../common/InputName'
+
+export const Board = () => {
   let boardId = useParams().id as string
 
   const selectError = useSelector(
@@ -30,17 +31,8 @@ const BoardComponent = (props: BoardProps) => {
     shallowEqual
   )
 
-  const direction = Math.round(Math.random() * 360)
-  const hue = Math.random() * (192 - 212) + 212;
-  const randomAlpha = Math.random() * (0.6 - 0.4) + 0.8
-
-  const style = {
-    background: `linear-gradient(${direction}deg, hsla(192, 98%, 33%,${randomAlpha}), hsla(${
-      hue 
-    }, 50%, 50%,${randomAlpha}))`,
-  }
+  const backGroundStyles = useBackgroundColor()
   const [boardName, setBoardName] = useState('')
-  const [color, setColor] = useState(style)
   const [listName, setListName] = useState('')
   const [isInputBoardName, setInputBoardNameVisibity] = useState(false)
   const [isInputListName, setInputListNameVisibity] = useState(false)
@@ -61,7 +53,7 @@ const BoardComponent = (props: BoardProps) => {
   }
 
   const toggleInputListName = () => {
-    setInputListNameVisibity((prev) => (!prev))
+    setInputListNameVisibity((prev) => !prev)
   }
 
   const handleSnackbarClose = () => {
@@ -94,19 +86,18 @@ const BoardComponent = (props: BoardProps) => {
 
   const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
-      if (newNameValidation((ev.target as HTMLInputElement).value)) {
-        setInputListNameVisibity(false)
-        store.dispatch(
-          createList((ev.target as HTMLInputElement).value, boardId)
-        )
-        store.dispatch(getBoard(boardId))
-      } else {
+      if (!newNameValidation((ev.target as HTMLInputElement).value)) {
         setErrorText(
           'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
         )
         setErrorListValidationOpen(true)
+      } 
+        setInputListNameVisibity(false)
+        store.dispatch(
+          createList((ev.target as HTMLInputElement).value, boardId)
+        )
+        // store.dispatch(getBoard(boardId))
       }
-    }
   }
 
   const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -135,14 +126,14 @@ const BoardComponent = (props: BoardProps) => {
     }
   }
 
-  const handleBlur = () => {  
-      if (newNameValidation(boardName)) {
-        setBoardName(boardName)
-        setInputBoardNameVisibity(false)
-        store.dispatch(editBoardTitle(boardName, boardId))
-      } else {
-        setErrorValidationOpen(true)
-      }
+  const handleBlur = () => {
+    if (newNameValidation(boardName)) {
+      setBoardName(boardName)
+      setInputBoardNameVisibity(false)
+      store.dispatch(editBoardTitle(boardName, boardId))
+    } else {
+      setErrorValidationOpen(true)
+    }
   }
 
   const handleListBlur = () => {
@@ -165,9 +156,53 @@ const BoardComponent = (props: BoardProps) => {
     }
   }, [selectError.isError])
 
+  // Get all elements with the class "drag"
+  const draggableElements = document.getElementsByClassName(
+    'list-card'
+  ) as HTMLCollectionOf<HTMLElement>
+
+  // Attach the dragstart event to each element
+  for (let i = 0; i < draggableElements.length; i++) {
+    draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
+      // Create a clone of the element
+      const clone = (event.target as HTMLElement).cloneNode(true) as HTMLElement
+      // Add the clone to the body
+      document.body.appendChild(clone)
+      clone.style.opacity = '1.0 !important'
+      clone.style.width = '100px'
+      console.log('clone', clone.style)
+      event.dataTransfer!.setDragImage(clone, 0, 0)
+    })
+  }
+
+  // let draggedItem = null
+
+  // function dragDrop() {
+  //   const listsItems = listsSelector
+  //   const listsItemsJS = document.querySelectorAll('.list')
+  //   const cardItems = document.querySelectorAll('.list-card')
+
+  //   for (let i = 0; i < cardItems.length; i++) {
+  //     // let draggedItem
+  //     const item = cardItems[i]
+
+  //     item.addEventListener('dragstart', (e) => {
+  //       // (e.currentTarget as HTMLDivElement | HTMLLIElement).style.pointerEvents = "none";
+  //       const clone = (e.target as HTMLElement).cloneNode(true) as HTMLElement
+  //       document.body.appendChild(clone)
+  //       clone.style.opacity = "1.0";
+  //       draggedItem = item
+  //       ;(e.currentTarget as HTMLLIElement).style.opacity = '1'
+  //       console.log('item', item)
+  //     })
+  //   }
+  // }
+
+  // dragDrop()
+
   return (
     <div
-      style={color}
+      style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
     >
       <div className="header-container">
@@ -198,42 +233,12 @@ const BoardComponent = (props: BoardProps) => {
 
       <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
         <div className="board-content">
-          {listsSelector.map((list: ListType, index: string) => (
+          {listsSelector.map((list: ListType) => (
             <List {...list} />
           ))}
+
           <div className="list">
-            <div>
-              {isInputListName ? (
-                <>
-                  <input
-                    className="input-list-title"
-                    type="text"
-                    value={listName}
-                    onChange={handleListChange}
-                    onKeyDown={addListOnEnter}
-                    onBlur={handleListBlur}
-                    autoFocus
-                  />
-                  <div className="add-list-controls">
-                    <button
-                      className="list-add-button"
-                      onClick={addListOnButton}
-                    >
-                      Add list
-                    </button>
-                    <span
-                      onClick={toggleInputListName}
-                      className="icon-close icon-close-addlist"
-                    ></span>
-                  </div>
-                </>
-              ) : (
-                <div className="open-add-list" onClick={toggleInputListName}>
-                  <span className="icon-plus"></span>
-                  <span className="add-list-span">Add new list</span>
-                </div>
-              )}
-            </div>
+            <InputName />
           </div>
         </div>
         <Snackbar open={showSnackbar} message={errorText}>
@@ -261,9 +266,4 @@ const BoardComponent = (props: BoardProps) => {
   )
 }
 
-const mapStateToProps = (state: any) => {
-  const { title: boardTitle, lists: boardLists } = state
-  return { boardTitle, boardLists }
-}
-
-export const Board = connect(mapStateToProps, { getBoard })(BoardComponent)
+//

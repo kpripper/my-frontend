@@ -1,6 +1,6 @@
-const initialState = {
-  boards: [],
-}
+import { BoardType } from '../../../common/types'
+
+const initialState: BoardType[] = []
 
 export default function reducer(
   state = initialState,

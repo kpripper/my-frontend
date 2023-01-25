@@ -113,14 +113,14 @@ export const Card = (props: CardType) => {
             onBlur={newOnBlur}
           />
         ) : (
-          <li className="list-card" id={id}>
+          <div draggable="true" className="list-card" id={id}>
             <div className="card-title">{cardName}</div>
             <div
               className="icon-edit icon-card-edit"
               id={id}
               onClick={toggleInputCardName}
             ></div>
-          </li>
+          </div>
         )}
       </div>
 
