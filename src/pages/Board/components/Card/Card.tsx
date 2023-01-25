@@ -4,6 +4,7 @@ import { newNameValidation } from '../../../../common/functions/functions'
 import { CardType } from '../../../../common/types'
 import { edCard, delCard } from '../../../../store/modules/board/actions'
 import store from '../../../../store/store'
+import { AddInput } from '../../AddInput'
 import './card.scss'
 
 export const Card = (props: CardType) => {
@@ -54,8 +55,20 @@ export const Card = (props: CardType) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log('handleKeyDown', cardName)
+    // console.log('handleKeyDown', cardName)
 
+    if (event.key === 'Enter') {
+      if (newNameValidation(cardName!)) {
+        setCardName(cardName)
+        setInputCardNameVisibity(false)
+        store.dispatch(edCard(boardId!, listId, props.id!, cardName!))
+      } else {
+        setErrorValidationOpen(true)
+      }
+    }
+  }
+
+  const handleSaveNew = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (newNameValidation(cardName!)) {
         setCardName(cardName)
@@ -100,7 +113,7 @@ export const Card = (props: CardType) => {
   }
 
   return (
-    <div id={id}>
+    <div id={id}>    
       <div>
         {isInputCardName ? (
           <input
@@ -123,6 +136,8 @@ export const Card = (props: CardType) => {
           </div>
         )}
       </div>
+
+
 
       {isSaveDelete && (
         <>

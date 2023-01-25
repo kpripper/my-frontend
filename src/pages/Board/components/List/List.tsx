@@ -14,6 +14,8 @@ import Alert from '@mui/material/Alert'
 import { clearError } from '../../../../store/modules/errorHandlers/actions'
 import { CardType, ListType } from '../../../../common/types'
 import { Card } from '../Card/Card'
+import { AddInput } from '../../AddInput'
+import { setSyntheticLeadingComments } from 'typescript'
 
 export const List = (props: ListType) => {
   let boardId = useParams().id as string
@@ -81,9 +83,11 @@ export const List = (props: ListType) => {
       if (newNameValidation(listName)) {
         setListName(listName)
         setEditListNameVisibity(false)
-        console.log(listName, boardId, props.position, props.id);
-        
-        store.dispatch(editListTitle(listName, boardId, props.position, props.id))
+        console.log(listName, boardId, props.position, props.id)
+
+        store.dispatch(
+          editListTitle(listName, boardId, props.position, props.id)
+        )
       } else {
         setEditListNameVisibity(false)
         setListName(initListName)
@@ -155,9 +159,18 @@ export const List = (props: ListType) => {
     }
   }, [selectError.isError])
 
+  const handleSave = (cardName: string) => {
+    if (!newNameValidation(cardName)) {
+      setErrorText('Card name ' + cardName + ' is not valid')
+      setErrorCardValidationOpen(true)
+      return
+    }    
+    store.dispatch(addCard(cardName, boardId, props.id, props.position))
+  }
+
   return (
-    <div key={props.title} className="list" id="">
-      <div className="">
+    <div key={props.title} className="list" >
+      <div className="list-header-container">
         <div className="input-container">
           {isEditListName ? (
             <input
@@ -188,30 +201,21 @@ export const List = (props: ListType) => {
         <Card {...card} boardId={boardId} listId={props.id} />
       ))}
 
-      {addCardShown && (
-        <li className="add-card">
-          <span className="icon-plus"></span>
-          <span className="add-card-title" onClick={showAddCardActions}>
-            Add a card
-          </span>
-        </li>
-      )}
+      <AddInput handleSave={handleSave} defaultValue={''} source={'card'} />
 
       {listActionsShown && (
         <div className="list-actions">
           <div className="list-actions-header">
             <h2 className="list-actions-title">List Actions</h2>
-            <div className="icon-close" onClick={showListActions}></div>
+            <div className="icon-close-list icon-close" onClick={showListActions}></div>
           </div>
           <div className="list-list-actions">
             <ul>
-              <li
-                onClick={(e) => {
+              <li >
+                <button   onClick={(e) => {
                   store.dispatch(deleteList(boardId, props.id))
                   showListActions()
-                }}
-              >
-                Delete list
+                }} className="invisible-button">Delete list</button>
               </li>
             </ul>
           </div>

@@ -23,6 +23,7 @@ h2 {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
 }
 
 .input-list-title {
@@ -62,7 +63,7 @@ h2 {
     background-color: rgb(246, 246, 246);
     border-radius: 3px;
     box-shadow: 0 1px 0 #091e4240;
-    margin: 8px;
+    margin: 8px 0;
     color: #2e2c2c;
     white-space: break-spaces;
 
@@ -71,6 +72,8 @@ h2 {
     }
 
     &:hover {
+        background-color: rgb(237, 237, 237);
+
         .icon-card-edit {
             display: block;
         }
@@ -80,7 +83,6 @@ h2 {
                 display: none;
             }
         }
-
     }
 }
 
@@ -112,17 +114,39 @@ h2 {
     // right: -9999px;
     // top: -9999px;
     //-webkit-transform: translateZ(0);
-    width: 255px;
+    // width: 255px;
     padding: 5px;
+    margin: 7px 0 0 0;
     // position: absolute;
     // top: 54px;
 }
+
+.list-list-actions ul {
+    padding: 0;
+}
+
+.list-list-actions button {
+    cursor: pointer;
+}
+
+.list-list-actions li {
+    list-style-type: none;
+    padding: 0 0 3px 10px;
+    margin: 0 -5px;
+
+    &:hover {
+        background-color: #9e9e9e21;
+    }
+}
+
+
 
 .list-actions-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     padding: 3px 3px 0 0;
+    border-bottom: 1px solid #091e4221;
 }
 
 .list-actions-title {
@@ -172,7 +196,8 @@ h2 {
     position: absolute;
     left: 223px;
     top: 0px;
-
+    cursor: pointer;
+  //  background-color: #a6a6a646;
 }
 
 .list-card {
@@ -192,7 +217,7 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-   // margin: 0 0 0 10px;
+    // margin: 0 0 0 10px;
     color: #fff;
     background-color: #026AA7;
     border: none;
@@ -203,15 +228,21 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-  //  margin: 0 10px 0px;
+    //  margin: 0 10px 0px;
     color: #fff;
     background-color: #026AA7;
     border: none;
     border-radius: 3px;
 }
 
-
-
 .add-cardtitle-form {
     margin: 7px 8px;
+}
+
+.icon-close-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    padding: 2px;
+    margin: 3px 3px 0 0;
 }

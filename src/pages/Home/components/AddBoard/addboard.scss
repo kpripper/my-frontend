@@ -9,12 +9,7 @@
     padding-bottom: 20px;
 }
 
-.icon-close {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    padding: 2px;
-}
+
 
 .add-board-input-container {
     display: flex;
@@ -28,4 +23,11 @@
 
 #addBoardInput {
     margin-bottom: 20px;
+}
+
+.icon-close-board {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    padding: 3px;
 }

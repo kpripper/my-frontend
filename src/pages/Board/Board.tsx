@@ -22,6 +22,7 @@ import { BoardProps, BoardResponse, ListType } from '../../common/types'
 import { clearError } from '../../store/modules/errorHandlers/actions'
 import { useBackgroundColor } from './useBackgroundColor'
 import { InputName } from '../../common/InputName'
+import { AddInput } from './AddInput'
 
 export const Board = () => {
   let boardId = useParams().id as string
@@ -91,13 +92,11 @@ export const Board = () => {
           'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
         )
         setErrorListValidationOpen(true)
-      } 
-        setInputListNameVisibity(false)
-        store.dispatch(
-          createList((ev.target as HTMLInputElement).value, boardId)
-        )
-        // store.dispatch(getBoard(boardId))
       }
+      setInputListNameVisibity(false)
+      store.dispatch(createList((ev.target as HTMLInputElement).value, boardId))
+      // store.dispatch(getBoard(boardId))
+    }
   }
 
   const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,26 +125,44 @@ export const Board = () => {
     }
   }
 
+  const handleSave = (listName: string) => {
+    // console.log('handleSave', listName)
+
+    if (!newNameValidation(listName)) {
+      setErrorListValidationOpen(true)
+      return
+    }
+
+    store.dispatch(createList(listName, boardId))
+    store.dispatch(getBoard(boardId))
+  }
+
+  // const handleBlurNew = () => {
+  //   if (newNameValidation(boardName)) {
+  //     setBoardName(boardName)
+  //     setInputBoardNameVisibity(false)
+  //     store.dispatch(editBoardTitle(boardName, boardId))
+  //   } else {
+  //     setErrorValidationOpen(true)
+  //   }
+  // }
+
   const handleBlur = () => {
     if (newNameValidation(boardName)) {
-      setBoardName(boardName)
-      setInputBoardNameVisibity(false)
       store.dispatch(editBoardTitle(boardName, boardId))
-    } else {
-      setErrorValidationOpen(true)
     }
   }
 
-  const handleListBlur = () => {
-    if (newNameValidation(listName)) {
-      setListName(listName)
-      setInputListNameVisibity(false)
-      store.dispatch(createList(listName, boardId))
-      store.dispatch(getBoard(boardId))
-    } else {
-      setErrorListValidationOpen(true)
-    }
-  }
+  // const handleListBlur = () => {
+  //   if (newNameValidation(listName)) {
+  //     setListName(listName)
+  //     setInputListNameVisibity(false)
+  //     store.dispatch(createList(listName, boardId))
+  //     store.dispatch(getBoard(boardId))
+  //   } else {
+  //     setErrorListValidationOpen(true)
+  //   }
+  // }
 
   const showSnackbar =
     selectError.isError || isErrorValidation || isErrorListValidation
@@ -238,7 +255,11 @@ export const Board = () => {
           ))}
 
           <div className="list">
-            <InputName />
+            <AddInput
+              handleSave={handleSave}
+              defaultValue={''}
+              source={'list'}
+            />
           </div>
         </div>
         <Snackbar open={showSnackbar} message={errorText}>
@@ -265,5 +286,3 @@ export const Board = () => {
     </div>
   )
 }
-
-//

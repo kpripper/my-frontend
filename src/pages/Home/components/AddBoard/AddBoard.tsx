@@ -74,7 +74,7 @@ export default function AddBoard() {
         <div className="whole-modal">
           <div className="button-modal-close">
             <button
-              className="icon-close"
+              className="icon-close icon-close-board"
               onClick={setModalIsOpenToFalse}
             ></button>
           </div>
