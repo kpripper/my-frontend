@@ -173,21 +173,18 @@ export const Board = () => {
     }
   }, [selectError.isError])
 
-  // Get all elements with the class "drag"
+
   const draggableElements = document.getElementsByClassName(
     'list-card'
   ) as HTMLCollectionOf<HTMLElement>
 
-  // Attach the dragstart event to each element
+
   for (let i = 0; i < draggableElements.length; i++) {
     draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
-      // Create a clone of the element
       const clone = (event.target as HTMLElement).cloneNode(true) as HTMLElement
-      // Add the clone to the body
       document.body.appendChild(clone)
       clone.style.opacity = '1.0 !important'
-      clone.style.width = '100px'
-      console.log('clone', clone.style)
+      clone.style.width = '162px'
       event.dataTransfer!.setDragImage(clone, 0, 0)
     })
   }
