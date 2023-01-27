@@ -112,16 +112,16 @@ function dragNdrop() {
 
       list.addEventListener('dragenter', function (e) {
         e.preventDefault()
-        this.style.backgroundColor = 'rgba(0,0,0,.3)'
+     //   this.style.backgroundColor = 'rgba(0,0,0,.3)'
       })
 
       list.addEventListener('dragleave', function (e) {
         // e.preventDefault()
-        this.style.backgroundColor = 'rgba(0,0,0,0)'
+     //   this.style.backgroundColor = 'rgba(0,0,0,0)'
       })
 
       list.addEventListener('drop', function (e) {
-        this.style.backgroundColor = 'rgba(0,0,0,0)'
+     //   this.style.backgroundColor = 'rgba(0,0,0,0)'
         this.append(draggedItem)
       })
     }
