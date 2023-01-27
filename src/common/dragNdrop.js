@@ -120,6 +120,7 @@ function dragNdrop() {
      //   this.style.backgroundColor = 'rgba(0,0,0,0)'
       })
 
+      // eslint-disable-next-line no-loop-func
       list.addEventListener('drop', function (e) {
      //   this.style.backgroundColor = 'rgba(0,0,0,0)'
         this.append(draggedItem)
