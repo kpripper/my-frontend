@@ -23,6 +23,8 @@ import { clearError } from '../../store/modules/errorHandlers/actions'
 import { useBackgroundColor } from './useBackgroundColor'
 import { InputName } from '../../common/InputName'
 import { AddInput } from './AddInput'
+import {dragNdrop} from '../../common/dragNdrop';
+
 
 export const Board = () => {
   let boardId = useParams().id as string
@@ -213,6 +215,8 @@ export const Board = () => {
   // }
 
   // dragDrop()
+
+dragNdrop()
 
   return (
     <div
