@@ -14,7 +14,7 @@ export const Card = (props: CardType) => {
     if (input) {
       input.focus()
       input.select()
-            // input.scrollIntoView({
+      // input.scrollIntoView({
       //   behavior: 'smooth',
       // })
       // input.scrollTop = 250
@@ -113,8 +113,8 @@ export const Card = (props: CardType) => {
   }
 
   return (
-    <div id={id}>    
-      <div>
+    <div id={id}>
+      <div className="card">
         {isInputCardName ? (
           <input
             ref={inputRef}
@@ -136,8 +136,6 @@ export const Card = (props: CardType) => {
           </div>
         )}
       </div>
-
-
 
       {isSaveDelete && (
         <>
