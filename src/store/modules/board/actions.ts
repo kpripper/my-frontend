@@ -42,6 +42,8 @@ export const editListTitle =
 
 export const createBoard =
   (boardTitle: string) => async () => {
+    console.log(instance);
+    
     try {
       await instance.post(config.boards, { title: boardTitle })
       store.dispatch(getBoards())

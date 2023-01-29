@@ -112,9 +112,21 @@ export const Card = (props: CardType) => {
     toggleInputCardName()
   }
 
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.currentTarget.style.display = 'none'
+    event.dataTransfer.setData('text', event.currentTarget.id)
+    event.dataTransfer.setDragImage(event.currentTarget, 0, 0)
+    event.currentTarget.style.width = '100px'
+  }
+
   return (
-    <div id={id}>
-      <div className="card">
+    <div>
+      <div
+        id={id}
+        className="card"
+        draggable="true"
+        onDragStart={handleDragStart}
+      >
         {isInputCardName ? (
           <input
             ref={inputRef}
@@ -126,11 +138,10 @@ export const Card = (props: CardType) => {
             onBlur={newOnBlur}
           />
         ) : (
-          <div draggable="true" className="list-card" id={id}>
+          <div className="list-card" id={id}>
             <div className="card-title">{cardName}</div>
             <div
               className="icon-edit icon-card-edit"
-              id={id}
               onClick={toggleInputCardName}
             ></div>
           </div>

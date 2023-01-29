@@ -164,12 +164,32 @@ export const List = (props: ListType) => {
       setErrorText('Card name ' + cardName + ' is not valid')
       setErrorCardValidationOpen(true)
       return
-    }    
+    }
     store.dispatch(addCard(cardName, boardId, props.id, props.position))
   }
 
+  const [dragOver, setDragOver] = useState(false)
+  const handleDragOverStart = () => setDragOver(true)
+  const handleDragOverEnd = () => setDragOver(false)
+
+  const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+  }
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const id = event.dataTransfer.getData('text')
+    console.log(`Somebody dropped an element with id: ${id}`)
+    setDragOver(false)
+  }
+
   return (
-    <div key={props.title} className="list" >
+    <div
+      key={props.id}
+      className="list"
+      onDragOver={enableDropping}
+      onDrop={handleDrop}
+      style={ondragover ? { fontWeight: 'bold', background: 'red' } : {}}
+    >
       <div className="list-header-container">
         <div className="input-container">
           {isEditListName ? (
@@ -197,7 +217,7 @@ export const List = (props: ListType) => {
         </div>
       </div>
 
-      {props.cards.map((card: CardType, index) => (
+      {props.cards.map((card: CardType) => (
         <Card {...card} boardId={boardId} listId={props.id} />
       ))}
 
@@ -207,15 +227,23 @@ export const List = (props: ListType) => {
         <div className="list-actions">
           <div className="list-actions-header">
             <h2 className="list-actions-title">List Actions</h2>
-            <div className="icon-close-list icon-close" onClick={showListActions}></div>
+            <div
+              className="icon-close-list icon-close"
+              onClick={showListActions}
+            ></div>
           </div>
           <div className="list-list-actions">
             <ul>
-              <li >
-                <button   onClick={(e) => {
-                  store.dispatch(deleteList(boardId, props.id))
-                  showListActions()
-                }} className="invisible-button">Delete list</button>
+              <li>
+                <button
+                  onClick={(e) => {
+                    store.dispatch(deleteList(boardId, props.id))
+                    showListActions()
+                  }}
+                  className="invisible-button"
+                >
+                  Delete list
+                </button>
               </li>
             </ul>
           </div>

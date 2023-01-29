@@ -4,6 +4,7 @@ import { toggleLoading } from '../store/modules/loading/actions'
 import store from '../store/store'
 import { handleAxiosError } from '../store/modules/errorHandlers/actions'
 
+console.log('api.baseURL', api.baseURL);
 
 const instance = axios.create({
   baseURL: api.baseURL,

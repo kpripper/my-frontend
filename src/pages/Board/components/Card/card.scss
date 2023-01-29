@@ -26,3 +26,11 @@
 .card-title {
     word-break: break-word;
 }
+
+.dragStart {
+    color: rgba(0, 0, 0, 0);
+
+    &:hover {
+        background-color: white;
+    }
+}

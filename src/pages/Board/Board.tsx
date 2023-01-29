@@ -23,8 +23,7 @@ import { clearError } from '../../store/modules/errorHandlers/actions'
 import { useBackgroundColor } from './useBackgroundColor'
 import { InputName } from '../../common/InputName'
 import { AddInput } from './AddInput'
-import {dragNdrop} from '../../common/dragNdrop';
-
+import { dragNdrop } from '../../common/dragNdrop'
 
 export const Board = () => {
   let boardId = useParams().id as string
@@ -175,11 +174,9 @@ export const Board = () => {
     }
   }, [selectError.isError])
 
-
   const draggableElements = document.getElementsByClassName(
     'list-card'
   ) as HTMLCollectionOf<HTMLElement>
-
 
   for (let i = 0; i < draggableElements.length; i++) {
     draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
@@ -216,7 +213,7 @@ export const Board = () => {
 
   // dragDrop()
 
-dragNdrop()
+  // dragNdrop()
 
   return (
     <div
