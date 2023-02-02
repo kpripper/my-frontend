@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   addCard,
+  delCard,
   deleteList,
   editListTitle,
 } from '../../../../store/modules/board/actions'
@@ -16,6 +17,8 @@ import { CardType, ListType } from '../../../../common/types'
 import { Card } from '../Card/Card'
 import { AddInput } from '../../AddInput'
 import { setSyntheticLeadingComments } from 'typescript'
+import { borderRadius } from '@mui/system'
+import React from 'react'
 
 export const List = (props: ListType) => {
   let boardId = useParams().id as string
@@ -169,26 +172,112 @@ export const List = (props: ListType) => {
   }
 
   const [dragOver, setDragOver] = useState(false)
+  const [slotPosition, setSlotPosition] = useState('above')
   const handleDragOverStart = () => setDragOver(true)
   const handleDragOverEnd = () => setDragOver(false)
+  const [lastDropTarget, setLastDropTarget] = useState(null);
 
   const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
   }
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    setShowSlot(false)
     const id = event.dataTransfer.getData('text')
-    console.log(`Somebody dropped an element with id: ${id}`)
+    const dragCardName = event.dataTransfer.getData('name')
+    console.log(
+      `Dropped in list on ${props.id} an element: ${id} : ${dragCardName}`
+    )
+
+    store.dispatch(addCard(dragCardName, boardId, props.id, props.position))
+    store.dispatch(delCard(boardId, id))
+
     setDragOver(false)
+  }
+
+  const [isOver, setIsOver] = useState(false)
+  const [slot, setSlot] = useState<null | number>(null)
+
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('onDragOver', e.target)
+
+    e.preventDefault()
+    setIsOver(true)
+    setSlot(e.clientY)
+  }
+
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('onDragLeave list', e.target)
+
+   // setShowSlot(false)
+  }
+
+  const handleDragExit = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('handleDragExit list', e.target)
+    setShowSlot(false)
+  }
+
+  const [showSlot, setShowSlot] = useState(false)
+
+  const [slotIndex, setSlotIndex] = useState(-1)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const id = e.dataTransfer.getData('text')
+    const dragCardName = e.dataTransfer.getData('name')
+
+    // console.log(
+    //   `handleDragOver on ${props.id} an element: ${id} : ${dragCardName} : ${showSlot}`
+    // )
+    setShowSlot(true)
+
+    const listRect = listRef.current?.getBoundingClientRect()
+    if (!listRect) return
+
+    const listHeight = listRect.bottom - listRect.top
+
+   // console.log(`listHeight : ${listHeight}`)
+
+    const mousePos = e.clientY - listRect.top
+
+   // console.log(`mousePos : ${mousePos}`)
+
+    const slotIndex = Math.floor((mousePos / listHeight) * props.cards.length)
+
+   // console.log(`slotIndex : ${slotIndex}`)
+
+    setSlotIndex(slotIndex - 1)
+  }
+
+  const handleDragOverCard = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault()
+
+    const cardBounds = e.currentTarget.getBoundingClientRect()
+    const y = e.clientY - cardBounds.top
+
+    if (y < cardBounds.height / 2) {
+      setSlotPosition("above")
+    } else {
+      setSlotPosition("below")
+    }
+
+    setSlotIndex(index)
+    setShowSlot(true)
   }
 
   return (
     <div
-      key={props.id}
+      id={props.id}
       className="list"
-      onDragOver={enableDropping}
+      // onDragOver={enableDropping}
+
+      ref={listRef}
+      onDragOver={handleDragOver}
+      onDragLeave={onDragLeave}
+      onDragExit={handleDragExit}
       onDrop={handleDrop}
-      style={ondragover ? { fontWeight: 'bold', background: 'red' } : {}}
+      // style={ondragover ? { fontWeight: 'bold', background: 'red' } : {}}
     >
       <div className="list-header-container">
         <div className="input-container">
@@ -217,11 +306,38 @@ export const List = (props: ListType) => {
         </div>
       </div>
 
-      {props.cards.map((card: CardType) => (
-        <Card {...card} boardId={boardId} listId={props.id} />
+      {props.cards.map((card, index) => (
+        <>
+          <Card
+            {...card}
+            index={index}
+            key={card.id}
+            boardId={boardId}
+            listId={props.id}
+            draggable
+            onDragOver={(e) => handleDragOverCard (e, index)}
+          />
+
+          {index === slotIndex && showSlot && (
+            <div
+              className="slot"
+              style={{
+                top: slotPosition === 'above' ? '-30px' : '30px',
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+              }}
+              onDragOver={(e) => {
+                e.preventDefault()
+              }}
+            >
+              {index}
+            </div>
+          )}
+        </>
       ))}
 
-      <AddInput handleSave={handleSave} defaultValue={''} source={'card'} />
+      <AddInput  handleSave={handleSave} defaultValue={''} source={'card'} />
 
       {listActionsShown && (
         <div className="list-actions">

@@ -19,56 +19,59 @@ import instance from '../../api/request'
 const Home = () => {
   const [boards, setBoards] = useState<BoardType[]>([])
 
-  const selectBoards = useSelector ((state: RootState) => state.boards)
+  const selectBoards = useSelector((state: RootState) => state.boards.boards)
   const selectError = useSelector((state: RootState) => state.error)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
   async function fetchData() {
-   const { boards: boardsAPI }: BoardsServerResponse = await instance.get(
+    const { boards: boardsAPI }: BoardsServerResponse = await instance.get(
       '/board'
-    )   
-    console.log("boardsAPI", boardsAPI);      
+    )
+    console.log('boardsAPI', boardsAPI)
+    store.dispatch(getBoards())
     setBoards(boardsAPI)
   }
 
   useEffect(() => {
-    console.log("useEffect", selectBoards);
+    console.log('useEffect', selectBoards)
     fetchData()
-    console.log("selectBoards", selectBoards);
-   // setBoards(selectBoards)
-
+    console.log('selectBoards use', selectBoards)
+    // setBoards(selectBoards)
   }, [])
 
-  console.log('boards', boards)
+  // console.log('selectBoards', selectBoards)
+  // console.log('selectBoards.boards', selectBoards.boards)
+  //console.log("selectBoards arr", Array.from(selectBoards));
+  // console.log('boards', boards)
 
   // const { current: currentBoards } = useRef(boards)
 
   return (
-
-      <div>
-        <div className="header-container">
-          <p>Home</p>
-        </div>
-        <div className="boards-header">
-          <div className="boards-header-item">
-            <span className="icon-boards"></span>
-            <span className="your-boards">Your boards</span>
-          </div>
-        </div>
-        <div className="all-boards">         
-            {boards.map(({ id, title }) => (
-              <BoardHome key={id} id={+id} title={title} />
-            ))}
-            <AddBoard />         
-        </div>
-        {selectError.isError ? (
-          <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
-        ) : (
-          ''
-        )}
-        {selectLoadingState.loading && <ProgressBar />}
+    <div>
+      <div className="header-container">
+        <p>Home</p>
       </div>
-  
+      <div className="boards-header">
+        <div className="boards-header-item">
+          <span className="icon-boards"></span>
+          <span className="your-boards">Your boards</span>
+        </div>
+      </div>
+      <div className="all-boards">
+        {/* Property 'boards' does not exist on type 'BoardType[]' */}
+
+        {selectBoards.map(({ id, title } : {id:string, title:string} ) => (
+          <BoardHome key={id} id={+id} title={title} />
+        ))}
+        <AddBoard />
+      </div>
+      {selectError.isError ? (
+        <SimpleSnackbar text={selectError.errorText}></SimpleSnackbar>
+      ) : (
+        ''
+      )}
+      {selectLoadingState.loading && <ProgressBar />}
+    </div>
   )
 }
 

@@ -1,6 +1,16 @@
 import { BoardType } from '../../../common/types'
 
-const initialState: BoardType[] = []
+interface InitialState {
+  boards: BoardType[]
+}
+
+interface BoardArray {
+  [index: number]: BoardType;
+}
+
+const initialState: InitialState = {boards: []}
+
+//const initialState: BoardArray = []
 
 export default function reducer(
   state = initialState,
@@ -8,8 +18,9 @@ export default function reducer(
 ) {
   switch (action.type) {
     case 'UPDATE_BOARDS':
-      return {
-        ...state,
+      console.log('UPDATE_BOARDS', action.payload);
+      
+      return {       
         boards: action.payload,
       }
 

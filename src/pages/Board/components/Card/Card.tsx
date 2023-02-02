@@ -5,6 +5,7 @@ import { CardType } from '../../../../common/types'
 import { edCard, delCard } from '../../../../store/modules/board/actions'
 import store from '../../../../store/store'
 import { AddInput } from '../../AddInput'
+import { useCardOver } from '../../useCardOver'
 import './card.scss'
 
 export const Card = (props: CardType) => {
@@ -37,6 +38,7 @@ export const Card = (props: CardType) => {
   const [initCardName, setInitCardName] = useState('')
   const [isInputCardName, setInputCardNameVisibity] = useState(false)
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
+  const [onHold, setOnHold] = useState(false)
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCardName(ev.target.value)
@@ -112,20 +114,67 @@ export const Card = (props: CardType) => {
     toggleInputCardName()
   }
 
-  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.currentTarget.style.display = 'none'
-    event.dataTransfer.setData('text', event.currentTarget.id)
-    event.dataTransfer.setDragImage(event.currentTarget, 0, 0)
-    event.currentTarget.style.width = '100px'
+  // let draggedItem = null
+
+  const [isOver, setIsOver] = useState(false)
+  const [slotOld, setSlot] = useState<null | number>(null)
+
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    // if (e.target.className === "card") {
+    //   setTimeout(() => {
+    //     e.target.className = "card anotherCardOnTop";
+    //   }, 0);
+    // }
+    setIsOver(true)
+    setSlot(e.clientY)
+  }
+
+  const dragEndHandler = () => {
+    setOnHold(false)
+  }
+
+  const dropHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    // store.dispatch(dropCard(boardID));
+    //setSlot(null);
+  }
+
+  const { handleCardOver, ref, slot } = useCardOver()
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
+  const [isDragging, setIsDragging] = useState(false)
+
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
+    // setIsDragging(true);
+    //  ;(e.target as HTMLDivElement).className += ' hidden-card'
+    setTimeout(() => {
+      setOnHold(true)
+    }, 0)
+    console.log(e.currentTarget.id, e.currentTarget.innerText)
+
+    e.dataTransfer.setData('text', e.currentTarget.id)
+    e.dataTransfer.setData('name', e.currentTarget.innerText)
   }
 
   return (
-    <div>
+    <div
+      onDragOver={(e) => {
+        e.preventDefault()
+      }}
+    >
       <div
         id={id}
-        className="card"
+        className={`card ${onHold ? 'hidden-card' : ''}`}
         draggable="true"
         onDragStart={handleDragStart}
+        //  onDragOver={handleDragOver}
+        //  ref={ref}
+        //  onDragEnd={dragEndHandler}
+        //  onDrop={dropHandler}
       >
         {isInputCardName ? (
           <input
@@ -136,10 +185,29 @@ export const Card = (props: CardType) => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             onBlur={newOnBlur}
+            onDragOver={(e) => {
+              e.preventDefault()
+            }}
           />
         ) : (
-          <div className="list-card" id={id}>
-            <div className="card-title">{cardName}</div>
+          <div
+            className="list-card"
+            id={id}
+            onDrop={(e) => {
+              e.preventDefault()
+            }}
+            onDragOver={(e) => {
+              e.preventDefault()
+            }}
+          >
+            <div
+              onDragOver={(e) => {
+                e.preventDefault()
+              }}
+              className="card-title"
+            >
+              {cardName}
+            </div>
             <div
               className="icon-edit icon-card-edit"
               onClick={toggleInputCardName}

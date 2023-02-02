@@ -17,7 +17,13 @@ export const AddInput = ({
 
   if (!isAdd) {
     return (
-      <div className="open-add-list" onClick={() => setIsAdd((prev) => !prev)}>
+      <div
+        onDragOver={(e) => {
+          e.preventDefault()
+        }}
+        className="open-add-list"
+        onClick={() => setIsAdd((prev) => !prev)}
+      >
         <span className="icon-plus"></span>
         <span className="add-list-span">
           {source === 'list' ? 'Add new list' : 'Add card'}
@@ -60,7 +66,7 @@ export const AddInput = ({
             setTitle('')
           }}
         >
-          {source === 'list' ? 'Add list' : 'Add card'}
+          {source === 'list' ? 'Add list' : 'Add new card'}
         </button>
         <button className="invisible-button">
           <span

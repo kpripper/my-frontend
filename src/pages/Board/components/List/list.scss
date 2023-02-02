@@ -197,7 +197,7 @@ h2 {
     left: 223px;
     top: 0px;
     cursor: pointer;
-  //  background-color: #a6a6a646;
+    //  background-color: #a6a6a646;
 }
 
 .list-card {
@@ -245,4 +245,11 @@ h2 {
     align-content: center;
     padding: 2px;
     margin: 3px 3px 0 0;
+}
+
+.slot {
+    border-radius: 3px;
+    min-height: 30px;
+    background-color: lightgray;
+    width: 100%;
 }
