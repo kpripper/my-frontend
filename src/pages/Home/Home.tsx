@@ -12,16 +12,18 @@ import SimpleSnackbar from '../SimpleSnackBar/SimpleSnackbar'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
 import { propsHomeType, stateType } from '../../common/types'
 import { useDispatch } from 'react-redux'
-import { BoardType } from '../../common/types'
+import { BoardArray, BoardType } from '../../common/types'
 import { BoardsServerResponse } from '../../common/interfaces/BoardsServerResponse'
 import instance from '../../api/request'
 
 const Home = () => {
   const [boards, setBoards] = useState<BoardType[]>([])
 
-  const selectBoards = useSelector((state: RootState) => state.boards.boards)
+  const selectBoards = useSelector((state: RootState) => state.boards) 
   const selectError = useSelector((state: RootState) => state.error)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
+
+  console.log('selectBoards', selectBoards)
 
   async function fetchData() {
     const { boards: boardsAPI }: BoardsServerResponse = await instance.get(

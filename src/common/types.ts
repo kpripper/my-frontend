@@ -25,9 +25,11 @@ export type BoardState = {
   title: string
 }
 
-export type BoardArray = {
-  [index: number]: BoardType;
-}
+// export type BoardArray = {
+//   [index: number]: BoardType;
+// }
+
+export type BoardArray = BoardType[];
 
 export type CardType = {
   id?: string
