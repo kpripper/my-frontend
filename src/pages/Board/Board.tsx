@@ -41,6 +41,11 @@ export const Board = () => {
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [isErrorListValidation, setErrorListValidationOpen] = useState(false)
   const [errorText, setErrorText] = useState('Error: ' + selectError.errorText)
+  const [cards, setCards] = useState([]);
+
+  function handleSetCards(newCards:any) {
+    setCards(newCards);
+  }
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setBoardName(ev.target.value)
@@ -219,6 +224,7 @@ export const Board = () => {
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
+      onDrag={()=>console.log('dragging')}
     >
       <div className="header-container">
         <Link className="" to="/">
@@ -249,7 +255,7 @@ export const Board = () => {
       <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
         <div className="board-content">
           {listsSelector.map((list: ListType) => (
-            <List {...list} />
+            <List key={list.id} {...list} setCards={handleSetCards} />
           ))}
 
           <div className="list">

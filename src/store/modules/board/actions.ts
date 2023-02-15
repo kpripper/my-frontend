@@ -7,9 +7,10 @@ import { handleAxiosError } from '../errorHandlers/actions'
 
 export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   try {
-    const boardInGet = await instance.get('/board/' + id)
-    dispatch({ type: 'UPDATE_BOARD', payload: boardInGet })
-    return boardInGet
+    const boards = await instance.get('/board/' + id)
+    console.log('boards', boards)
+    dispatch({ type: 'UPDATE_BOARD', payload: boards })
+    return boards
   } catch (e) {
     handleAxiosError(e)
   }
@@ -40,17 +41,16 @@ export const editListTitle =
     }
   }
 
-export const createBoard =
-  (boardTitle: string) => async () => {
-    console.log(instance);
-    
-    try {
-      await instance.post(config.boards, { title: boardTitle })
-      store.dispatch(getBoards())
-    } catch (e) {
-      handleAxiosError(e)
-    }
+export const createBoard = (boardTitle: string) => async () => {
+  console.log(instance)
+
+  try {
+    await instance.post(config.boards, { title: boardTitle })
+    store.dispatch(getBoards())
+  } catch (e) {
+    handleAxiosError(e)
   }
+}
 
 export const deleteBoard = (boardId: string) => async (dispatch: Dispatch) => {
   try {
@@ -64,12 +64,14 @@ export const deleteBoard = (boardId: string) => async (dispatch: Dispatch) => {
 export const createList =
   (listTitle: string, boardId: string) => async (dispatch: Dispatch) => {
     try {
-      const currentBoard: { lists: [] } = await instance.get('/board/' + boardId)
+      const currentBoard: { lists: [] } = await instance.get(
+        '/board/' + boardId
+      )
       await instance.post(config.boards + '/' + boardId + '/list', {
         title: listTitle,
         position: currentBoard.lists.length,
       })
-     store.dispatch(getBoard(boardId))
+      store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
     }
@@ -79,11 +81,13 @@ export const addCard =
   (cardTitle: string, boardId: string, listID: string, position: string) =>
   async (dispatch: Dispatch) => {
     try {
-      await instance.post(config.boards + '/' + boardId + '/card', {
+      let res = await instance.post(config.boards + '/' + boardId + '/card', {
         title: cardTitle,
         list_id: listID,
         position: position,
       })
+
+      console.log(`Create ${res.data?.id} ${cardTitle} in ${listID} list`, res)
 
       store.dispatch(getBoard(boardId))
     } catch (e) {
@@ -94,7 +98,11 @@ export const addCard =
 export const delCard =
   (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
     try {
-      await instance.delete(config.boards + '/' + boardId + '/card/' + cardID)
+      let res = await instance.delete(
+        config.boards + '/' + boardId + '/card/' + cardID
+      )
+
+      console.log(`Card ${cardID} deleted`, res)
 
       store.dispatch(getBoard(boardId))
     } catch (e) {

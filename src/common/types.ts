@@ -1,6 +1,6 @@
 import { AlertTitleClassKey } from '@mui/material'
 import { AxiosResponse } from 'axios'
-import React from 'react'
+import React, { DetailedHTMLProps, HTMLAttributes } from 'react'
 
 export type BoardType = {
   id: string
@@ -29,18 +29,19 @@ export type BoardState = {
 //   [index: number]: BoardType;
 // }
 
-export type BoardArray = BoardType[];
+export type BoardArray = BoardType[]
 
 export type CardType = {
   id?: string
   title?: string
-  possition: string
+  position: string
   boardId: string
   listId: string
   index: number
-  draggable?: boolean
-  onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void
-}
+  // draggable?: boolean
+  setSlotPosition?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+  handleDragStart?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export type ListType = {
   id: string
