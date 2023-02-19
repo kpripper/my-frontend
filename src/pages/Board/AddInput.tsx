@@ -18,9 +18,9 @@ export const AddInput = ({
   if (!isAdd) {
     return (
       <div
-        onDragOver={(e) => {
-          e.preventDefault()
-        }}
+        // onDragOver={(e) => {
+        //   e.preventDefault()
+        // }}
         className="open-add-list"
         onClick={() => setIsAdd((prev) => !prev)}
       >

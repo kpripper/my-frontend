@@ -9,7 +9,31 @@ $base-blue-color: #026AA7;
     width: 272px;
     background-color: #ebecf0;
     border-radius: 3px;
+
 }
+
+/* Create a pseudo-element to show the padding lines */
+// .list::before {
+//     content: '';
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     width: 1px;
+//     background-color: red;
+//     background-clip: padding-box;
+//   }
+  
+//   .list::after {
+//     content: '';
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     right: 0;
+//     width: 1px;
+//     background-color: red;
+//     background-clip: padding-box;
+//   }
 
 .list-title {
     padding: 8px 10px;

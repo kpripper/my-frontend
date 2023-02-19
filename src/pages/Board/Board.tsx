@@ -224,7 +224,8 @@ export const Board = () => {
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
-      onDrag={()=>console.log('dragging')}
+      // onDrag={()=>console.log('dragging' )}
+      // onDragOver={(e:React.DragEvent)=>console.log('drag', e.target )}
     >
       <div className="header-container">
         <Link className="" to="/">
@@ -253,7 +254,9 @@ export const Board = () => {
       </div>
 
       <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
-        <div className="board-content">
+        <div className="board-content"
+        // onDragEnter={onDragEnter}
+        >
           {listsSelector.map((list: ListType) => (
             <List key={list.id} {...list} setCards={handleSetCards} />
           ))}
