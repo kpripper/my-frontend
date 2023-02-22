@@ -403,6 +403,8 @@ export const List = (props: ListType & SetCards) => {
       setSlotIndex(index - 1)
       // console.log(index, `5 above setted slotIndex`, slotIndex)
     }
+
+
   }
 
   const handleDragStart = (
@@ -417,11 +419,20 @@ export const List = (props: ListType & SetCards) => {
 
     setTimeout(() => {
       console.log('list handleDragStart index', index)
+
     }, 0)
 
     // setSlotPosition(e, index)
     setShowSlot(true)
 
+  }
+
+  const handleDragEnd = (
+    // e: React.DragEvent<HTMLDivElement>,
+    // index: number
+  ) => {
+    setShowFirstSlot(false)
+    setShowSlot(false)
   }
 
   return (
@@ -496,6 +507,7 @@ export const List = (props: ListType & SetCards) => {
             listId={props.id}
             setSlotPosition={setSlotPosition}
             handleDragStart={handleDragStart}
+            handleDragEnd={handleDragEnd}
           />
 
           {index === slotIndex && showSlot && !showFirstSlot && (

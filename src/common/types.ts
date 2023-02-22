@@ -41,6 +41,7 @@ export type CardType = {
   // draggable?: boolean
   setSlotPosition?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
   handleDragStart?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+  handleDragEnd?: () => void
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export type ListType = {

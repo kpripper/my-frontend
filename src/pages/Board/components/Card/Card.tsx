@@ -237,13 +237,15 @@ export const Card = (props: CardType) => {
             draggable="true"
             onDragStart={(e) => {
               props.handleDragStart!(e, props.index)
-
-              // setTimeout(() => {
-              //   setOnHold(true)
-              // }, 0)
+              setTimeout(() => {
+                setOnHold(true)
+              }, 0)
             }}
-
-
+            onDragEnd={() => {  
+              console.log('dragend card')
+              props.handleDragEnd!()
+              setOnHold(false);
+            }}
             onDragOver={(e) => handleDragOverCard(e, props.index)}
 
             // onDragStart={() => {
@@ -263,7 +265,7 @@ export const Card = (props: CardType) => {
               }}
               className="card-title"
             > */}
-            {cardName}
+            {cardName} onHold {onHold?1:0}
             {/* </div> */}
             <div
               className="icon-edit icon-card-edit"
