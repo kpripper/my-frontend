@@ -241,8 +241,9 @@ export const Card = (props: CardType) => {
               }, 0)
             }}
             onDragEnd={() => {  
+              //TODO ховати слот коли закінчився драг в межах листа без дропа, коли слот ще видно
               console.log('dragend card')
-              props.handleDragEnd!()
+              // props.handleDragEnd!()
               setOnHold(false);
             }}
             onDragOver={(e) => handleDragOverCard(e, props.index)}

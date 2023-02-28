@@ -412,9 +412,9 @@ export const List = (props: ListType & SetCards) => {
       console.log('list handleDragStart index', index)
     }, 0)
 
-    setSlotPosition(e, index)
-    // setShowSlot(true)
-    // console.log('setShowSlot(true) handleDragStart' )
+    // setSlotPosition(e, index)
+    setShowSlot(true)
+
   }
 
   const handleDragEnd = () =>
@@ -473,7 +473,6 @@ export const List = (props: ListType & SetCards) => {
 
       {props.cards.map((card, index) => (
         <div key={card.id}>
-          {index === 0 && showFirstSlot && (
           {index === 0 && showFirstSlot && (
             <div
               className="slot"
