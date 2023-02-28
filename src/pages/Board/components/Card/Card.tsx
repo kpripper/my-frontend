@@ -232,7 +232,7 @@ export const Card = (props: CardType) => {
             id={id}
             data-index={props.position}
             className={`list-card card ${onHold ? 'hidden-card' : ''}`}
-           // className={`list-card card`}
+            // className={`list-card card`}
             draggable="true"
             onDragStart={(e) => {
               props.handleDragStart!(e, props.index)
@@ -240,11 +240,11 @@ export const Card = (props: CardType) => {
                 setOnHold(true)
               }, 0)
             }}
-            onDragEnd={() => {  
+            onDragEnd={() => {
               //TODO ховати слот коли закінчився драг в межах листа без дропа, коли слот ще видно
               console.log('dragend card')
               // props.handleDragEnd!()
-              setOnHold(false);
+              setOnHold(false)
             }}
             onDragOver={(e) => handleDragOverCard(e, props.index)}
 
@@ -259,8 +259,8 @@ export const Card = (props: CardType) => {
             //   e.preventDefault()
             // }}
           >
-           ind {props.index} pos {props.position} name {cardName}
-              <div
+            ind {props.index} pos {props.position} name {cardName}
+            <div
               className="icon-edit icon-card-edit"
               onClick={toggleInputCardName}
             ></div>
