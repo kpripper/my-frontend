@@ -184,7 +184,7 @@ export const List = (props: ListType & SetCards) => {
   const [slot, setSlot] = useState<null | number>(null)
   const [showSlot, setShowSlot] = useState(false)
   const [showFirstSlot, setShowFirstSlot] = useState(false)
-  const [slotIndex, setSlotIndex] = useState(-1)
+  let [slotIndex, setSlotIndex] = useState(-1)
   const listRef = useRef<HTMLDivElement>(null)
   const [slotIndexSimple, setSlotIndexSimple] = useState(-1)
 
@@ -284,10 +284,10 @@ export const List = (props: ListType & SetCards) => {
     const dragCardName = e.dataTransfer.getData('name')
     const targetElement = document.elementFromPoint(e.clientX, e.clientY)
 
-    // console.log(
-    //   'handleDragOver list e.target',
-    //   (e.target as HTMLDivElement).classList
-    // )
+    console.log(
+      'handleDragOver list e.target',
+      (e.target as HTMLDivElement).classList.value
+    )
     //сам лист console.log(`handleDragOver list e.currentTarget`, e.currentTarget)
 
     if (
@@ -347,9 +347,9 @@ export const List = (props: ListType & SetCards) => {
     if (above && index === 0) {
       setShowFirstSlot(true)
       // setShowSlot(false)
-
+      console.log('before setSlotIndex', index)
       setSlotIndex(index)
-       console.log(`above && index === 0`, slotIndex)
+      console.log(`after setSlotIndex`, slotIndex)
     }
 
     if (below && index === 0) {
@@ -390,6 +390,8 @@ export const List = (props: ListType & SetCards) => {
       setSlotIndex(index - 1)
        console.log(index, `5 above setted slotIndex`, slotIndex)
     }
+
+    console.log(`final slotIndex`, slotIndex)
   }
 
   const handleDragStart = (
@@ -415,6 +417,18 @@ export const List = (props: ListType & SetCards) => {
     // console.log('setShowSlot(true) handleDragStart' )
   }
 
+  const handleDragEnd = () =>
+    // e: React.DragEvent<HTMLDivElement>,
+    // index: number
+    {
+      setShowFirstSlot(false)
+      setShowSlot(false)
+    }
+
+  useEffect(() => {
+    console.log('updated slotIndex', slotIndex)
+  }, [slotIndex])
+
   return (
     <div
       className="list"
@@ -424,7 +438,7 @@ export const List = (props: ListType & SetCards) => {
       ref={listRef}
       onDragOver={handleDragOver}
       onDragLeave={onDragLeave}
-      onDragEnter={onDragEnter}
+      // onDragEnter={onDragEnter}
       // onDragExit={handleDragExit}
       // onDrop={handleDrop}
     >
@@ -460,6 +474,7 @@ export const List = (props: ListType & SetCards) => {
       {props.cards.map((card, index) => (
         <div key={card.id}>
           {index === 0 && showFirstSlot && (
+          {index === 0 && showFirstSlot && (
             <div
               className="slot"
               onDragOver={enableDropping}
@@ -490,6 +505,7 @@ export const List = (props: ListType & SetCards) => {
             listId={props.id}
             setSlotPosition={setSlotPosition}
             handleDragStart={handleDragStart}
+            handleDragEnd={handleDragEnd}
           />
 
           {index === slotIndex && showSlot && !showFirstSlot && (

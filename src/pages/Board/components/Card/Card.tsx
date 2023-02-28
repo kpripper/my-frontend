@@ -236,11 +236,14 @@ export const Card = (props: CardType) => {
             draggable="true"
             onDragStart={(e) => {
               props.handleDragStart!(e, props.index)
-         
-              //без таймаута не видно картки яка перетягується
               setTimeout(() => {
                 setOnHold(true)
               }, 0)
+            }}
+            onDragEnd={() => {  
+              console.log('dragend card')
+              props.handleDragEnd!()
+              setOnHold(false);
             }}
             onDragOver={(e) => handleDragOverCard(e, props.index)}
 
