@@ -26,10 +26,10 @@ export const Card = (props: CardType) => {
 
       console.log('offsetPosition', offsetPosition)
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
+      // window.scrollTo({
+      //   top: offsetPosition,
+      //   behavior: 'smooth',
+      // })
     }
   }, [])
 
@@ -93,7 +93,7 @@ export const Card = (props: CardType) => {
   var blurTimer: NodeJS.Timeout | null = null
 
   function newOnBlur() {
-    blurTimer = setTimeout(handleBlur, 100)
+    blurTimer = setTimeout(handleBlur, 1000)
   }
 
   const handleSave = () => {
@@ -104,6 +104,7 @@ export const Card = (props: CardType) => {
   }
 
   const handleDelete = () => {
+    console.log('card handleDelete')
     clearTimeout(blurTimer!)
     store.dispatch(delCard(boardId, id))
     setInputCardNameVisibity(false)
@@ -166,7 +167,7 @@ export const Card = (props: CardType) => {
     index: number
   ) => {
     e.preventDefault()
-    console.log(`handleDragOverCard`, index)
+    // console.log(`handleDragOverCard`, index)
     // без таймаута не показуэться перетягувана картка
     setTimeout(() => {
       props.setSlotPosition!(e, props.index)
@@ -192,25 +193,23 @@ export const Card = (props: CardType) => {
       }}
     >
       <div
-          // id={id}
-          // data-index={props.index}
-          // className={`card ${onHold ? 'hidden-card' : ''}`}
-          // draggable="true"
-          // onDragStart={(e) => {
-          //   props.handleDragStart!(e, props.index)
-          //   setTimeout(() => {
-          //     setOnHold(true)
-          //   }, 0)
-          // }}
-          // onDragOver={(e) => handleDragOverCard(e, props.index)}
+      // id={id}
+      // data-index={props.index}
+      // className={`card ${onHold ? 'hidden-card' : ''}`}
+      // draggable="true"
+      // onDragStart={(e) => {
+      //   props.handleDragStart!(e, props.index)
+      //   setTimeout(() => {
+      //     setOnHold(true)
+      //   }, 0)
+      // }}
+      // onDragOver={(e) => handleDragOverCard(e, props.index)}
 
-
-
-        //   onDragOver={(e) => props.setSlotPosition! (e, props.index)}
-        // onDragEnter={onDragEnter}
-        //  ref={ref}
-        //  onDragEnd={dragEndHandler}
-        //  onDrop={dropHandler}
+      //   onDragOver={(e) => props.setSlotPosition! (e, props.index)}
+      // onDragEnter={onDragEnter}
+      //  ref={ref}
+      //  onDragEnd={dragEndHandler}
+      //  onDrop={dropHandler}
       >
         {isInputCardName ? (
           <input
@@ -231,23 +230,22 @@ export const Card = (props: CardType) => {
             // index={props.index}
             // className="list-card"
             id={id}
-           
-            data-index={props.index}
+            data-index={props.position}
             className={`list-card card ${onHold ? 'hidden-card' : ''}`}
+           // className={`list-card card`}
             draggable="true"
             onDragStart={(e) => {
               props.handleDragStart!(e, props.index)
-
-              // setTimeout(() => {
-              //   setOnHold(true)
-              // }, 0)
+         
+              //без таймаута не видно картки яка перетягується
+              setTimeout(() => {
+                setOnHold(true)
+              }, 0)
             }}
-
-
             onDragOver={(e) => handleDragOverCard(e, props.index)}
 
             // onDragStart={() => {
-                  //   return false
+            //   return false
             // }}
 
             // onDrop={(e) => {
@@ -257,15 +255,8 @@ export const Card = (props: CardType) => {
             //   e.preventDefault()
             // }}
           >
-            {/* <div
-              onDragEnter={(e) => {
-                e.preventDefault()
-              }}
-              className="card-title"
-            > */}
-            {cardName}
-            {/* </div> */}
-            <div
+           ind {props.index} pos {props.position} name {cardName}
+              <div
               className="icon-edit icon-card-edit"
               onClick={toggleInputCardName}
             ></div>

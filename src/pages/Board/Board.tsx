@@ -41,10 +41,10 @@ export const Board = () => {
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [isErrorListValidation, setErrorListValidationOpen] = useState(false)
   const [errorText, setErrorText] = useState('Error: ' + selectError.errorText)
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([])
 
-  function handleSetCards(newCards:any) {
-    setCards(newCards);
+  function handleSetCards(newCards: any) {
+    setCards(newCards)
   }
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,15 +183,15 @@ export const Board = () => {
     'list-card'
   ) as HTMLCollectionOf<HTMLElement>
 
-  for (let i = 0; i < draggableElements.length; i++) {
-    draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
-      const clone = (event.target as HTMLElement).cloneNode(true) as HTMLElement
-      document.body.appendChild(clone)
-      clone.style.opacity = '1.0 !important'
-      clone.style.width = '162px'
-      event.dataTransfer!.setDragImage(clone, 0, 0)
-    })
-  }
+  // for (let i = 0; i < draggableElements.length; i++) {
+  //   draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
+  //     const clone = (event.target as HTMLElement).cloneNode(true) as HTMLElement
+  //     document.body.appendChild(clone)
+  //     clone.style.opacity = '1.0 !important'
+  //     clone.style.width = '162px'
+  //     event.dataTransfer!.setDragImage(clone, 0, 0)
+  //   })
+  // }
 
   // let draggedItem = null
 
@@ -224,8 +224,8 @@ export const Board = () => {
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
-      // onDrag={()=>console.log('dragging' )}
-      // onDragOver={(e:React.DragEvent)=>console.log('drag', e.target )}
+      // onDrag={(e) => console.log('dragging', e.currentTarget)}
+      onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
     >
       <div className="header-container">
         <Link className="" to="/">
@@ -254,8 +254,9 @@ export const Board = () => {
       </div>
 
       <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
-        <div className="board-content"
-        // onDragEnter={onDragEnter}
+        <div
+          className="board-content"
+          // onDragEnter={onDragEnter}
         >
           {listsSelector.map((list: ListType) => (
             <List key={list.id} {...list} setCards={handleSetCards} />

@@ -78,16 +78,23 @@ export const createList =
   }
 
 export const addCard =
-  (cardTitle: string, boardId: string, listID: string, position: string) =>
+  (
+    cardTitle: string,
+    boardId: string,
+    listID: string,
+    cardsLength: number
+  ) =>
   async (dispatch: Dispatch) => {
+
+    console.log(`Try Create ${cardTitle} in position ${cardsLength}`)
     try {
       let res = await instance.post(config.boards + '/' + boardId + '/card', {
         title: cardTitle,
         list_id: listID,
-        position: position,
+        position: cardsLength,
       })
 
-      console.log(`Create ${res.data?.id} ${cardTitle} in ${listID} list`, res)
+      console.log(`Create ${cardTitle} in ${listID} list`, res)
 
       store.dispatch(getBoard(boardId))
     } catch (e) {

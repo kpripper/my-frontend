@@ -7,8 +7,13 @@ $base-blue-color: #026AA7;
     margin: 0 4px;
     vertical-align: top;
     width: 272px;
-    background-color: #ebecf0;
+    // background-color: #374788;
     border-radius: 3px;
+    border: 1px solid black;
+
+    // &:hover {
+    //     background-color: rgba(242, 152, 152, 0.351);
+    // }
 
 }
 
@@ -23,7 +28,7 @@ $base-blue-color: #026AA7;
 //     background-color: red;
 //     background-clip: padding-box;
 //   }
-  
+
 //   .list::after {
 //     content: '';
 //     position: absolute;
