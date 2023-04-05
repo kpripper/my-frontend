@@ -72,11 +72,13 @@ export const Board = () => {
     setInputListNameVisibity(false)
   }
 
-  const listsSelector = useSelector(
+  const listsSelector: ListType[] = useSelector(
     (state: RootState) => state.board.lists,
     shallowEqual
   )
 
+
+  
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
   async function fetchData() {
@@ -143,32 +145,12 @@ export const Board = () => {
     store.dispatch(getBoard(boardId))
   }
 
-  // const handleBlurNew = () => {
-  //   if (newNameValidation(boardName)) {
-  //     setBoardName(boardName)
-  //     setInputBoardNameVisibity(false)
-  //     store.dispatch(editBoardTitle(boardName, boardId))
-  //   } else {
-  //     setErrorValidationOpen(true)
-  //   }
-  // }
 
   const handleBlur = () => {
     if (newNameValidation(boardName)) {
       store.dispatch(editBoardTitle(boardName, boardId))
     }
   }
-
-  // const handleListBlur = () => {
-  //   if (newNameValidation(listName)) {
-  //     setListName(listName)
-  //     setInputListNameVisibity(false)
-  //     store.dispatch(createList(listName, boardId))
-  //     store.dispatch(getBoard(boardId))
-  //   } else {
-  //     setErrorListValidationOpen(true)
-  //   }
-  // }
 
   const showSnackbar =
     selectError.isError || isErrorValidation || isErrorListValidation
@@ -183,49 +165,14 @@ export const Board = () => {
     'list-card'
   ) as HTMLCollectionOf<HTMLElement>
 
-  // for (let i = 0; i < draggableElements.length; i++) {
-  //   draggableElements[i].addEventListener('dragstart', (event: DragEvent) => {
-  //     const clone = (event.target as HTMLElement).cloneNode(true) as HTMLElement
-  //     document.body.appendChild(clone)
-  //     clone.style.opacity = '1.0 !important'
-  //     clone.style.width = '162px'
-  //     event.dataTransfer!.setDragImage(clone, 0, 0)
-  //   })
-  // }
 
-  // let draggedItem = null
-
-  // function dragDrop() {
-  //   const listsItems = listsSelector
-  //   const listsItemsJS = document.querySelectorAll('.list')
-  //   const cardItems = document.querySelectorAll('.list-card')
-
-  //   for (let i = 0; i < cardItems.length; i++) {
-  //     // let draggedItem
-  //     const item = cardItems[i]
-
-  //     item.addEventListener('dragstart', (e) => {
-  //       // (e.currentTarget as HTMLDivElement | HTMLLIElement).style.pointerEvents = "none";
-  //       const clone = (e.target as HTMLElement).cloneNode(true) as HTMLElement
-  //       document.body.appendChild(clone)
-  //       clone.style.opacity = "1.0";
-  //       draggedItem = item
-  //       ;(e.currentTarget as HTMLLIElement).style.opacity = '1'
-  //       console.log('item', item)
-  //     })
-  //   }
-  // }
-
-  // dragDrop()
-
-  // dragNdrop()
 
   return (
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
       // onDrag={(e) => console.log('dragging', e.currentTarget)}
-      onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
+     // onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
     >
       <div className="header-container">
         <Link className="" to="/">
@@ -253,17 +200,17 @@ export const Board = () => {
         </div>
       </div>
 
-      <SimpleBar className="simplebar" direction="rtl" autoHide={false}>
-        <div
-          className="board-content"
-          // onDragEnter={onDragEnter}
-        >
+      {/* <SimpleBar className="simplebar" direction="rtl" autoHide={false}> */}
+        <div className="board-content">
+
           {listsSelector.map((list: ListType) => (
             <List key={list.id} {...list} setCards={handleSetCards} />
           ))}
 
           <div className="list">
-            <AddInput
+            <AddInput 
+              // onDragOver={()=>{}}  
+              // onDragLeave={()=>{}}           
               handleSave={handleSave}
               defaultValue={''}
               source={'list'}
@@ -289,7 +236,7 @@ export const Board = () => {
             {'Board name ' + boardName + ' is not valid'}
           </Alert>
         </Snackbar>
-      </SimpleBar>
+      {/* </SimpleBar> */}
       {selectLoadingState.loading && <ProgressBar />}
     </div>
   )

@@ -7,9 +7,11 @@ import { useSelector } from 'react-redux'
 
 export const getBoards = () => async () => {
   try {
-    const { boards }: BoardsServerResponse = await instance.get('/board')
-    console.log('getBoards', boards)
-    store.dispatch({ type: 'UPDATE_BOARDS', payload: boards })
+    // const { boards }: BoardsServerResponse = await instance.get('/board')
+    // console.log('getBoards', boards)
+    const BoardsServerResponse: BoardsServerResponse = await instance.get('/board')
+    console.log('getBoards', BoardsServerResponse)
+    store.dispatch({ type: 'UPDATE_BOARDS', payload: BoardsServerResponse.boards })
   } catch (e) {
     handleAxiosError(e)
   }

@@ -3,10 +3,10 @@
 $base-blue-color: #026AA7;
 
 .boards {
-    height: 100%;
-    background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
-    padding: 0 0 50px 0;
-    background-size: cover;
+    // height: 100%;
+    //  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
+    //padding: 0 0 50px 0;
+    // background-size: cover;
 }
 
 .board {
@@ -34,7 +34,22 @@ $base-blue-color: #026AA7;
 .board-content {
     white-space: nowrap;
     padding: 0 10px;
+    overflow-x: auto;
+    height: calc(100vh - 122px);
+    max-height: calc(100vh - 122px);
 }
+
+// .board-content::-webkit-scrollbar {
+//     position: relative;
+//     height: 20px;
+//     border-radius: 10px;
+//     background-color: rgba(229, 218, 218, 0.58);
+// }
+
+// .board-content::-webkit-scrollbar-thumb {
+//     background-color: rgba(143, 137, 137, 0.78);
+//     border-radius: 10px;
+// }
 
 h1 {
     padding: 0 0 0 30px;
@@ -43,8 +58,8 @@ h1 {
 
 .list {
     display: inline-block;
-    margin: 0 4px;
-    padding: 10px;
+    margin: 0 14px;
+    // padding: 10px;
     background-color: #ffffff90;
     border-radius: 3px;
     color: rgb(61, 61, 61);
@@ -59,6 +74,18 @@ h1 {
         background-color: #ffffffa9;
     }
 }
+
+// .list::-webkit-scrollbar {
+//     position: relative;
+//     height: 20px;
+//     border-radius: 10px;
+//     background-color: rgba(229, 218, 218, 0.58);
+// }
+
+// .list::-webkit-scrollbar-thumb {
+//     background-color: rgba(143, 137, 137, 0.78);
+//     border-radius: 10px;
+// }
 
 .active-list {
     background-color: #e8e8e83d;
@@ -116,6 +143,9 @@ h1 {
     width: 32px;
 }
 
+.adding-list {
+    padding: 5px;
+}
 
 .list-add-button {
     float: left;
@@ -145,19 +175,24 @@ h1 {
 .open-add-list {
     display: flex;
     align-items: center;
-    width: 100%;
+    // width: 100%;
     cursor: pointer;
     border: none;
     border-radius: 3px;
-    padding: 0 0 0 3px;
+    padding: 10px;
 
     &:hover {
-        background-color: #8f8f8f3d;        
+        background-color: #8f8f8f3d;
     }
 }
 
-.list-header-container + .open-add-list {
+.list-header-container+.open-add-list {
     margin-top: 8px;
+}
+
+.list-header-container {
+    padding: 10px;
+    border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
 }
 
 .icon-close-addlist {

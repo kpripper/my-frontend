@@ -1,13 +1,16 @@
 import { IBoard } from '../../../common/interfaces/IBoard'
+import { BoardType, ListType } from '../../../common/types'
+import { AnyAction } from '@reduxjs/toolkit';
 
-const initialState: IBoard = {
+const initialState: BoardType = {
+  id: 0,
   title: '',
-  lists: [],
+  lists: [],  
 }
 
 export default function reducer(
   state = initialState,
-  action: { type: string; payload: any }
+  action: { type: string; payload: BoardType }
 ) {
   switch (action.type) {
     case 'UPDATE_BOARD':
@@ -28,6 +31,17 @@ export default function reducer(
         ...state,
         modalIsOpen: action.payload,
       }
+
+    // case 'UPDATE_CARD_POSITION':
+    //   const { cardId, newPosition } = action.payload
+    //   const newCards = state.cards.map((card) => {
+    //     if (card.id === cardId) {
+    //       return { ...card, position: newPosition }
+    //     } else {
+    //       return card
+    //     }
+    //   })
+    //   return { ...state, cards: newCards }
 
     default: {
       return { ...state }

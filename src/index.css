@@ -28,8 +28,6 @@ html {
    height: 100%;      
 }
 
-
-
 body { 
   height: 100%;   
 }
@@ -38,11 +36,15 @@ body {
   height: 100%;   
 }
 
-.home {
+.boards {
+  height: 100%;
+}
+
+/* .home {
   background: rgb(255, 255, 255);
   min-width: 100%;
   min-height: 100%;
-}
+} */
 
 .simplebar-scrollbar::before {
   background-color: rgb(211, 209, 209);  

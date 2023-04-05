@@ -39,6 +39,14 @@
     display: none;
 }
 
+.dragged-card {
+    display: none;
+}
+
+.over-card {
+    border: 1px solid red;
+}
+
 .cursor-move {
     cursor: move;
 }

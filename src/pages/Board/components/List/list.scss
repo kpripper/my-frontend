@@ -3,7 +3,7 @@ $base-blue-color: #026AA7;
 .list {
     box-sizing: border-box;
     // display: inline-block;
-    height: 100%;
+   // height: 100%;
     margin: 0 4px;
     vertical-align: top;
     width: 272px;
@@ -16,6 +16,7 @@ $base-blue-color: #026AA7;
     // }
 
 }
+
 
 /* Create a pseudo-element to show the padding lines */
 // .list::before {
@@ -52,7 +53,7 @@ h2 {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
+ 
 }
 
 .input-list-title {
@@ -87,6 +88,36 @@ h2 {
 
 .list-card {
     position: relative;
+    border: 1px solid #9000ff;
+    padding: 0 10px;
+    // list-style: none;   
+    // background-color: rgb(246, 246, 246);
+    // border-radius: 13px;
+    // box-shadow: 0 1px 0 #091e4240;   
+    // color: #2e2c2c;
+    // white-space: break-spaces;
+
+    // p {
+    //     margin: 0;
+    // }
+
+    // &:hover {
+    //     background-color: rgb(237, 237, 237);
+
+    //     .icon-card-edit {
+    //         display: block;
+    //     }
+
+    //     &:focus {
+    //         .icon-card-edit {
+    //             display: none;
+    //         }
+    //     }
+    // }
+}
+
+.self-card {
+    position: relative;
     list-style: none;
     padding: 2px 0 5px 10px;
     background-color: rgb(246, 246, 246);
@@ -95,7 +126,7 @@ h2 {
     margin: 8px 0;
     color: #2e2c2c;
     white-space: break-spaces;
-
+    
     p {
         margin: 0;
     }
@@ -167,8 +198,6 @@ h2 {
         background-color: #9e9e9e21;
     }
 }
-
-
 
 .list-actions-header {
     display: flex;
@@ -276,10 +305,16 @@ h2 {
     margin: 3px 3px 0 0;
 }
 
-.slot {
-    border-radius: 3px;
-    min-height: 30px;
-    background-color: lightgray;
-    width: 100%;
-    margin: 8px 0;
-}
+
+
+// .cards-container::-webkit-scrollbar {
+//    // position: relative;
+//     height: 20px;
+//     border-radius: 10px;
+//     background-color: rgba(229, 218, 218, 0.58);
+// }
+
+// .cards-container::-webkit-scrollbar-thumb {
+//     background-color: rgba(143, 137, 137, 0.78);
+//     border-radius: 10px;
+// }

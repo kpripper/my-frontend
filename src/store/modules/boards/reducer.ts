@@ -48,6 +48,7 @@ interface InitialState {
 
 const initialState: BoardType[] = []
 
+
 export default function reducer(
   state = initialState,
   action: { type: string; payload: BoardType[] }
@@ -55,7 +56,7 @@ export default function reducer(
   switch (action.type) {
     case 'UPDATE_BOARDS':
       console.log('UPDATE_BOARDS', action.payload);
-      return action.payload;
+      return action.payload;      
 
     default: {
       return state;

@@ -23,7 +23,7 @@ const Home = () => {
   const selectError = useSelector((state: RootState) => state.error)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
-  console.log('selectBoards', selectBoards)
+  //console.log('selectBoards', selectBoards)
 
   async function fetchData() {
     const { boards: boardsAPI }: BoardsServerResponse = await instance.get(
@@ -38,15 +38,8 @@ const Home = () => {
     console.log('useEffect', selectBoards)
     fetchData()
     console.log('selectBoards use', selectBoards)
-    // setBoards(selectBoards)
+   
   }, [])
-
-  // console.log('selectBoards', selectBoards)
-  // console.log('selectBoards.boards', selectBoards.boards)
-  //console.log("selectBoards arr", Array.from(selectBoards));
-  // console.log('boards', boards)
-
-  // const { current: currentBoards } = useRef(boards)
 
   return (
     <div>
@@ -62,8 +55,8 @@ const Home = () => {
       <div className="all-boards">
         {/* Property 'boards' does not exist on type 'BoardType[]' */}
 
-        {selectBoards.map(({ id, title } : {id:string, title:string} ) => (
-          <BoardHome key={id} id={+id} title={title} />
+        {selectBoards.map(({ id, title } : {id:number, title:string} ) => (
+          <BoardHome key={id} id={id} title={title} />
         ))}
         <AddBoard />
       </div>

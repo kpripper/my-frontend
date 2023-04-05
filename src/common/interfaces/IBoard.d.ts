@@ -1,4 +1,4 @@
-import {  ICard } from './ ICard';
+// import {  ICard } from './ ICard';
 import {  ISimpleCard } from './ ISimpleCard';
 
 export interface IBoard {  
