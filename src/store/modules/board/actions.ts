@@ -236,16 +236,16 @@ export const editCards =
     //
     //const filteredNewCardsput = JSON.parse(JSON.stringify(newCardsPut)).filter((value: null) => value !== null);
 
-    const newArr = cardsAfterInsert
+    const insertedCardsToPut = cardsAfterInsert
       .filter((value) => value !== null)
       .map((item: any, index: number) => ({ ...item, position: index + 1 }))
 
-    console.log('newArr', newArr)
+    console.log('newArr', insertedCardsToPut)
 
     try {
       let resPut = await instance.put(
         config.boards + '/' + boardId + '/card',
-        newArr
+        insertedCardsToPut
       )
 
       console.log(`editCards resPut`, resPut)
@@ -264,15 +264,15 @@ export const editCards =
           }
         })
     
-        console.log('updatedCards bef splice', updatedCardsMinus)
+        console.log('updatedCardsMinus bef splice', updatedCardsMinus)
     
           for (let i = 0; i < updatedCardsMinus.length; i++) {
           updatedCardsMinus[i].position = i+1
         }
     
-        console.log('updatedCards corrected position', updatedCardsMinus)
+        console.log('updatedCardsMinus corrected position', updatedCardsMinus)
 
-        console.log('updatedCards disp', updatedCardsMinus)
+        console.log('updatedCardsMinus disp', updatedCardsMinus)
 
         let resDel = await instance.put(
           config.boards + '/' + boardId + '/card',
@@ -282,8 +282,6 @@ export const editCards =
         console.log(`editCards resDel`, resDel)
 
       }
-
-
 
       store.dispatch(getBoard(boardId))
     } catch (e) {

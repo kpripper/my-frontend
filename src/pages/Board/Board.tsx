@@ -171,7 +171,7 @@ export const Board = () => {
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
-      // onDrag={(e) => console.log('dragging', e.currentTarget)}
+      onDrag={(e) => console.log('dragging', e.currentTarget)}
      // onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
     >
       <div className="header-container">
