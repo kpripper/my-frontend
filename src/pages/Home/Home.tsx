@@ -23,7 +23,7 @@ const Home = () => {
   const selectError = useSelector((state: RootState) => state.error)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
-  //console.log('selectBoards', selectBoards)
+  console.log('selectBoards', selectBoards)
 
   async function fetchData() {
     const { boards: boardsAPI }: BoardsServerResponse = await instance.get(

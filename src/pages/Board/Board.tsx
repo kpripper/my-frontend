@@ -91,6 +91,7 @@ export const Board = () => {
   useEffect(() => {
     fetchData()
     store.dispatch(getBoard(boardId))
+    console.log('listsSelector', listsSelector)
   }, [])
 
   const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
@@ -161,17 +162,11 @@ export const Board = () => {
     }
   }, [selectError.isError])
 
-  const draggableElements = document.getElementsByClassName(
-    'list-card'
-  ) as HTMLCollectionOf<HTMLElement>
-
-
-
   return (
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
-      onDrag={(e) => console.log('dragging', e.currentTarget)}
+     // onDrag={(e) => console.log('dragging', e.currentTarget)}
      // onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
     >
       <div className="header-container">
@@ -200,7 +195,7 @@ export const Board = () => {
         </div>
       </div>
 
-      {/* <SimpleBar className="simplebar" direction="rtl" autoHide={false}> */}
+       {/* <SimpleBar className="simplebar" direction="rtl" autoHide={false}>  */}
         <div className="board-content">
 
           {listsSelector.map((list: ListType) => (
@@ -236,7 +231,7 @@ export const Board = () => {
             {'Board name ' + boardName + ' is not valid'}
           </Alert>
         </Snackbar>
-      {/* </SimpleBar> */}
+       {/* </SimpleBar>  */}
       {selectLoadingState.loading && <ProgressBar />}
     </div>
   )

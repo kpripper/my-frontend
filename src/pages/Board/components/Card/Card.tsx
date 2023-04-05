@@ -109,6 +109,7 @@ export const Card = (props: CardType) => {
       onDragOver={(e) => {
         e.preventDefault()
       }}
+
     >
       <div>
         {isInputCardName ? (
@@ -127,7 +128,7 @@ export const Card = (props: CardType) => {
             data-index={props.position}
             className={`list-card card
              ${onHold ? 'hidden-card' : ''}`}
-            
+  
             onDragStart={(e) => {
               props.handleDragStart!(e, +props.position)
               setTimeout(() => {
@@ -135,14 +136,19 @@ export const Card = (props: CardType) => {
               }, 0)
             }}
             onDragEnd={(e) => {
-               setOnHold(false)
-              // props.handleDragEnd!(e)
+              setOnHold(false)
+              console.log('dragend', e.target)
+              props.handleDragEnd!(e)
             }}
             onDragOver={(e) => {
-                    handleDragOverCard(e, props.index)
+              handleDragOverCard(e, props.index)
             }}
           >
-            <div className="self-card" draggable="true">
+            <div
+              className="self-card"
+              draggable="true"
+
+            >
               {/* ind {props.index} pos {props.position} name  */}
               {props.id!} pos {props.position}
               <div

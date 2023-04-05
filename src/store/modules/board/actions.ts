@@ -4,16 +4,20 @@ import instance from '../../../api/request'
 import { getBoards } from '../boards/actions'
 import store from '../../store'
 import { handleAxiosError } from '../errorHandlers/actions'
-import { BoardType, CardType, changeCardGroup, IGroupCard } from '../../../common/types'
-
-
+import {
+  BoardType,
+  CardType,
+  changeCardGroup,
+  IGroupCard,
+} from '../../../common/types'
 
 export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   try {
     const board = await instance.get<BoardType>('/board/' + id)
     console.log('getBoard board', board)
     //@ts-ignore
-    console.log('id type', typeof board.lists[0].id)
+    //BUG з включеним консоль логом на дошці без списків показуються списки попередньо відкритої дошки
+    // console.log('id type', typeof board.lists[0].id)
     dispatch({ type: 'UPDATE_BOARD', payload: board })
     return board
   } catch (e) {
@@ -185,16 +189,19 @@ export const editCards =
 
     cardsToDelete.splice(+draggedOffPosition - 1, 1)
 
-    console.log('cardsToDelete aft splica', cardsToDelete)
+    console.log('cardsToDelete aft splice', cardsToDelete)
 
-    if(cardsToInsert.length === 0 ) {
+    if (cardsToInsert.length === 0) {
       cardsAfterInsert[0] = newCard
     } else {
       cardsToInsert.forEach((card, index) => {
         delete card.users
         delete card.created_at
         delete card.title
-        if (+card.position >= addCardInPosition && +card.id! !== +placedCardId) {
+        if (
+          +card.position >= addCardInPosition &&
+          +card.id! !== +placedCardId
+        ) {
           console.log(
             'card.id',
             typeof card.id,
@@ -228,13 +235,10 @@ export const editCards =
       })
     }
 
-    console.log(`cardsAfterInsert JSON`, JSON.parse(JSON.stringify(cardsAfterInsert)))
-    // console.log(`newCardsdel JSON`, JSON.parse(JSON.stringify(newCardsDel)))
-    // newCardsDel.splice(+draggedOffPosition-1, 1)
-    // console.log(`newCardsdel JSON`, JSON.parse(JSON.stringify(newCardsDel)))
-
-    //
-    //const filteredNewCardsput = JSON.parse(JSON.stringify(newCardsPut)).filter((value: null) => value !== null);
+    console.log(
+      `cardsAfterInsert JSON`,
+      JSON.parse(JSON.stringify(cardsAfterInsert))
+    )
 
     const insertedCardsToPut = cardsAfterInsert
       .filter((value) => value !== null)
@@ -250,7 +254,7 @@ export const editCards =
 
       console.log(`editCards resPut`, resPut)
 
-      if(+initialListId !== +list_id) {
+      if (+initialListId !== +list_id) {
         console.log('initialListId !== list_id', initialListId, list_id)
         const updatedCardsMinus = cardsToDelete.map((card, index) => {
           delete card.users
@@ -263,13 +267,13 @@ export const editCards =
             list_id: initialListId,
           }
         })
-    
+
         console.log('updatedCardsMinus bef splice', updatedCardsMinus)
-    
-          for (let i = 0; i < updatedCardsMinus.length; i++) {
-          updatedCardsMinus[i].position = i+1
+
+        for (let i = 0; i < updatedCardsMinus.length; i++) {
+          updatedCardsMinus[i].position = i + 1
         }
-    
+
         console.log('updatedCardsMinus corrected position', updatedCardsMinus)
 
         console.log('updatedCardsMinus disp', updatedCardsMinus)
@@ -278,9 +282,8 @@ export const editCards =
           config.boards + '/' + boardId + '/card',
           updatedCardsMinus
         )
-  
-        console.log(`editCards resDel`, resDel)
 
+        console.log(`editCards resDel`, resDel)
       }
 
       store.dispatch(getBoard(boardId))

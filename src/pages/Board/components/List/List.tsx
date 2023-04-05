@@ -318,17 +318,11 @@ export const List = (props: ListType & SetCards) => {
         (e.relatedTarget as HTMLDivElement).className === 'board-header'
       ) {
         console.log('all to false')
-        setShowSlot(false)
-        setShowSingleSlot(false)
-        setShowFirstSlot(false)
-        setSlotIndex(-1)
+        allToFalse()
       }
     } else {
       console.log('all to false')
-      setShowSlot(false)
-      setShowSingleSlot(false)
-      setShowFirstSlot(false)
-      setSlotIndex(-1)
+      allToFalse()
     }
   }
 
@@ -379,45 +373,6 @@ export const List = (props: ListType & SetCards) => {
       console.log(`below`)
       setSlotIndex(index - 1)
     }
-
-    // if (above && slotIndex === -1) {
-    //   //setSlotIndex(index - 1)
-    //   setTimeout(() => {
-    //     setSlotIndex(index - 1)
-    //     console.log(index, `1 above setted slotIndex`, slotIndex)
-    //   }, 2000)
-    // }
-
-    // if (below && slotIndex < index) {
-    //   // console.log('below')
-    //   setShowFirstSlot(false)
-    //   setSlotIndex(index)
-    //   console.log(index, `2 below setted slotIndex`, slotIndex)
-    // }
-
-    // if (below && slotIndex === index) {
-    //   setTimeout(() => {
-    //     setShowFirstSlot(false)
-    //     setSlotIndex(index)
-    //     console.log(index, `3 below setted slotIndex`, slotIndex)
-    //   }, 2000)
-
-    // }
-
-    // if (above && slotIndex === index && index > 0) {
-    //   setTimeout(() => {
-    //     setShowFirstSlot(false)
-    //     setSlotIndex(index - 1)
-    //     console.log(index, `4 above setted slotIndex`, slotIndex)
-    //   }, 2000)
-
-    // }
-
-    // if (above && slotIndex > index) {
-    //   setShowFirstSlot(false)
-    //   setSlotIndex(index - 1)
-    //   console.log(index, `5 above setted slotIndex`, slotIndex)
-    // }
 
     // console.log(`final slotIndex`, slotIndex)
   }
@@ -470,9 +425,28 @@ export const List = (props: ListType & SetCards) => {
       setShowSlot(false)
     }
 
+  // const onDragEndList = (e: React.DragEvent<HTMLDivElement>) =>
+  //   // e: React.DragEvent<HTMLDivElement>,
+  //   // index: number
+  //   {
+  //     console.log('onDragEndList', e)
+  //     allToFalse()
+  //   }
+
+  const allToFalse = () =>
+    {
+
+      setShowFirstSlot(false)
+      setShowSingleSlot(false)
+      setShowSlot(false)
+      setSlotIndex(-1)
+    }
+
   useEffect(() => {
     // console.log('useEffect updated slotIndex', slotIndex)
   }, [slotIndex])
+
+
 
   return (
     <div
@@ -480,10 +454,10 @@ export const List = (props: ListType & SetCards) => {
       id={props.id}
       ref={listRef}
       onDragOver={handleDragOver}
-      // onDragLeave={onDragLeave}
+      onDrop={allToFalse}
       onDragLeave={onDragLeaveTarget}
     >
-      <div className="list-header-container">
+      <div className="list-header-container" >
         <div className="input-container">
           {isEditListName ? (
             <input
@@ -496,8 +470,8 @@ export const List = (props: ListType & SetCards) => {
               autoFocus
             />
           ) : (
-            <div className="list-header">
-              <h2 className="list-title" onClick={toggleListName}>
+            <div className="list-header" >
+              <h2 className="list-title" onClick={toggleListName} onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
                 {listName} <br />
                 {props.id} <br />
                 slotInd {slotIndex} <br />
@@ -514,7 +488,7 @@ export const List = (props: ListType & SetCards) => {
         </div>
       </div>
 
-      <div className="cards-container">
+      <div className="cards-container" onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
         {props.cards.map((card: CardType, index, arr: CardType[]) => {
           let nextCard: CardType
           nextCard = arr[index + 1]
@@ -532,8 +506,8 @@ export const List = (props: ListType & SetCards) => {
           }
 
           return (
-            <>
-              <div key={card!.id}>
+            < >
+              <div key={card!.id} onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
                 {index === 0 && showFirstSlot && (
                   <Slot slotPosition="above" {...slotProps} />
                 )}
