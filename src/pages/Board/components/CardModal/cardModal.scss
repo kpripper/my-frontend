@@ -1,0 +1,238 @@
+.modalDiv {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    background-color: rgba(91, 112, 131, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    // width: 350px;
+    // height: 200px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+/* Загальні стилі для всього компонента */
+.my-component {
+    position: relative;
+    width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Заголовок на всю ширину */
+.my-component h1 {
+    width: 100%;
+    font-size: 30px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Підзаголовок з назвою списку */
+.my-component h2 {
+    width: 100%;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Основний блок контенту */
+.my-component .main-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Ліва частина контенту (75%) */
+.my-component .left-content {
+    width: 75%;
+   // padding-right: 20px;
+}
+
+/* Права частина контенту (25%) */
+.my-component .right-content {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Блок "Учасники" */
+.my-component .left-content h3 {
+    font-size: 20px;
+    font-weight: bold;
+   // margin-bottom: 10px;
+}
+
+/* Аватари учасників */
+.my-component .left-content .avatars {
+    display: flex;
+    // flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* Кожен аватар учасника */
+.my-component .left-content .avatars img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+/* Кнопка "Приєднатися" */
+.my-component .left-content button {
+    display: block;
+    margin: 10px;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #2f94dc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 150px;
+}
+
+/* Блок опису */
+.my-component .left-content .description {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+/* Заголовок опису */
+.my-component .left-content .description h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Кнопка "Змінити" */
+//.my-component .left-content .description
+ button {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #2f94dc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+}
+
+.red-button {
+    background-color: #fd3636;
+}
+
+
+
+/* Заголовок "Дії" */
+.my-component .right-content h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Кнопки в правій частині */
+.my-component .right-content button {
+    display: block;
+    margin-top: 10px;
+}
+
+/* Кнопка закриття */
+.my-component .close-button {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Стилі для хрестика */
+.my-component .close-button::before,
+.my-component .close-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #4b4b4b;
+}
+
+.my-component .close-button::before {
+    transform: rotate(45deg);
+}
+
+.my-component .close-button::after {
+    transform: rotate(-45deg);
+}
+
+/* Збільшуємо натискання на кнопку */
+.my-component .close-button:hover::before,
+.my-component .close-button:hover::after {
+    height: 3px;
+}
+
+.participants {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: 1px solid #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0 10px 0 0;
+}
+
+.avatar span {
+    text-transform: uppercase;
+}
+
+.add-participant {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #aaa;
+    border-radius: 50%;
+    background-color: #aaa;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.join-button {
+  
+    border: none;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    width: auto;
+    //min-width: 120px;
+    max-width:150px;
+}

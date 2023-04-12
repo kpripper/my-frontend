@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import {
   addCard,
   delCard,
@@ -352,9 +352,6 @@ export const List = (props: ListType & SetCards) => {
     if (above && index === 0) {
       setShowSlot(false)
       setShowFirstSlot(true)
-      // console.log('before setSlotIndex', index)
-      // setSlotIndex(0)
-      // console.log(`after setSlotIndex`, slotIndex)
     }
     if (below && index === 0) {
       console.log(`below && index === 0`, slotIndex)
@@ -425,28 +422,19 @@ export const List = (props: ListType & SetCards) => {
       setShowSlot(false)
     }
 
-  // const onDragEndList = (e: React.DragEvent<HTMLDivElement>) =>
-  //   // e: React.DragEvent<HTMLDivElement>,
-  //   // index: number
-  //   {
-  //     console.log('onDragEndList', e)
-  //     allToFalse()
-  //   }
 
-  const allToFalse = () =>
-    {
-
-      setShowFirstSlot(false)
-      setShowSingleSlot(false)
-      setShowSlot(false)
-      setSlotIndex(-1)
-    }
+  const allToFalse = () => {
+    setShowFirstSlot(false)
+    setShowSingleSlot(false)
+    setShowSlot(false)
+    setSlotIndex(-1)
+  }
 
   useEffect(() => {
     // console.log('useEffect updated slotIndex', slotIndex)
   }, [slotIndex])
 
-
+  const location = useLocation();
 
   return (
     <div
@@ -457,7 +445,7 @@ export const List = (props: ListType & SetCards) => {
       onDrop={allToFalse}
       onDragLeave={onDragLeaveTarget}
     >
-      <div className="list-header-container" >
+      <div className="list-header-container">
         <div className="input-container">
           {isEditListName ? (
             <input
@@ -470,14 +458,15 @@ export const List = (props: ListType & SetCards) => {
               autoFocus
             />
           ) : (
-            <div className="list-header" >
-              <h2 className="list-title" onClick={toggleListName} onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
-                {listName} <br />
+            <div className="list-header">
+              <h2 className="list-title" onClick={toggleListName}>
+                {listName}
+                 {/* <br />
                 {props.id} <br />
                 slotInd {slotIndex} <br />
                 showSlot {showSlot ? 'true' : 'false'} <br />
                 showFirstSlot {showFirstSlot ? 'true' : 'false'} <br />
-                showSingleSlot {showSingleSlot ? 'true' : 'false'}
+                showSingleSlot {showSingleSlot ? 'true' : 'false'} */}
               </h2>
               <div
                 className="list-menu icon-dots-three"
@@ -488,7 +477,7 @@ export const List = (props: ListType & SetCards) => {
         </div>
       </div>
 
-      <div className="cards-container" onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
+      <div className="cards-container">
         {props.cards.map((card: CardType, index, arr: CardType[]) => {
           let nextCard: CardType
           nextCard = arr[index + 1]
@@ -506,22 +495,26 @@ export const List = (props: ListType & SetCards) => {
           }
 
           return (
-            < >
-              <div key={card!.id} onMouseUp={(e)=>{console.log('onMouseUp2', e)}}>
+           // <> //NOTE Warning: Each child in a list should have a unique "key" prop.
+              <div key={card!.id}>
                 {index === 0 && showFirstSlot && (
                   <Slot slotPosition="above" {...slotProps} />
                 )}
 
-                <Card
-                  {...card}
-                  index={+props.position}
-                  boardid={boardId}
-                  listId={props.id}
-                  setSlotPosition={setSlotPosition}
-                  handleDragStart={handleDragStart}
-                  handleDragEnd={handleDragEnd}
-                />
-
+                <Link
+                  to={`/board/${boardId}/card/${card.id}/`}                 
+                  state={{ background: location }}
+                >
+                  <Card
+                    {...card}
+                    index={+props.position}
+                    boardid={boardId}
+                    listId={props.id}
+                    setSlotPosition={setSlotPosition}
+                    handleDragStart={handleDragStart}
+                    handleDragEnd={handleDragEnd}
+                  />
+                </Link>
                 {
                   //without this condition, the slots under all cards are shown
                   index === slotIndex && showSlot && !showFirstSlot && (
@@ -529,7 +522,7 @@ export const List = (props: ListType & SetCards) => {
                   )
                 }
               </div>
-            </>
+         //  </>
           )
         })}
       </div>
@@ -630,6 +623,7 @@ export const List = (props: ListType & SetCards) => {
           {errorText}
         </Alert>
       </Snackbar>
+      {/* <Outlet />  */}
     </div>
   )
 }

@@ -1,5 +1,11 @@
 import { Alert, Snackbar } from '@mui/material'
-import { DetailedHTMLProps, HTMLAttributes, useCallback, useState } from 'react'
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  ReactElement,
+  useCallback,
+  useState,
+} from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
 import { CardType } from '../../../../common/types'
 import { edCard, delCard } from '../../../../store/modules/board/actions'
@@ -7,9 +13,13 @@ import store from '../../../../store/store'
 import { AddInput } from '../../AddInput'
 import { useCardOver } from '../../useCardOver'
 import './card.scss'
+import { useNavigate, useParams } from 'react-router-dom'
+
 
 export const Card = (props: CardType) => {
   // console.log(props)
+
+  // let boardParamID = parseInt(useParams().id!)
 
   const inputRef = useCallback((input: HTMLInputElement) => {
     if (input) {
@@ -99,17 +109,24 @@ export const Card = (props: CardType) => {
     // console.log(`handleDragOverCard`, index)\
     // без таймаута не показуэться перетягувана картка
     setTimeout(() => {
-      console.log('call setSlotPosition', +props.position - 1)
+      //  console.log('call setSlotPosition', +props.position - 1)
       props.setSlotPosition!(e, +props.position - 1)
     }, 0)
   }
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
+
+  // const openEditCardWindow = (e: React.MouseEvent<SVGElement>) => {
+  //   e.stopPropagation()
+  // }
 
   return (
     <div
       onDragOver={(e) => {
         e.preventDefault()
       }}
-
     >
       <div>
         {isInputCardName ? (
@@ -119,6 +136,7 @@ export const Card = (props: CardType) => {
             type="text"
             value={cardName}
             onChange={handleChange}
+            onClick={handleClick}
             onKeyDown={handleKeyDown}
             onBlur={newOnBlur}
           />
@@ -128,7 +146,6 @@ export const Card = (props: CardType) => {
             data-index={props.position}
             className={`list-card card
              ${onHold ? 'hidden-card' : ''}`}
-  
             onDragStart={(e) => {
               props.handleDragStart!(e, +props.position)
               setTimeout(() => {
@@ -147,14 +164,27 @@ export const Card = (props: CardType) => {
             <div
               className="self-card"
               draggable="true"
-
+              // onClick={(e) => {
+              //   handleClick(e)
+              // }}
             >
               {/* ind {props.index} pos {props.position} name  */}
-              {props.id!} pos {props.position}
-              <div
+              {/* {props.id!} pos {props.position} */}
+              {cardName}
+              <p
                 className="icon-edit icon-card-edit"
-                onClick={toggleInputCardName}
-              ></div>
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  toggleInputCardName()
+                }}
+              ></p>
+              {/* <FaPencilAlt className="icon-edit icon-card-edit"
+                onClick={(e) => {
+                  openEditCardWindow(e)
+                }}
+               //className="edit-card"
+              /> */}
             </div>
           </div>
         )}

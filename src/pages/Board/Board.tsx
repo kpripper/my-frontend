@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams, useLocation } from 'react-router-dom'
+import { Link, useParams, useLocation, Outlet } from 'react-router-dom'
 import { List } from './components/List/List'
 import SimpleBar from 'simplebar-react'
 import 'simplebar-react/dist/simplebar.min.css'
@@ -28,6 +28,8 @@ import { dragNdrop } from '../../common/dragNdrop'
 export const Board = () => {
   let boardId = useParams().id as string
 
+  const location = useLocation()
+
   const selectError = useSelector(
     (state: RootState) => state.error,
     shallowEqual
@@ -35,7 +37,7 @@ export const Board = () => {
 
   const backGroundStyles = useBackgroundColor()
   const [boardName, setBoardName] = useState('')
-  const [listName, setListName] = useState('')
+  // const [listName, setListName] = useState('')
   const [isInputBoardName, setInputBoardNameVisibity] = useState(false)
   const [isInputListName, setInputListNameVisibity] = useState(false)
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
@@ -51,17 +53,17 @@ export const Board = () => {
     setBoardName(ev.target.value)
   }
 
-  const handleListChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setListName(ev.target.value)
-  }
+  // const handleListChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+  //   setListName(ev.target.value)
+  // }
 
   const toggleInputBoardName = () => {
     setInputBoardNameVisibity(!isInputBoardName)
   }
 
-  const toggleInputListName = () => {
-    setInputListNameVisibity((prev) => !prev)
-  }
+  // const toggleInputListName = () => {
+  //   setInputListNameVisibity((prev) => !prev)
+  // }
 
   const handleSnackbarClose = () => {
     store.dispatch(clearError())
@@ -77,8 +79,6 @@ export const Board = () => {
     shallowEqual
   )
 
-
-  
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
   async function fetchData() {
@@ -86,41 +86,39 @@ export const Board = () => {
     setBoardName(response.title)
   }
 
-  let location = useLocation()
-
   useEffect(() => {
     fetchData()
     store.dispatch(getBoard(boardId))
     console.log('listsSelector', listsSelector)
   }, [])
 
-  const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
-      if (!newNameValidation((ev.target as HTMLInputElement).value)) {
-        setErrorText(
-          'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
-        )
-        setErrorListValidationOpen(true)
-      }
-      setInputListNameVisibity(false)
-      store.dispatch(createList((ev.target as HTMLInputElement).value, boardId))
-      // store.dispatch(getBoard(boardId))
-    }
-  }
+  // const addListOnEnter = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (ev.key === 'Enter') {
+  //     if (!newNameValidation((ev.target as HTMLInputElement).value)) {
+  //       setErrorText(
+  //         'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
+  //       )
+  //       setErrorListValidationOpen(true)
+  //     }
+  //     setInputListNameVisibity(false)
+  //     store.dispatch(createList((ev.target as HTMLInputElement).value, boardId))
+  //     // store.dispatch(getBoard(boardId))
+  //   }
+  // }
 
-  const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
-    const elemInpListTitle = document.querySelector(
-      '.input-list-title'
-    ) as HTMLInputElement
-    if (newNameValidation(elemInpListTitle.value)) {
-      setInputListNameVisibity(false)
-      store.dispatch(createList(elemInpListTitle.value, boardId))
-      store.dispatch(getBoard(boardId))
-    } else {
-      setErrorText('List name ' + elemInpListTitle.value + ' is not valid')
-      setErrorListValidationOpen(true)
-    }
-  }
+  // const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
+  //   const elemInpListTitle = document.querySelector(
+  //     '.input-list-title'
+  //   ) as HTMLInputElement
+  //   if (newNameValidation(elemInpListTitle.value)) {
+  //     setInputListNameVisibity(false)
+  //     store.dispatch(createList(elemInpListTitle.value, boardId))
+  //     store.dispatch(getBoard(boardId))
+  //   } else {
+  //     setErrorText('List name ' + elemInpListTitle.value + ' is not valid')
+  //     setErrorListValidationOpen(true)
+  //   }
+  // }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -129,7 +127,7 @@ export const Board = () => {
         setInputBoardNameVisibity(false)
         store.dispatch(editBoardTitle(boardName, boardId))
       } else {
-        setErrorValidationOpen(true)
+        setErrorValidationOpen(false)
       }
     }
   }
@@ -145,7 +143,6 @@ export const Board = () => {
     store.dispatch(createList(listName, boardId))
     store.dispatch(getBoard(boardId))
   }
-
 
   const handleBlur = () => {
     if (newNameValidation(boardName)) {
@@ -166,8 +163,8 @@ export const Board = () => {
     <div
       style={backGroundStyles}
       className={`${location.pathname !== '/' ? 'boards' : ''}`}
-     // onDrag={(e) => console.log('dragging', e.currentTarget)}
-     // onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
+      // onDrag={(e) => console.log('dragging', e.currentTarget)}
+      // onDragOver={(e:React.DragEvent)=>console.log('onDragOver board target', e.target )}
     >
       <div className="header-container">
         <Link className="" to="/">
@@ -195,44 +192,45 @@ export const Board = () => {
         </div>
       </div>
 
-       {/* <SimpleBar className="simplebar" direction="rtl" autoHide={false}>  */}
-        <div className="board-content">
+      {/* <SimpleBar className="simplebar" direction="rtl" autoHide={false}>  */}
+      <div className="board-content">
+        {listsSelector.map((list: ListType) => (
+          <List key={list.id} {...list} setCards={handleSetCards} />
+        ))}
 
-          {listsSelector.map((list: ListType) => (
-            <List key={list.id} {...list} setCards={handleSetCards} />
-          ))}
-
-          <div className="list">
-            <AddInput 
-              // onDragOver={()=>{}}  
-              // onDragLeave={()=>{}}           
-              handleSave={handleSave}
-              defaultValue={''}
-              source={'list'}
-            />
-          </div>
+        <div className="list">
+          <AddInput
+            // onDragOver={()=>{}}
+            // onDragLeave={()=>{}}
+            handleSave={handleSave}
+            defaultValue={''}
+            source={'list'}
+          />
         </div>
-        <Snackbar open={showSnackbar} message={errorText}>
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="error"
-            sx={{ width: '100%' }}
-          >
-            {errorText}
-          </Alert>
-        </Snackbar>
+      </div>
+      <Snackbar open={showSnackbar} message={errorText}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {errorText}
+        </Alert>
+      </Snackbar>
 
-        <Snackbar open={isErrorValidation}>
-          <Alert
-            onClose={handleSnackbarClose}
-            severity="error"
-            sx={{ width: '100%' }}
-          >
-            {'Board name ' + boardName + ' is not valid'}
-          </Alert>
-        </Snackbar>
-       {/* </SimpleBar>  */}
+      <Snackbar open={isErrorValidation}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {'Board name ' + boardName + ' is not valid'}
+        </Alert>
+      </Snackbar>
+
+      {/* </SimpleBar>  */}
       {selectLoadingState.loading && <ProgressBar />}
+      <Outlet />
     </div>
   )
 }

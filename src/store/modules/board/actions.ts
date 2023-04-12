@@ -126,6 +126,7 @@ export const delCard =
 export const edCard =
   (boardId: string, listID: string, cardID: string, cardTitle: string) =>
   async (dispatch: Dispatch) => {
+   // console.log('edcard props', boardId, listID, typeof cardID, cardTitle)
     console.log(config.boards + '/' + boardId + '/card/' + cardID, {
       title: cardTitle,
       list_id: listID,
