@@ -4,20 +4,21 @@ import {
   HTMLAttributes,
   ReactElement,
   useCallback,
+  useEffect,
   useState,
 } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
-import { CardType } from '../../../../common/types'
+import { CardType, ListType } from '../../../../common/types'
 import { edCard, delCard } from '../../../../store/modules/board/actions'
-import store from '../../../../store/store'
+import store, { RootState } from '../../../../store/store'
 import { AddInput } from '../../AddInput'
 import { useCardOver } from '../../useCardOver'
 import './card.scss'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { shallowEqual, useSelector } from 'react-redux'
 
 export const Card = (props: CardType) => {
-  // console.log(props)
+  console.log('card props', props)
 
   // let boardParamID = parseInt(useParams().id!)
 
@@ -28,14 +29,28 @@ export const Card = (props: CardType) => {
     }
   }, [])
 
+  const listsSelector: ListType[] = useSelector(
+    (state: RootState) => state.board.lists,
+    shallowEqual
+  )
+
+
   const [isSaveDelete, setIsSaveDelete] = useState(false)
-  const [cardName, setCardName] = useState(props.title)
+  const [cardName, setCardName] = useState('')
   const [initCardName, setInitCardName] = useState('')
   const [isInputCardName, setInputCardNameVisibity] = useState(false)
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [onHold, setOnHold] = useState(false)
   const [onOver, setOnOver] = useState(false)
   const [draggedCard, setDraggedCard] = useState(false)
+
+  // listsSelector.forEach((list) => {
+  //   list.cards.forEach((c) => {
+  //     if (c.id === props.id) {
+  //       setCardName(c.title!)
+  //     }
+  //   })
+  // })
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCardName(ev.target.value)
@@ -50,7 +65,7 @@ export const Card = (props: CardType) => {
   const { id, boardid, listId } = props as {
     id: string
     boardid: string
-    listId: string
+    listId: number
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -81,14 +96,16 @@ export const Card = (props: CardType) => {
     blurTimer = setTimeout(handleBlur, 1000)
   }
 
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault()
     clearTimeout(blurTimer!)
     store.dispatch(edCard(boardid, listId, id, cardName!))
     setInputCardNameVisibity(false)
     setIsSaveDelete(false)
   }
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault()
     console.log('card handleDelete')
     clearTimeout(blurTimer!)
     store.dispatch(delCard(boardid, id))
@@ -118,9 +135,9 @@ export const Card = (props: CardType) => {
     e.preventDefault()
   }
 
-  // const openEditCardWindow = (e: React.MouseEvent<SVGElement>) => {
-  //   e.stopPropagation()
-  // }
+  // useEffect(() => {
+  //  setCardName(props.title!)
+  // }, [])
 
   return (
     <div
@@ -164,13 +181,10 @@ export const Card = (props: CardType) => {
             <div
               className="self-card"
               draggable="true"
-              // onClick={(e) => {
-              //   handleClick(e)
-              // }}
             >
               {/* ind {props.index} pos {props.position} name  */}
               {/* {props.id!} pos {props.position} */}
-              {cardName}
+              {cardName || props.title}
               <p
                 className="icon-edit icon-card-edit"
                 onClick={(e) => {
@@ -179,12 +193,6 @@ export const Card = (props: CardType) => {
                   toggleInputCardName()
                 }}
               ></p>
-              {/* <FaPencilAlt className="icon-edit icon-card-edit"
-                onClick={(e) => {
-                  openEditCardWindow(e)
-                }}
-               //className="edit-card"
-              /> */}
             </div>
           </div>
         )}

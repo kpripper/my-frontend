@@ -18,7 +18,7 @@ type SlotProps = {
   setSlotIndex: (arg0: number) => void
   slotIndex: number
   boardId: string
-  listId: string
+  listId: number
   cards: CardType[]
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 

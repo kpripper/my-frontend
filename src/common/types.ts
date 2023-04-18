@@ -32,12 +32,18 @@ export type BoardState = {
 
 export type BoardArray = BoardType[]
 
+export type CardRequest = {
+  title: string,
+  list_id: number,
+  description?: string
+}
+
 export type CardType = {
   id?: string
   title?: string
   position: string
   boardid: string
-  listId: string
+  listId: number
   index: number
   users?: []
   created_at?: number
@@ -50,7 +56,7 @@ export type CardType = {
 export type changeCardGroup = {
   id: string
   position: number
-  list_id: string
+  list_id: number
 } 
 
 export interface IGroupCard {
@@ -60,7 +66,7 @@ export interface IGroupCard {
 }
 
 export type ListType = {
-  id: string
+  id: number
   title: string
   position: string
   cards: CardType[]
@@ -80,7 +86,7 @@ export type SlotProps = {
   setSlotIndex: (arg0: number) => void
   slotIndex: number
   boardId: string
-  listId: string
+  listId: number
   cards: CardType[]
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 

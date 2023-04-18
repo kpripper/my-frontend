@@ -6,6 +6,7 @@ import store from '../../store'
 import { handleAxiosError } from '../errorHandlers/actions'
 import {
   BoardType,
+  CardRequest,
   CardType,
   changeCardGroup,
   IGroupCard,
@@ -37,7 +38,7 @@ export const editBoardTitle =
   }
 
 export const editListTitle =
-  (listName: string, boardId: string, position: string, listId: string) =>
+  (listName: string, boardId: string, position: string, listId: number) =>
   async () => {
     try {
       await instance.put(config.boards + '/' + boardId + '/list/' + listId, {
@@ -87,7 +88,7 @@ export const createList =
   }
 
 export const addCard =
-  (cardTitle: string, boardId: string, listID: string, cardsLength: number) =>
+  (cardTitle: string, boardId: string, listID: number, cardsLength: number) =>
   async (dispatch: Dispatch) => {
     console.log(`Try Create ${cardTitle} in position ${cardsLength}`)
     try {
@@ -124,20 +125,33 @@ export const delCard =
 // add to config for error test const errorTest = 'error string'
 
 export const edCard =
-  (boardId: string, listID: string, cardID: string, cardTitle: string) =>
-  async (dispatch: Dispatch) => {
-   // console.log('edcard props', boardId, listID, typeof cardID, cardTitle)
-    console.log(config.boards + '/' + boardId + '/card/' + cardID, {
+  (
+    boardId: string,
+    listID: number,
+    cardID: string,
+    cardTitle: string,
+    description?: string
+  ) =>
+  async () => {
+    let requestBody: CardRequest = {
       title: cardTitle,
       list_id: listID,
-    })
+    }
+
+    if (description) {
+      requestBody = {
+        ...requestBody,
+        description: description,
+      }
+    }
+
+    console.log(config.boards + '/' + boardId + '/card/' + cardID, requestBody)
 
     try {
-      await instance.put(config.boards + '/' + boardId + '/card/' + cardID, {
-        title: cardTitle,
-        list_id: listID,
-      })
-
+      await instance.put(
+        config.boards + '/' + boardId + '/card/' + cardID,
+        requestBody
+      )
       store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)
@@ -155,7 +169,7 @@ export const editCards =
     initialListId: string,
     initialCardsString: string,
     draggedOffPosition: string,
-    list_id: string,
+    list_id: number,
     cardsToInsert: CardType[],
     addCardInPosition: number,
     placedCardId: string
@@ -294,7 +308,7 @@ export const editCards =
   }
 
 export const deleteList =
-  (boardId: string, listId: string) => async (dispatch: Dispatch) => {
+  (boardId: string, listId: number) => async (dispatch: Dispatch) => {
     try {
       await instance.delete(config.boards + '/' + boardId + '/list/' + listId)
       store.dispatch(getBoard(boardId))

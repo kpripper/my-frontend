@@ -389,7 +389,7 @@ export const List = (props: ListType & SetCards) => {
       console.log('last position')
     }
 
-    e.dataTransfer.setData('initial list', props.id)
+    e.dataTransfer.setData('initial list', props.id.toString())
     e.dataTransfer.setData('initial cards', JSON.stringify(props.cards))
     e.dataTransfer.setData('dragged off position', JSON.stringify(cardPosition))
     e.dataTransfer.setData('card id', e.currentTarget.id)
@@ -439,7 +439,7 @@ export const List = (props: ListType & SetCards) => {
   return (
     <div
       className="list"
-      id={props.id}
+      id={String(props.id)}
       ref={listRef}
       onDragOver={handleDragOver}
       onDrop={allToFalse}

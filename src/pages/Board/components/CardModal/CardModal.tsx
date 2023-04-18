@@ -1,16 +1,16 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
 import './cardModal.scss'
 import store, { RootState } from '../../../../store/store'
 import { shallowEqual, useSelector } from 'react-redux'
 import { BoardType } from '../../../../common/types'
 import { useEffect, useState } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
-import { edCard } from '../../../../store/modules/board/actions'
+import { edCard, getBoard } from '../../../../store/modules/board/actions'
 
 type CardModalProps = {}
 
 export const CardModal = () => {
-  
   const navigate = useNavigate()
   const { board_id, card_id } = useParams()
   const selectBoard = useSelector(
@@ -20,12 +20,12 @@ export const CardModal = () => {
   // console.log('state.board', selectBoard)
 
   const [isInputCardTitle, setInputCardTitleVisibity] = useState(false)
+  const [isCardDescEditing, setCardDescEditing] = useState(false)
   let [cardTitle, setCardTitle] = useState('')
   let [listTitle, setListTitle] = useState('')
+  let [textAreaValue, setTextAreaValue] = useState('')
+  let [list_id, setList_id] = useState(0)
   const [isErrorCardValidation, setErrorCardValidationOpen] = useState(false)
-
-  let list_id = ''
-  //let listTitle = ''
 
   const getCardData = (board: BoardType, id: number) => {
     // const result = {
@@ -35,16 +35,14 @@ export const CardModal = () => {
     // }
 
     console.log('board.lists', board.lists)
-   // console.log('board.lists', typeof board.lists[0].id)
+    // console.log('board.lists', typeof board.lists[0].id)
 
     for (let list of board.lists) {
       for (let card of list.cards) {
         if (+card.id! === id) {
-          console.log('typeof list.id', typeof list.id)
-          listTitle = list.title
-          list_id = list.id
-        //  cardTitle = card.title!
-          setListTitle(card.title!)
+          console.log('list.id', list.id)
+          setList_id(list.id)
+          setListTitle(list.title)
           setCardTitle(card.title!)
           console.log('listTitle', listTitle, list_id, cardTitle)
         }
@@ -55,12 +53,14 @@ export const CardModal = () => {
   useEffect(() => {
     console.log(' cardModal useEffect')
     getCardData(selectBoard, +card_id!)
-
-    
-  }, [])
+  }, [selectBoard])
 
   const toggleInputCardTitle = () => {
     setInputCardTitleVisibity(!isInputCardTitle)
+  }
+
+  const toggleCardDescEditing = () => {
+    setCardDescEditing(!isCardDescEditing)
   }
 
   const handleChangeCardTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,14 +68,31 @@ export const CardModal = () => {
     setCardTitle(ev.target.value)
   }
 
-  const handleKeyDownCardTitle = (
-    event: React.KeyboardEvent<HTMLInputElement>
+  const handleChangeTextarea = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextAreaValue(ev.target.value)
+    ev.target.style.height = 'auto'
+    ev.target.style.height = `${ev.target.scrollHeight}px`
+  }
+
+  const handleKeyDownTextarea = (
+    ev: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
-    if (event.key === 'Enter') {
+    if (ev.key === 'Enter') {
+      // setCardTitle(cardTitle)
+      toggleCardDescEditing()
+      //  store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
+    }
+  }
+
+  const handleKeyDownCardTitle = (
+    ev: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (ev.key === 'Enter') {
       if (newNameValidation(cardTitle)) {
         setCardTitle(cardTitle)
         setInputCardTitleVisibity(false)
         store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
+        // store.dispatch(getBoard(board_id!))
       } else {
         setErrorCardValidationOpen(false)
       }
@@ -84,13 +101,27 @@ export const CardModal = () => {
 
   const handleBlurCardTitle = () => {
     if (newNameValidation(cardTitle)) {
-      // store.dispatch(editBoardTitle(boardName, boardId))
+      setInputCardTitleVisibity(false)
+      store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
+    } else {
+      setErrorCardValidationOpen(false)
+    }
+  }
+
+  const handleBlurTextarea = () => {
+    toggleCardDescEditing()
+  }
+
+  const handleEscapeKeyPress = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.key === 'Escape') {
+      setInputCardTitleVisibity(false)
+      setCardDescEditing(false)
     }
   }
 
   return (
     <div className="modalDiv">
-      <div className="my-component modal">
+      <div className="my-component modal" onKeyDown={handleEscapeKeyPress}>
         {isInputCardTitle ? (
           <input
             className="input-card-title"
@@ -103,10 +134,9 @@ export const CardModal = () => {
           />
         ) : (
           <h1 onClick={toggleInputCardTitle}>
-            {cardTitle}:{card_id}
+            {cardTitle} :{card_id}
           </h1>
         )}
-        {/* <h1>{cardTitle}</h1> */}
         <button
           className="close-button"
           onClick={() => {
@@ -115,7 +145,8 @@ export const CardModal = () => {
         ></button>
         <div>
           <h2>
-            List: {listTitle}:{list_id}
+            List: {listTitle}
+            {/* :{list_id} */}
           </h2>
           <div className="main-content">
             <div className="left-content">
@@ -139,10 +170,27 @@ export const CardModal = () => {
               </div>
               <div className="description">
                 <h3>Description</h3>
-                <button>Edit</button>
+                <button onClick={toggleCardDescEditing}>Edit</button>
+                {isCardDescEditing ? <button>Save</button> : ''}
               </div>
               <div className="card-description">
-                <p>Card descrition</p>
+                {isCardDescEditing ? (
+                  <>
+                    <textarea
+                      className="textarea-card-edit"
+                      value={textAreaValue}
+                      onChange={handleChangeTextarea}
+                      onKeyDown={handleKeyDownTextarea}
+                      onBlur={handleBlurTextarea}
+                      autoFocus
+                    />
+                  </>
+                ) : (
+                  <div onClick={toggleCardDescEditing}>
+                    <ReactMarkdown children={textAreaValue} />
+                  </div>
+                  // <p onClick={toggleCardDescEditing}>{textAreaValue}</p>
+                )}
               </div>
             </div>
             <div className="right-content">
