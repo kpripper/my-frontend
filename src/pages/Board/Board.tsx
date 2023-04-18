@@ -82,7 +82,7 @@ export const Board = () => {
   const selectLoadingState = useSelector((state: RootState) => state.loading)
 
   async function fetchData() {
-    const response: BoardResponse = await instance.get('/board/' + boardId)
+    const response: any = await instance.get('/board/' + boardId)
     setBoardName(response.title)
   }
 

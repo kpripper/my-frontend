@@ -10,8 +10,8 @@ export type BoardType = {
 
 export type BoardResponse = {
   title: string
-  users: []
-  lists: []
+  // users: []
+  lists: ListType[]
 }
 
 export type BoardProps = {
@@ -45,6 +45,7 @@ export type CardType = {
   boardid: string
   listId: number
   index: number
+  description?:string;
   users?: []
   created_at?: number
   // draggable?: boolean

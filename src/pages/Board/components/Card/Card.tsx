@@ -18,7 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { shallowEqual, useSelector } from 'react-redux'
 
 export const Card = (props: CardType) => {
-  console.log('card props', props)
+  //console.log('card props', props)
 
   // let boardParamID = parseInt(useParams().id!)
 

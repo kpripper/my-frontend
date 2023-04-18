@@ -14,7 +14,7 @@ import {
 
 export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   try {
-    const board = await instance.get<BoardType>('/board/' + id)
+    const board = await instance.get('/board/' + id)
     console.log('getBoard board', board)
     //@ts-ignore
     //BUG з включеним консоль логом на дошці без списків показуються списки попередньо відкритої дошки
@@ -133,6 +133,9 @@ export const edCard =
     description?: string
   ) =>
   async () => {
+    
+    console.log( boardId, listID, cardID, cardTitle, description)
+
     let requestBody: CardRequest = {
       title: cardTitle,
       list_id: listID,
@@ -148,10 +151,11 @@ export const edCard =
     console.log(config.boards + '/' + boardId + '/card/' + cardID, requestBody)
 
     try {
-      await instance.put(
+      let res = await instance.put(
         config.boards + '/' + boardId + '/card/' + cardID,
         requestBody
       )
+      console.log('res edCard', res)
       store.dispatch(getBoard(boardId))
     } catch (e) {
       handleAxiosError(e)

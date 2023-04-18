@@ -180,7 +180,7 @@ export const List = (props: ListType & SetCards) => {
   useEffect(() => {
     if (selectError.isError) {
       setErrorText('Error: ' + selectError.errorText)
-    }
+     }
   }, [selectError.isError])
 
   const handleSave = (cardName: string) => {

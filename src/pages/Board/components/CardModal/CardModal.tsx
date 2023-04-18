@@ -4,11 +4,14 @@ import './cardModal.scss'
 import store, { RootState } from '../../../../store/store'
 import { shallowEqual, useSelector } from 'react-redux'
 import { BoardType } from '../../../../common/types'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
 import { edCard, getBoard } from '../../../../store/modules/board/actions'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import parse from 'html-react-parser'
 
-type CardModalProps = {}
+// type CardModalProps = {}
 
 export const CardModal = () => {
   const navigate = useNavigate()
@@ -26,6 +29,14 @@ export const CardModal = () => {
   let [textAreaValue, setTextAreaValue] = useState('')
   let [list_id, setList_id] = useState(0)
   const [isErrorCardValidation, setErrorCardValidationOpen] = useState(false)
+  const quillRef = useRef<ReactQuill>(null)
+
+  //
+  useEffect(() => {
+    if (quillRef.current) {
+      quillRef.current.focus()
+    }
+  }, [isCardDescEditing])
 
   const getCardData = (board: BoardType, id: number) => {
     // const result = {
@@ -44,6 +55,7 @@ export const CardModal = () => {
           setList_id(list.id)
           setListTitle(list.title)
           setCardTitle(card.title!)
+          if (card.description) setTextAreaValue(card.description)
           console.log('listTitle', listTitle, list_id, cardTitle)
         }
       }
@@ -68,19 +80,27 @@ export const CardModal = () => {
     setCardTitle(ev.target.value)
   }
 
-  const handleChangeTextarea = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextAreaValue(ev.target.value)
-    ev.target.style.height = 'auto'
-    ev.target.style.height = `${ev.target.scrollHeight}px`
-  }
+  // const handleChangeTextarea = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setTextAreaValue(ev.target.value)
+  //   ev.target.style.height = 'auto'
+  //   ev.target.style.height = `${ev.target.scrollHeight}px`
+  // }
+
+  // const handleChangeQuill = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   const newValue = ev.target.value
+  //   setTextAreaValue(newValue)
+  // }
 
   const handleKeyDownTextarea = (
     ev: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (ev.key === 'Enter') {
+      console.log('Enter')
       // setCardTitle(cardTitle)
       toggleCardDescEditing()
-      //  store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
+      store.dispatch(
+        edCard(board_id!, list_id, card_id!, cardTitle, textAreaValue)
+      )
     }
   }
 
@@ -108,8 +128,14 @@ export const CardModal = () => {
     }
   }
 
-  const handleBlurTextarea = () => {
-    toggleCardDescEditing()
+  const handleBlurTextarea = (ev: React.FocusEvent<HTMLDivElement>) => {
+    // // toggleCardDescEditing()
+    // console.log('ev.target', ev.target)
+    // console.log('ev blur', ev)
+    // console.log('ev.target.tagName', ev.target.tagName)
+    if (ev.target.tagName !== 'INPUT' && ev.target.tagName !== 'BUTTON') {
+      toggleCardDescEditing()
+    }
   }
 
   const handleEscapeKeyPress = (ev: React.KeyboardEvent<HTMLInputElement>) => {
@@ -170,26 +196,42 @@ export const CardModal = () => {
               </div>
               <div className="description">
                 <h3>Description</h3>
-                <button onClick={toggleCardDescEditing}>Edit</button>
+                <button
+                  onClick={() => {
+                    toggleCardDescEditing()
+                  }}
+                >
+                  Edit
+                </button>
                 {isCardDescEditing ? <button>Save</button> : ''}
               </div>
               <div className="card-description">
                 {isCardDescEditing ? (
                   <>
-                    <textarea
+                    {/* <textarea
                       className="textarea-card-edit"
                       value={textAreaValue}
                       onChange={handleChangeTextarea}
                       onKeyDown={handleKeyDownTextarea}
                       onBlur={handleBlurTextarea}
                       autoFocus
-                    />
+                    /> */}
+
+                    <div onBlur={handleBlurTextarea}>
+                      <ReactQuill
+                        theme="snow"
+                        value={textAreaValue}
+                        placeholder={'Content goes here...'}
+                        onChange={(value) => {
+                          setTextAreaValue(value)
+                        }}
+                        onKeyDown={handleKeyDownTextarea}
+                        ref={quillRef}
+                      />
+                    </div>
                   </>
                 ) : (
-                  <div onClick={toggleCardDescEditing}>
-                    <ReactMarkdown children={textAreaValue} />
-                  </div>
-                  // <p onClick={toggleCardDescEditing}>{textAreaValue}</p>
+                  <p onClick={toggleCardDescEditing}> {parse(textAreaValue)}</p>
                 )}
               </div>
             </div>
