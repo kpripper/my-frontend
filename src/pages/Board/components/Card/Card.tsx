@@ -41,16 +41,9 @@ export const Card = (props: CardType) => {
   const [isInputCardName, setInputCardNameVisibity] = useState(false)
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [onHold, setOnHold] = useState(false)
-  const [onOver, setOnOver] = useState(false)
-  const [draggedCard, setDraggedCard] = useState(false)
+  // const [onOver, setOnOver] = useState(false)
+  // const [draggedCard, setDraggedCard] = useState(false)
 
-  // listsSelector.forEach((list) => {
-  //   list.cards.forEach((c) => {
-  //     if (c.id === props.id) {
-  //       setCardName(c.title!)
-  //     }
-  //   })
-  // })
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCardName(ev.target.value)
@@ -161,8 +154,7 @@ export const Card = (props: CardType) => {
           <div
             id={id}
             data-index={props.position}
-            className={`list-card card
-             ${onHold ? 'hidden-card' : ''}`}
+            className={`list-card card ${onHold ? 'hidden-card' : ''}`}
             onDragStart={(e) => {
               props.handleDragStart!(e, +props.position)
               setTimeout(() => {

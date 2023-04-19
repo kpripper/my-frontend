@@ -9,7 +9,6 @@ import ErrorPage from './pages/ErrorPages/error-page'
 import './index.css'
 import './iconfont/iconsfont.css'
 import NotFoundPage from './pages/ErrorPages/NotFoundPage'
-import { CardModal } from './pages/Board/components/CardModal/CardModal'
 import Home from './pages/Home/Home'
 import { useLocation } from 'react-router-dom'
 

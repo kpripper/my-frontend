@@ -1,5 +1,4 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
 import './cardModal.scss'
 import store, { RootState } from '../../../../store/store'
 import { shallowEqual, useSelector } from 'react-redux'
@@ -10,8 +9,9 @@ import { edCard, getBoard } from '../../../../store/modules/board/actions'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import parse from 'html-react-parser'
+import { toggleState } from '../../../../common/functions/functions'
+import {CardModalActions} from '../CardModalActions/CardModalActons'
 
-// type CardModalProps = {}
 
 export const CardModal = () => {
   const navigate = useNavigate()
@@ -24,6 +24,7 @@ export const CardModal = () => {
 
   const [isInputCardTitle, setInputCardTitleVisibity] = useState(false)
   const [isCardDescEditing, setCardDescEditing] = useState(false)
+  const [ isCardModalActions, setCardModalActions] = useState(false) 
   let [cardTitle, setCardTitle] = useState('')
   let [listTitle, setListTitle] = useState('')
   let [textAreaValue, setTextAreaValue] = useState('')
@@ -67,13 +68,13 @@ export const CardModal = () => {
     getCardData(selectBoard, +card_id!)
   }, [selectBoard])
 
-  const toggleInputCardTitle = () => {
-    setInputCardTitleVisibity(!isInputCardTitle)
-  }
+  // const toggleInputCardTitle = () => {
+  //   setInputCardTitleVisibity(!isInputCardTitle)
+  // }
 
-  const toggleCardDescEditing = () => {
-    setCardDescEditing(!isCardDescEditing)
-  }
+  // const toggleCardDescEditing = () => {
+  //   setCardDescEditing(!isCardDescEditing)
+  // }
 
   const handleChangeCardTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     console.log('handleChangeCardTitle', ev.target.value)
@@ -96,8 +97,8 @@ export const CardModal = () => {
   ) => {
     if (ev.key === 'Enter') {
       console.log('Enter')
-      // setCardTitle(cardTitle)
-      toggleCardDescEditing()
+      toggleState(setCardDescEditing)
+     // toggleCardDescEditing()
       store.dispatch(
         edCard(board_id!, list_id, card_id!, cardTitle, textAreaValue)
       )
@@ -129,12 +130,12 @@ export const CardModal = () => {
   }
 
   const handleBlurTextarea = (ev: React.FocusEvent<HTMLDivElement>) => {
-    // // toggleCardDescEditing()
+
     // console.log('ev.target', ev.target)
     // console.log('ev blur', ev)
     // console.log('ev.target.tagName', ev.target.tagName)
     if (ev.target.tagName !== 'INPUT' && ev.target.tagName !== 'BUTTON') {
-      toggleCardDescEditing()
+      toggleState(setCardDescEditing)
     }
   }
 
@@ -144,6 +145,8 @@ export const CardModal = () => {
       setCardDescEditing(false)
     }
   }
+
+
 
   return (
     <div className="modalDiv">
@@ -159,7 +162,7 @@ export const CardModal = () => {
             autoFocus
           />
         ) : (
-          <h1 onClick={toggleInputCardTitle}>
+          <h1 onClick={()=>{toggleState(setInputCardTitleVisibity)}}>
             {cardTitle} :{card_id}
           </h1>
         )}
@@ -198,7 +201,7 @@ export const CardModal = () => {
                 <h3>Description</h3>
                 <button
                   onClick={() => {
-                    toggleCardDescEditing()
+                    toggleState(setCardDescEditing)
                   }}
                 >
                   Edit
@@ -231,18 +234,20 @@ export const CardModal = () => {
                     </div>
                   </>
                 ) : (
-                  <p onClick={toggleCardDescEditing}> {parse(textAreaValue)}</p>
+                  <p onClick={()=>toggleState(setCardDescEditing)}> {parse(textAreaValue)}</p>
                 )}
               </div>
             </div>
             <div className="right-content">
               <h3>Actions</h3>
-              <button>Copy</button>
+              <button onClick={()=>toggleState(setCardModalActions)}>Copy</button>
               <button>Move</button>
               <button className="red-button">Archive</button>
             </div>
           </div>
         </div>
+        {isCardModalActions && (<CardModalActions title="My Modal"
+          onClose={()=>toggleState(setCardModalActions)} />) }
       </div>
     </div>
   )
