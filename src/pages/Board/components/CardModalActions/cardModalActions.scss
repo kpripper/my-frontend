@@ -1,14 +1,15 @@
 :root {
     --ds-shadow-overlay: 0px 8px 12px #091E4226, 0px 0px 1px #091E424F;
     --ds-border: #091E4224;
+    --modal-blue: #2f94dc;
 }
 
 .modal-actions {
-    position: relative; 
+    position: relative;
     margin: 0 auto;
     width: 350px;
-    height: 300px;
-    cursor: move;    
+    height: 330px;
+    cursor: move;
     // height: 300px;
     background-color: rgb(255, 255, 255);
     display: flex;
@@ -19,11 +20,14 @@
 }
 
 .modal-actions-body {
-    width: 80%;
+    position: relative;
+    display: inline-block;
+    width: -webkit-fill-available;
     padding: 20px;
 
     textarea {
-        width: 100%;
+        width: -webkit-fill-available;
+        margin-top: 8px;
     }
 }
 
@@ -83,11 +87,27 @@
     cursor: pointer;
 }
 
-.one-select {
-    width: 100%;
+.board-select {
+    position: absolute;
+    width: 88.5%;
+    border: 2px solid rgb(199, 199, 199);
+    box-shadow: var(--ds-shadow-overlay);
+    overflow: hidden;
+    z-index: 1;
 }
 
-.center-draggable{
+.board-select option {
+    font-size: 18px;
+    padding: 2px;
+}
+
+option.board-select:focus {
+    background-color: #6585c9 !important;
+    color: #fff;
+}
+
+
+.center-draggable {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -98,3 +118,76 @@
     align-items: center;
 }
 
+.copy-to-inner {
+    cursor: auto;
+    background-color: #e0e0e0;
+    margin-top: 8px;
+}
+
+.copy-to-inner span {
+    display: block;
+    position: relative;
+}
+
+.two-selects {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+}
+
+.copy-to-list {
+    margin-right: 8px;
+    position: relative;
+}
+
+.copy-to-card {
+    position: relative;
+}
+
+.list-select {
+    position: absolute;
+    top: 48px;
+    width: 100%;
+    border: 2px solid rgb(199, 199, 199);
+    box-shadow: var(--ds-shadow-overlay);
+    overflow: hidden;
+    z-index: 1;
+    -webkit-appearance: none;
+}
+
+.list-select option {
+    font-size: 18px;
+    padding: 2px;
+}
+
+.card-select {
+    position: absolute;
+    //  top:48px;
+    width: 100%;
+    border: 2px solid rgb(199, 199, 199);
+    box-shadow: var(--ds-shadow-overlay);
+    overflow: hidden;
+    z-index: 1;
+    -webkit-appearance: none;
+}
+
+.card-select option {
+    font-size: 18px;
+    padding: 2px;
+}
+
+
+.copy-to-inner-span-board {
+    //margin: 5px;
+    padding: 3px;
+}
+
+.copy-to-inner-span-list {
+    //margin: 5px;
+    padding: 3px;
+}
+
+.copy-to-inner-span-card {
+    //margin: 5px;
+    padding: 3px;
+}

@@ -33,6 +33,10 @@
       "keywords": "#e16969",
       "textMateRules": [
         {
+          "scope": "string",
+          "settings":{ "foreground": "#b9e18f", "fontStyle": "" }
+        },
+        {
           "scope": "punctuation.definition.tag",
           "settings": {
             "foreground": "#d4d4d4" // <-- Change the color here
@@ -61,21 +65,21 @@
           "settings": {
             "foreground": "#e1e3e9" // <-- Change the color here
           }
-          
         },
         {
           "scope": [
             "punctuation.definition.tag.begin",
             "punctuation.definition.tag.end"
-        ],
-        "settings": {
+          ],
+          "settings": {
             "foreground": "#26a4ff"
+          }
         }
-        }
-
-
       ]
     }
   },
-  "editor.fontSize": 14
+  "editor.fontSize": 13.5,
+  "editor.fontWeight": 100,
+  "editor.lineHeight": 20,
+  "terminal.integrated.fontFamily": "Consolas"
 }

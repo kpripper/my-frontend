@@ -9,7 +9,10 @@ import {
 } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
 import { CardType, ListType } from '../../../../common/types'
-import { edCard, delCard } from '../../../../store/modules/board/actions'
+import {
+  edCardDescription,
+  delCard,
+} from '../../../../store/modules/board/actions'
 import store, { RootState } from '../../../../store/store'
 import { AddInput } from '../../AddInput'
 import { useCardOver } from '../../useCardOver'
@@ -34,7 +37,6 @@ export const Card = (props: CardType) => {
     shallowEqual
   )
 
-
   const [isSaveDelete, setIsSaveDelete] = useState(false)
   const [cardName, setCardName] = useState('')
   const [initCardName, setInitCardName] = useState('')
@@ -43,7 +45,6 @@ export const Card = (props: CardType) => {
   const [onHold, setOnHold] = useState(false)
   // const [onOver, setOnOver] = useState(false)
   // const [draggedCard, setDraggedCard] = useState(false)
-
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCardName(ev.target.value)
@@ -69,7 +70,9 @@ export const Card = (props: CardType) => {
         setCardName(cardName)
         setInputCardNameVisibity(false)
         setIsSaveDelete(false)
-        store.dispatch(edCard(boardid!, listId, props.id!, cardName!))
+        store.dispatch(
+          edCardDescription(boardid!, listId, props.id!, cardName!)
+        )
       } else {
         setErrorValidationOpen(true)
       }
@@ -92,7 +95,7 @@ export const Card = (props: CardType) => {
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault()
     clearTimeout(blurTimer!)
-    store.dispatch(edCard(boardid, listId, id, cardName!))
+    store.dispatch(edCardDescription(boardid, listId, id, cardName!))
     setInputCardNameVisibity(false)
     setIsSaveDelete(false)
   }
@@ -170,10 +173,7 @@ export const Card = (props: CardType) => {
               handleDragOverCard(e, props.index)
             }}
           >
-            <div
-              className="self-card"
-              draggable="true"
-            >
+            <div className="self-card" draggable="true">
               {/* ind {props.index} pos {props.position} name  */}
               {/* {props.id!} pos {props.position} */}
               {cardName || props.title}

@@ -15,11 +15,13 @@ import {
 export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   try {
     const board = await instance.get('/board/' + id)
-    console.log('getBoard board', board)
-    //@ts-ignore
+    console.log('getBoard board', id, board)
+
     //BUG з включеним консоль логом на дошці без списків показуються списки попередньо відкритої дошки
     // console.log('id type', typeof board.lists[0].id)
-    dispatch({ type: 'UPDATE_BOARD', payload: board })
+
+    dispatch({ type: 'UPDATE_BOARD', payload: { ...board, id: id } })
+
     return board
   } catch (e) {
     handleAxiosError(e)
@@ -108,7 +110,7 @@ export const addCard =
 
 export const delCard =
   (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
-    console.log(`Try delete ${cardID}`)
+    console.log(`Try delete ${boardId} ${cardID}`)
     try {
       let res = await instance.delete(
         config.boards + '/' + boardId + '/card/' + cardID
@@ -122,9 +124,8 @@ export const delCard =
     }
   }
 
-// add to config for error test const errorTest = 'error string'
 
-export const edCard =
+export const edCardDescription =
   (
     boardId: string,
     listID: number,
@@ -133,8 +134,7 @@ export const edCard =
     description?: string
   ) =>
   async () => {
-    
-    console.log( boardId, listID, cardID, cardTitle, description)
+    console.log(boardId, listID, cardID, cardTitle, description)
 
     let requestBody: CardRequest = {
       title: cardTitle,

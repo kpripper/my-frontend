@@ -16,6 +16,7 @@ export default function reducer(
     case 'UPDATE_BOARD':
       return {
         ...state,
+        id: action.payload.id,
         title: action.payload.title,
         lists: action.payload.lists,
       }
@@ -23,25 +24,14 @@ export default function reducer(
     case 'CREATE_BOARD':
       return {
         ...state,
-        title: action.payload,
+        title: action.payload.title,
       }
 
-    case 'MODAL_IS_OPEN':
-      return {
-        ...state,
-        modalIsOpen: action.payload,
-      }
-
-    // case 'UPDATE_CARD_POSITION':
-    //   const { cardId, newPosition } = action.payload
-    //   const newCards = state.cards.map((card) => {
-    //     if (card.id === cardId) {
-    //       return { ...card, position: newPosition }
-    //     } else {
-    //       return card
-    //     }
-    //   })
-    //   return { ...state, cards: newCards }
+    // case 'MODAL_IS_OPEN':
+    //   return {
+    //     ...state,
+    //     modalIsOpen: action.payload,
+    //   }
 
     default: {
       return { ...state }

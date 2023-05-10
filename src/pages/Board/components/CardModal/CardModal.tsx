@@ -5,26 +5,38 @@ import { shallowEqual, useSelector } from 'react-redux'
 import { BoardType } from '../../../../common/types'
 import { useEffect, useRef, useState } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
-import { edCard, getBoard } from '../../../../store/modules/board/actions'
+import {
+  delCard,
+  edCardDescription,
+  getBoard,
+} from '../../../../store/modules/board/actions'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import parse from 'html-react-parser'
 import { toggleState } from '../../../../common/functions/functions'
-import {CardModalActions} from '../CardModalActions/CardModalActons'
-
+import { CardModalActions } from '../CardModalActions/CardModalActions'
+import { getBoards } from '../../../../store/modules/boards/actions'
 
 export const CardModal = () => {
   const navigate = useNavigate()
-  const { board_id, card_id } = useParams()
+  const location = useLocation()
+  const { id: board_id, cardId } = useParams() as { id: string; cardId: string }
   const selectBoard = useSelector(
     (state: RootState) => state.board,
     shallowEqual
   )
   // console.log('state.board', selectBoard)
 
+  useEffect(() => {
+    store.dispatch(getBoards())
+  }, [])
+
   const [isInputCardTitle, setInputCardTitleVisibity] = useState(false)
   const [isCardDescEditing, setCardDescEditing] = useState(false)
-  const [ isCardModalActions, setCardModalActions] = useState(false) 
+  const [isCardModalActions, setCardModalActions] = useState({
+    isOpen: false,
+    title: '',
+  })
   let [cardTitle, setCardTitle] = useState('')
   let [listTitle, setListTitle] = useState('')
   let [textAreaValue, setTextAreaValue] = useState('')
@@ -46,26 +58,26 @@ export const CardModal = () => {
     //   list_id: '',
     // }
 
-    console.log('board.lists', board.lists)
+    console.log('getCardData board.lists', board.lists)
     // console.log('board.lists', typeof board.lists[0].id)
 
     for (let list of board.lists) {
       for (let card of list.cards) {
         if (+card.id! === id) {
-          console.log('list.id', list.id)
+          //   console.log('list.id', list.id)
           setList_id(list.id)
           setListTitle(list.title)
           setCardTitle(card.title!)
           if (card.description) setTextAreaValue(card.description)
-          console.log('listTitle', listTitle, list_id, cardTitle)
+          //  console.log('listTitle', listTitle, list_id, cardTitle)
         }
       }
     }
   }
 
   useEffect(() => {
-    console.log(' cardModal useEffect')
-    getCardData(selectBoard, +card_id!)
+    //  console.log(selectBoard, ' cardModal useEffect', cardId)
+    getCardData(selectBoard, +cardId!)
   }, [selectBoard])
 
   // const toggleInputCardTitle = () => {
@@ -98,9 +110,9 @@ export const CardModal = () => {
     if (ev.key === 'Enter') {
       console.log('Enter')
       toggleState(setCardDescEditing)
-     // toggleCardDescEditing()
+      // toggleCardDescEditing()
       store.dispatch(
-        edCard(board_id!, list_id, card_id!, cardTitle, textAreaValue)
+        edCardDescription(board_id, list_id, cardId!, cardTitle, textAreaValue)
       )
     }
   }
@@ -112,8 +124,8 @@ export const CardModal = () => {
       if (newNameValidation(cardTitle)) {
         setCardTitle(cardTitle)
         setInputCardTitleVisibity(false)
-        store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
-        // store.dispatch(getBoard(board_id!))
+        store.dispatch(edCardDescription(board_id, list_id, cardId!, cardTitle))
+        // store.dispatch(getBoard(board_id))
       } else {
         setErrorCardValidationOpen(false)
       }
@@ -123,14 +135,13 @@ export const CardModal = () => {
   const handleBlurCardTitle = () => {
     if (newNameValidation(cardTitle)) {
       setInputCardTitleVisibity(false)
-      store.dispatch(edCard(board_id!, list_id, card_id!, cardTitle))
+      store.dispatch(edCardDescription(board_id, list_id, cardId!, cardTitle))
     } else {
       setErrorCardValidationOpen(false)
     }
   }
 
   const handleBlurTextarea = (ev: React.FocusEvent<HTMLDivElement>) => {
-
     // console.log('ev.target', ev.target)
     // console.log('ev blur', ev)
     // console.log('ev.target.tagName', ev.target.tagName)
@@ -146,8 +157,6 @@ export const CardModal = () => {
     }
   }
 
-
-
   return (
     <div className="modalDiv">
       <div className="my-component modal" onKeyDown={handleEscapeKeyPress}>
@@ -162,14 +171,19 @@ export const CardModal = () => {
             autoFocus
           />
         ) : (
-          <h1 onClick={()=>{toggleState(setInputCardTitleVisibity)}}>
-            {cardTitle} :{card_id}
+          <h1
+            onClick={() => {
+              toggleState(setInputCardTitleVisibity)
+            }}
+          >
+            {cardTitle} :{cardId}
           </h1>
         )}
         <button
           className="close-button"
           onClick={() => {
-            navigate(-1)
+            console.log('location.pathname', location.pathname)
+            navigate('/board/' + location.pathname.split('/')[2])
           }}
         ></button>
         <div>
@@ -234,20 +248,54 @@ export const CardModal = () => {
                     </div>
                   </>
                 ) : (
-                  <p onClick={()=>toggleState(setCardDescEditing)}> {parse(textAreaValue)}</p>
+                  <div onClick={() => toggleState(setCardDescEditing)}>
+                    {' '}
+                    {parse(textAreaValue)}
+                  </div>
                 )}
               </div>
             </div>
             <div className="right-content">
               <h3>Actions</h3>
-              <button onClick={()=>toggleState(setCardModalActions)}>Copy</button>
-              <button>Move</button>
-              <button className="red-button">Archive</button>
+              <button
+                onClick={() =>
+                  setCardModalActions(() => ({
+                    isOpen: true,
+                    title: 'Copy',
+                  }))
+                }
+              >
+                Copy
+              </button>
+              <button
+                onClick={() =>
+                  setCardModalActions(() => ({
+                    isOpen: true,
+                    title: 'Move',
+                  }))
+                }
+              >
+                Move
+              </button>
+              <button
+                className="red-button"
+                onClick={() => {
+                  store.dispatch(delCard(board_id, cardId))
+                  navigate('/board/' + board_id)
+                }}
+              >
+                Archive
+              </button>
             </div>
           </div>
         </div>
-        {isCardModalActions && (<CardModalActions title="My Modal"
-          onClose={()=>toggleState(setCardModalActions)} />) }
+        {isCardModalActions.isOpen && (
+          <CardModalActions
+            title={isCardModalActions.title}
+            cardTitle={cardTitle}
+            onClose={() => setCardModalActions({ isOpen: false, title: '' })}
+          />
+        )}
       </div>
     </div>
   )

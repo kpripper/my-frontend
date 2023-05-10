@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux'
 import { RootState } from './store/store'
 import { CardModal } from './pages/Board/components/CardModal/CardModal'
 
-
 function App() {
   const loadingState = useSelector((state: RootState) => state.loading)
 
@@ -20,7 +19,7 @@ function App() {
   //     {/* BUG що передавати в параметр Home boards?
   //     with React Router v6, since you're in charge
   //     of creating the element, you just pass a prop to the component
-  //      as you normally would. 
+  //      as you normally would.
   //      <Route path="/dashboard" element={<Dashboard authed={true} />} />
   //      */}
 
@@ -35,27 +34,35 @@ function App() {
   //   // </div>
   // )
 
+  const location = useLocation()
+  const background = location.state && location.state.background
 
-  // const location = useLocation()
-  // console.log('location App', location)
-  // const background = location.state && location.state.background
 
-  const location = useLocation();
-  const background = location.state && location.state.background;
 
   return (
     <>
-      <Routes location={background || location} >
+      {/* <Routes location={background || location}>
         <Route path="/*" element={<Home />} />
-        <Route path="/board/:id" element={<Board />}/>
-        <Route path="/board/:board_id/card/:cardId/" element={<CardModal />}/>
+        <Route path="/board/:id" element={<Board />} />
+        <Route path="/board/:board_id/card/:cardId/" element={<CardModal />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {background && (
         <Routes>
-          <Route path="/board/:board_id/card/:card_id/" element={<CardModal />} />
+          <Route
+            path="/board/:board_id/card/:card_id/"
+            element={<CardModal />}
+          />
         </Routes>
-      )}
+      )} */}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/board/:id" element={<Board />}>
+          <Route path="/board/:id/card/:cardId/" element={<CardModal />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
 
       {loadingState.loading ? <ProgressBar /> : ''}
     </>
