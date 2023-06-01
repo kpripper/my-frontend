@@ -10,13 +10,10 @@
 }
 
 .modal {
-    // width: 350px;
-    // height: 200px;
     background-color: #f9f9f9;
     border-radius: 5px;
 }
 
-/* Загальні стилі для всього компонента */
 .my-component {
     position: relative;
     width: 700px;
@@ -25,7 +22,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* Заголовок на всю ширину */
 .my-component h1 {
     width: 100%;
     font-size: 30px;
@@ -33,26 +29,21 @@
     color: #000;
 }
 
-/* Підзаголовок з назвою списку */
 .my-component h2 {
     width: 100%;
     font-size: 24px;
     font-weight: bold;
 }
 
-/* Основний блок контенту */
 .my-component .main-content {
     display: flex;
     flex-wrap: wrap;
 }
 
-/* Ліва частина контенту (75%) */
 .my-component .left-content {
     width: 75%;
-   // padding-right: 20px;
 }
 
-/* Права частина контенту (25%) */
 .my-component .right-content {
     width: 25%;
     display: flex;
@@ -60,21 +51,17 @@
     align-items: center;
 }
 
-/* Блок "Учасники" */
 .my-component .left-content h3 {
     font-size: 20px;
     font-weight: bold;
-   // margin-bottom: 10px;
 }
 
-/* Аватари учасників */
 .my-component .left-content .avatars {
     display: flex;
     // flex-wrap: wrap;
     justify-content: flex-start;
 }
 
-/* Кожен аватар учасника */
 .my-component .left-content .avatars img {
     width: 50px;
     height: 50px;
@@ -83,7 +70,6 @@
     border-radius: 50%;
 }
 
-/* Кнопка "Приєднатися" */
 .my-component .left-content button {
     display: block;
     margin: 10px;
@@ -99,22 +85,18 @@
     max-width: 150px;
 }
 
-/* Блок опису */
 .my-component .left-content .description {
     margin-top: 20px;
     display: flex;
     align-items: center;
 }
 
-/* Заголовок опису */
 .my-component .left-content .description h4 {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Кнопка "Змінити" */
-//.my-component .left-content .description
  button {
     display: block;
     margin-top: 10px;
@@ -134,22 +116,17 @@
     background-color: #fd3636;
 }
 
-
-
-/* Заголовок "Дії" */
 .my-component .right-content h3 {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Кнопки в правій частині */
 .my-component .right-content button {
     display: block;
     margin-top: 10px;
 }
 
-/* Кнопка закриття */
 .my-component .close-button {
     position: absolute;
     top: 0px;
@@ -162,7 +139,6 @@
     cursor: pointer;
 }
 
-/* Стилі для хрестика */
 .my-component .close-button::before,
 .my-component .close-button::after {
     content: '';
@@ -182,7 +158,6 @@
     transform: rotate(-45deg);
 }
 
-/* Збільшуємо натискання на кнопку */
 .my-component .close-button:hover::before,
 .my-component .close-button:hover::after {
     height: 3px;
@@ -226,14 +201,12 @@
     cursor: pointer;
 }
 
-.join-button {
-  
+.join-button {  
     border: none;
     color: #fff;
     padding: 8px;
     border-radius: 5px;
     width: auto;
-    //min-width: 120px;
     max-width:150px;
 }
 
@@ -248,5 +221,4 @@
     font-size: 16px;
     border: #2f94dc 2px solid;
     border-radius: 5px;
-   // box-shadow: 0 0 0 1px inset #2f94dc;
 }

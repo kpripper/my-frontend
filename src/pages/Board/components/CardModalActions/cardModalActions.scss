@@ -7,10 +7,11 @@
 .modal-actions {
     position: relative;
     margin: 0 auto;
+    padding: 10px;
+    border-radius:3px;
     width: 350px;
     height: 330px;
     cursor: move;
-    // height: 300px;
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
@@ -23,7 +24,6 @@
     position: relative;
     display: inline-block;
     width: -webkit-fill-available;
-    padding: 20px;
 
     textarea {
         width: -webkit-fill-available;
@@ -31,7 +31,7 @@
     }
 }
 
-/* Стилі для кнопки закриття */
+
 .modal-actions-close {
     position: absolute;
     top: 10px;
@@ -41,14 +41,12 @@
     cursor: pointer;
 }
 
-/* Стилі для заголовка */
 .modal-actions-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Стилі для текстареа */
 .modal-actions-textarea {
     width: 100%;
     height: 100px;
@@ -58,24 +56,20 @@
     margin-bottom: 10px;
 }
 
-/* Стилі для селекту */
 .modal-actions-select {
     width: 100%;
     margin-bottom: 10px;
 }
 
-/* Стилі для лівого селекту */
 .modal-actions-left-select {
     width: 70%;
     margin-right: 10%;
 }
 
-/* Стилі для правого селекту */
 .modal-actions-right-select {
     width: 30%;
 }
 
-/* Стилі для кнопки */
 .modal-actions-button {
     margin-left: auto;
     display: block;
@@ -178,16 +172,13 @@ option.board-select:focus {
 
 
 .copy-to-inner-span-board {
-    //margin: 5px;
     padding: 3px;
 }
 
 .copy-to-inner-span-list {
-    //margin: 5px;
     padding: 3px;
 }
 
 .copy-to-inner-span-card {
-    //margin: 5px;
     padding: 3px;
 }

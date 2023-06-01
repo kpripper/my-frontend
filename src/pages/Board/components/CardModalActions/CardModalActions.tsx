@@ -1,57 +1,60 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Draggable from 'react-draggable'
 import './cardModalActions.scss'
-import { useParams } from 'react-router-dom'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { shallowEqual, useSelector } from 'react-redux'
 import store, { RootState } from '../../../../store/store'
-import { getBoards } from '../../../../store/modules/boards/actions'
 import { BoardType, ListType, CardType } from '../../../../common/types'
-import { addCard, getBoard } from '../../../../store/modules/board/actions'
+import {
+  addCard,
+  delCard,
+  normalizeCardsPositions,
+} from '../../../../store/modules/board/actions'
 import instance from '../../../../api/request'
 
 interface ICardModalActions {
   cardTitle: string
+  cardDescription: string,
+  cardId: string
   title: string
+  position: string
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const CardModalActions = (props: ICardModalActions) => {
-  //all others, including useParams<{id: string, cardId: string }>(), returns  string | undefined 
-  const { id: board_id, cardId } = useParams() as {id: string, cardId: string }
 
-  //console.log('typeof cardId', typeof cardId) //string
-  // console.log('CardModalActions useParams()', useParams())  // {id: '1682354609232', cardId: '1682948047924'}
-
+  const { id: board_id, cardId } = useParams() as { id: string; cardId: string }
+  const navigate = useNavigate()
   const boardSelectRef = useRef<HTMLSelectElement>(null)
   const listSelectRef = useRef<HTMLSelectElement>(null)
   const cardSelectRef = useRef<HTMLSelectElement>(null)
 
-  // id title дощок
   const selectBoards = useSelector(
     (state: RootState) => state.boards,
     shallowEqual
   )
-  console.log('selectBoards', selectBoards)
 
   const selectBoard = useSelector(
     (state: RootState) => state.board,
     shallowEqual
   )
-  console.log('selectBoard', selectBoard)
 
+  const [textAreaCardTitle, setTextAreaCardTitle] = useState(props.cardTitle)
   const [isOpenBoardSelect, setIsOpenBoardSelect] = useState(false)
   const [isOpenListSelect, setIsOpenListSelect] = useState(false)
   const [isOpenCardSelect, setIsOpenCardSelect] = useState(false)
+  let [  desiredPosition, setDesiredPosition] = useState(0)
+
   let [displayedBoard, setDisplayedBoard] = useState<BoardType>({
     id: 0,
     title: '',
-    lists: [],
+    lists: [] as ListType[],
   })
   let [displayedList, setDisplayedList] = useState<ListType>({
     id: 0,
     title: '',
-    position:'',
-    cards: [],
+    position: '',
+    cards: [] as CardType[],
   })
   let [displayedCard, setDisplayedCard] = useState<CardType>({
     position: '',
@@ -59,12 +62,13 @@ export const CardModalActions = (props: ICardModalActions) => {
     listId: 0,
     index: 0,
   })
-  // let [currentBoard, setCurrentBoard] = useState<BoardType>(selectBoard)
-  let [currentList, setCurrentList] = useState<ListType>()
-  //let [allBoards, setAllBoards] = useState<BoardType[]>()
-  const [selectedBoard, setSelectedBoard] = useState('')
 
-  // let allBoards: BoardType[] = []
+  let [currentList, setCurrentList] = useState<ListType>({
+    id: 0,
+    title: '',
+    position: '',
+    cards: [],
+  })
 
   const [allBoards, setAllBoards] = useState<BoardType[]>([])
 
@@ -73,19 +77,18 @@ export const CardModalActions = (props: ICardModalActions) => {
   )?.title
 
   async function getAllBoards(selectBoards: any) {
-    console.log('getAllBoards get')
 
     const result: BoardType[] = []
 
     for (let [index, board] of selectBoards.entries()) {
-      const b: BoardType = await instance.get('/board/' + board.id)
-      console.log(index, 'b', b)
-      console.log('currentBoardtitle', currentBoardtitle)
-      if (b.title === currentBoardtitle) {
-        console.log('try display board', b)
-        setDisplayedBoard(b)
+      const boardFromAPI: BoardType = await instance.get('/board/' + board.id)
+      if (boardFromAPI.title === currentBoardtitle) {
+        boardFromAPI.id = board.id
+        setDisplayedBoard(boardFromAPI)
       }
-      result.push(b)
+      boardFromAPI.id = board.id
+
+      result.push(boardFromAPI)
     }
 
     setAllBoards(result)
@@ -102,12 +105,9 @@ export const CardModalActions = (props: ICardModalActions) => {
     for (const list of lists) {
       const card = list.cards.find((card) => String(card.id) === cardId)
       if (card) {
-        //  return list
-        // console.log('list', list)
         setDisplayedList(list)
         setDisplayedCard(card)
         setCurrentList(list)
-        // console.log('currentList', currentList)
       }
     }
   }
@@ -118,21 +118,13 @@ export const CardModalActions = (props: ICardModalActions) => {
 
   let currentBoard: BoardType = findCurrentBoard()
 
-  console.log('currentList', currentList)
-  console.log('currentBoard', currentBoard)
-  console.log('displayedBoard', displayedBoard)
-  console.log('displayedList', displayedList)
-  console.log('  allBoards', allBoards)
-
   function findCardByCardId(lists: ListType[], cardId: string) {
     for (const list of lists) {
       const card = list.cards.find((card) => String(card.id) === cardId)
       if (card) {
         return card
-      }
+      } 
     }
-
-    // return null; // якщо карта з заданим id не знайдена в жодному елементі списку
   }
 
   let currentCard = findCardByCardId(selectBoard.lists, cardId!)
@@ -166,17 +158,74 @@ export const CardModalActions = (props: ICardModalActions) => {
     }
   }, [boardSelectRef, listSelectRef, cardSelectRef])
 
-  function doModalAction(
+  async function doModalAction(
     action: string,
-    board: BoardType,
-    list: ListType,
-    card: CardType,
+    targetBoard: BoardType,
+    targetList: ListType,
+    desiredPosition: number,
+    textAreaCardTitle: string,
+    cardDescription: string
   ) {
     if (action === 'Copy') {
-      store.dispatch(addCard(card.title!, String(board.id), list.id, +card.position))
+      try {
+        store.dispatch(
+          addCard(
+            textAreaCardTitle,
+            String(targetBoard.id),
+            targetList.id,
+            desiredPosition,
+            board_id, 
+            cardDescription
+          )
+        )
+      } catch (error) {
+        console.log(error)
+      }
+
+      setTimeout(() => {
+        store.dispatch(
+          normalizeCardsPositions(String(targetBoard.id), targetList.id)
+        )
+      }, 1000)
     }
     if (action === 'Move') {
+      const createdCardId = await store.dispatch(
+        addCard(
+          textAreaCardTitle,
+          String(targetBoard.id),
+          targetList.id,
+          desiredPosition,
+          board_id,
+          cardDescription
+        )
+      );
+      
+      if (+board_id !== targetBoard.id) {
+        navigate(`/board/${board_id}`);
+      } else {
+        navigate(`/board/${board_id}/card/${createdCardId}`);
+      }       
+
+      setTimeout(() => {
+        store.dispatch(delCard(board_id, currentCard!.id!))
+      }, 500)
+
+      setTimeout(() => {
+        store.dispatch(
+          normalizeCardsPositions(String(targetBoard.id), targetList.id)
+        )
+      }, 1000)
+
+      setTimeout(() => {
+        store.dispatch(normalizeCardsPositions(board_id, currentList.id))        
+      }, 1500)
     }
+  }
+
+  const handleTextAreaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setTextAreaCardTitle(event.target.value)
   }
 
   return (
@@ -191,13 +240,12 @@ export const CardModalActions = (props: ICardModalActions) => {
           </div>
           <div className="modal-actions-body">
             <div>Title</div>
-            <textarea placeholder={props.cardTitle} />
-            <div>Copy to…</div>
-            {/* isOpenBoardSelect: {isOpenBoardSelect ? 'true' : 'false'}
-            currentList: {currentList?.title}
-            displayedList: {displayedList?.title}
-            displayedBoard: {displayedBoard?.title}
-            displayedCard {displayedCard?.position} */}
+            <textarea
+              value={textAreaCardTitle}
+              placeholder={textAreaCardTitle}
+              onChange={handleTextAreaChange}
+            />
+            <div>Copy to…</div>     
             <div
               className="copy-to-inner"
               onClick={() => {
@@ -207,7 +255,7 @@ export const CardModalActions = (props: ICardModalActions) => {
             >
               <span className="copy-to-inner-span-board">Board</span>
               <span className="copy-to-inner-span-board">
-                {displayedBoard?.title ?? currentBoard!.title}
+                {displayedBoard.title}
               </span>
             </div>
             {isOpenBoardSelect && (
@@ -227,13 +275,23 @@ export const CardModalActions = (props: ICardModalActions) => {
                         allBoards.find((b) => b.title === currentBoard.title)
                       )
                       setDisplayedBoard(
-                        allBoards.find((b) => b.title === currentBoard.title) as BoardType
+                        allBoards.find(
+                          (b) => b.title === currentBoard.title
+                        ) as BoardType
                       )
-                      setDisplayedList(
-                        allBoards.find((b) => b.title === currentBoard.title)?.lists[0] as ListType
+
+                      //тернарник без варіанту у випадку фолс
+                      const foundBoard = allBoards.find(
+                        (b) => b.title === currentBoard.title
                       )
+
+                      if (foundBoard) {
+                        setDisplayedList(foundBoard.lists[0] as ListType)                  
+                      } 
+
                       setDisplayedCard(
-                        allBoards.find((b) => b.title === currentBoard.title)?.lists[0].cards[0] as CardType
+                        allBoards.find((b) => b.title === currentBoard.title)
+                          ?.lists[0].cards[0] as CardType
                       )
                       setIsOpenBoardSelect(!isOpenBoardSelect)
                     }}
@@ -249,11 +307,18 @@ export const CardModalActions = (props: ICardModalActions) => {
                       key={board.id}
                       value={board.title}
                       onClick={() => {
-                        console.log('try set board', board)
                         setDisplayedBoard(board)
-                        setDisplayedList(board.lists[0])
-                        setDisplayedCard(board.lists[0].cards[0])
-                        setCurrentList(undefined)
+                        setDisplayedList(board.lists[0])       
+                        if (displayedList.cards.length > 0) {
+                          setDisplayedCard(displayedList.cards[0])
+                        } else {
+                          setDisplayedCard({
+                            position: '1',
+                            boardid: String(displayedBoard.id),
+                            listId: displayedList.id,
+                            index: 1,
+                          })
+                        }
                         setIsOpenBoardSelect(false)
                       }}
                     >
@@ -268,16 +333,11 @@ export const CardModalActions = (props: ICardModalActions) => {
                 onClick={() => setIsOpenListSelect(!isOpenListSelect)}
               >
                 <span className="copy-to-inner-span-list">
-                  List{' '}
-                  {
-                    //  currentList?.title ||
-                    displayedList?.title
-                  }
+                  List        
                 </span>
                 <span className="copy-to-inner-span-list">
                   {
-                    //   currentList?.title ||
-                    displayedList?.title
+                              displayedList?.title
                   }
                 </span>
 
@@ -293,11 +353,19 @@ export const CardModalActions = (props: ICardModalActions) => {
                         key={list.id}
                         value={list.title}
                         onClick={() => {
-                          setDisplayedList(list)
-                          setDisplayedCard(list.cards[0])
+                                            setDisplayedList(list)
+                          if (displayedList.cards.length > 0) {
+                            setDisplayedCard(displayedList.cards[0])
+                          } else {
+                            setDisplayedCard({
+                              position: '1',
+                              boardid: String(displayedBoard.id),
+                              listId: list.id,
+                              index: 1,
+                            })
+                          }
                         }}
                       >
-                        {/* {displayedBoard?.title}                           */}
                         {list.title === currentList?.title
                           ? list.title + ' (Current)'
                           : list.title}
@@ -313,13 +381,15 @@ export const CardModalActions = (props: ICardModalActions) => {
               >
                 <span className="copy-to-inner-span-card">Position</span>
                 <span className="copy-to-inner-span-card">
-                  {displayedCard.position}
+                  {desiredPosition === 0
+                    ? displayedCard?.position
+                    : desiredPosition}
                 </span>
                 {isOpenCardSelect && (
                   <select
                     ref={cardSelectRef}
                     className="card-select"
-                    size={displayedList!.cards.length}
+                    size={displayedList!.cards.length + 1}
                   >
                     {displayedList!.cards.map((card) => (
                       <option
@@ -328,25 +398,39 @@ export const CardModalActions = (props: ICardModalActions) => {
                         value={card.position}
                         onClick={() => setDisplayedCard(card)}
                       >
-                        {card.position === currentCard?.position
+                        {displayedList.title === currentList?.title &&
+                        card.position === props.position
                           ? card.position + ' (Current)'
                           : card.position}
-                        {/* {displayedCard!.position} */}
                       </option>
                     ))}
+                    {/* ще одна опція селекта для додавання однієї позиції після існуючих карток */}
+                    <option
+                      className="option-select"
+                      value={displayedList!.cards.length + 1}
+                      onClick={() => {
+                        setDesiredPosition(displayedList.cards.length + 1) 
+                      }}
+                    >
+                      {displayedList!.cards.length + 1}
+                    </option>
                   </select>
                 )}
               </div>
             </div>
             <button
-              onClick={()=> (doModalAction(
-                props.title,
-                displayedBoard,
-                displayedList,
-                displayedCard)
-              )}
+              onClick={() =>
+                doModalAction(
+                  props.title, //action
+                  displayedBoard,
+                  displayedList,
+                  desiredPosition,
+                  textAreaCardTitle,
+                  currentCard?.description!
+                )
+              }
             >
-              {props.title} card
+              {props.title} card 
             </button>
           </div>
         </div>

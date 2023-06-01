@@ -24,8 +24,6 @@ instance.interceptors.request.use(
   }
 )
 
-//instance.interceptors.response.use((res: AxiosResponse) => res.data);
-
 instance.interceptors.response.use(
   function (res: AxiosResponse) {
     store.dispatch(toggleLoading(false))
@@ -34,13 +32,7 @@ instance.interceptors.response.use(
   function (error) {
     store.dispatch(toggleLoading(false))
     //саме в error.response.data.error знаходиться стрінг помилки
-    store.dispatch(handleAxiosError(error.response.data.error))
-    console.log(
-      'store.dispatch(handleAxiosError(error))',
-      error.response.data.error
-    )
-    // setErrorMessage(error.response.data.error);
-    // setOpen(true);
+    store.dispatch(handleAxiosError(error.response.data.error, 'toggleLoading'))
     return Promise.reject(error)
   }
 )

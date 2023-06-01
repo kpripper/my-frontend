@@ -1,30 +1,15 @@
 import { Alert, Snackbar } from '@mui/material'
-import {
-  DetailedHTMLProps,
-  HTMLAttributes,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { useCallback, useState } from 'react'
 import { newNameValidation } from '../../../../common/functions/functions'
-import { CardType, ListType } from '../../../../common/types'
+import { CardType } from '../../../../common/types'
 import {
   edCardDescription,
   delCard,
 } from '../../../../store/modules/board/actions'
-import store, { RootState } from '../../../../store/store'
-import { AddInput } from '../../AddInput'
-import { useCardOver } from '../../useCardOver'
+import store from '../../../../store/store'
 import './card.scss'
-import { useNavigate, useParams } from 'react-router-dom'
-import { shallowEqual, useSelector } from 'react-redux'
 
 export const Card = (props: CardType) => {
-  //console.log('card props', props)
-
-  // let boardParamID = parseInt(useParams().id!)
-
   const inputRef = useCallback((input: HTMLInputElement) => {
     if (input) {
       input.focus()
@@ -32,19 +17,12 @@ export const Card = (props: CardType) => {
     }
   }, [])
 
-  const listsSelector: ListType[] = useSelector(
-    (state: RootState) => state.board.lists,
-    shallowEqual
-  )
-
   const [isSaveDelete, setIsSaveDelete] = useState(false)
   const [cardName, setCardName] = useState('')
   const [initCardName, setInitCardName] = useState('')
   const [isInputCardName, setInputCardNameVisibity] = useState(false)
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [onHold, setOnHold] = useState(false)
-  // const [onOver, setOnOver] = useState(false)
-  // const [draggedCard, setDraggedCard] = useState(false)
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setCardName(ev.target.value)
@@ -63,8 +41,6 @@ export const Card = (props: CardType) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // console.log('handleKeyDown', cardName)
-
     if (event.key === 'Enter') {
       if (newNameValidation(cardName!)) {
         setCardName(cardName)
@@ -102,7 +78,6 @@ export const Card = (props: CardType) => {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('card handleDelete')
     clearTimeout(blurTimer!)
     store.dispatch(delCard(boardid, id))
     setInputCardNameVisibity(false)
@@ -119,10 +94,7 @@ export const Card = (props: CardType) => {
     index: number
   ) => {
     e.preventDefault()
-    // console.log(`handleDragOverCard`, index)\
-    // без таймаута не показуэться перетягувана картка
     setTimeout(() => {
-      //  console.log('call setSlotPosition', +props.position - 1)
       props.setSlotPosition!(e, +props.position - 1)
     }, 0)
   }
@@ -130,10 +102,6 @@ export const Card = (props: CardType) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
   }
-
-  // useEffect(() => {
-  //  setCardName(props.title!)
-  // }, [])
 
   return (
     <div
@@ -166,7 +134,6 @@ export const Card = (props: CardType) => {
             }}
             onDragEnd={(e) => {
               setOnHold(false)
-              console.log('dragend', e.target)
               props.handleDragEnd!(e)
             }}
             onDragOver={(e) => {
@@ -174,9 +141,7 @@ export const Card = (props: CardType) => {
             }}
           >
             <div className="self-card" draggable="true">
-              {/* ind {props.index} pos {props.position} name  */}
-              {/* {props.id!} pos {props.position} */}
-              {cardName || props.title}
+              {props.title}
               <p
                 className="icon-edit icon-card-edit"
                 onClick={(e) => {

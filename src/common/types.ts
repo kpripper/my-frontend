@@ -1,4 +1,3 @@
-import { AlertTitleClassKey } from '@mui/material'
 import { AxiosResponse } from 'axios'
 import React, { DetailedHTMLProps, HTMLAttributes } from 'react'
 
@@ -9,8 +8,7 @@ export type BoardType = {
 }
 
 export type BoardResponse = {
-  title: string
-  // users: []
+  title: string 
   lists: ListType[]
 }
 
@@ -25,10 +23,6 @@ export type Boards = BoardType[]
 export type BoardState = {
   title: string
 }
-
-// export type BoardArray = {
-//   [index: number]: BoardType;
-// }
 
 export type BoardArray = BoardType[]
 
@@ -48,7 +42,6 @@ export type CardType = {
   description?:string;
   users?: []
   created_at?: number
-  // draggable?: boolean
   setSlotPosition?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
   handleDragStart?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
   handleDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void
@@ -79,7 +72,6 @@ export type propsHomeType = {
 }
 
 export type SlotProps = {
- // slotPosition: 'above' | 'below',
   card: CardType 
   nextCard: CardType 
   setShowSlot: (arg0: boolean) => void

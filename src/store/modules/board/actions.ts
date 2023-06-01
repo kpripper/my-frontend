@@ -9,13 +9,11 @@ import {
   CardRequest,
   CardType,
   changeCardGroup,
-  IGroupCard,
 } from '../../../common/types'
 
 export const getBoard = (id: string) => async (dispatch: Dispatch) => {
   try {
     const board = await instance.get('/board/' + id)
-    console.log('getBoard board', id, board)
 
     //BUG з включеним консоль логом на дошці без списків показуються списки попередньо відкритої дошки
     // console.log('id type', typeof board.lists[0].id)
@@ -24,7 +22,7 @@ export const getBoard = (id: string) => async (dispatch: Dispatch) => {
 
     return board
   } catch (e) {
-    handleAxiosError(e)
+    handleAxiosError(e, 'getBoard')
   }
 }
 
@@ -35,7 +33,7 @@ export const editBoardTitle =
       store.dispatch(getBoards())
       store.dispatch(getBoard(id))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'editBoardTitle')
     }
   }
 
@@ -49,7 +47,7 @@ export const editListTitle =
       })
       store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'editListTitle')
     }
   }
 
@@ -60,7 +58,7 @@ export const createBoard = (boardTitle: string) => async () => {
     await instance.post(config.boards, { title: boardTitle })
     store.dispatch(getBoards())
   } catch (e) {
-    handleAxiosError(e)
+    handleAxiosError(e, 'createBoard')
   }
 }
 
@@ -69,7 +67,7 @@ export const deleteBoard = (boardId: string) => async (dispatch: Dispatch) => {
     await instance.delete(config.boards + '/' + boardId)
     store.dispatch(getBoards())
   } catch (e) {
-    handleAxiosError(e)
+    handleAxiosError(e, 'deleteBoard')
   }
 }
 
@@ -85,45 +83,89 @@ export const createList =
       })
       store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'createList')
     }
   }
 
 export const addCard =
-  (cardTitle: string, boardId: string, listID: number, cardsLength: number) =>
-  async (dispatch: Dispatch) => {
-    console.log(`Try Create ${cardTitle} in position ${cardsLength}`)
+  (
+    cardTitle: string,
+    boardId: string,
+    listID: number,
+    cardsLength: number,
+    boardToGetBoard: string,
+    cardDescription?: string
+  ) =>
+  async () => {
     try {
-      let res = await instance.post(config.boards + '/' + boardId + '/card', {
-        title: cardTitle,
-        list_id: listID,
-        position: cardsLength,
-      })
+      let res: { result: string; id: number } = await instance.post(
+        config.boards + '/' + boardId + '/card',
+        {
+          title: cardTitle,
+          list_id: listID,
+          position: cardsLength,
+          description: cardDescription,
+        }
+      )
 
-      console.log(`Create ${cardTitle} in ${listID} list`, res)
+      //якщо додаємо картку на іншу дошку, то беремо поточну, щоб не відобразилася таргет-дошка
+      boardId === boardToGetBoard
+        ? store.dispatch(getBoard(boardToGetBoard))
+        : store.dispatch(getBoard(boardId))
 
+      return res.id
+    } catch (e) {
+      handleAxiosError(e, 'addCard')
+    }
+    const board = await instance.get('/board/' + boardId)
+  }
+
+export const normalizeCardsPositions =
+  (boardId: string, listId: number) => async (dispatch: Dispatch) => {
+    let normalizedCards: changeCardGroup[] = []
+
+    const board: BoardType = await instance.get('/board/' + boardId)
+
+    board.lists.forEach((list) => {
+      if (list.id === listId) {
+        normalizedCards = list.cards.map((card, index) => {
+          delete card.users
+          delete card.created_at
+          delete card.title
+          card.position = String(index + 1)
+          return {
+            id: card.id!,
+            position: parseInt(card.position),
+            list_id: list.id,
+          }
+        })
+      }
+    })
+
+    try {
+      let resPut = await instance.put(
+        config.boards + '/' + boardId + '/card',
+        normalizedCards
+      )
       store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'normalizeCardsPositions')
     }
   }
 
 export const delCard =
   (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
-    console.log(`Try delete ${boardId} ${cardID}`)
+
     try {
       let res = await instance.delete(
         config.boards + '/' + boardId + '/card/' + cardID
       )
 
-      console.log(`Card ${cardID} deleted`, res)
-
       store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'delCard')
     }
   }
-
 
 export const edCardDescription =
   (
@@ -134,8 +176,6 @@ export const edCardDescription =
     description?: string
   ) =>
   async () => {
-    console.log(boardId, listID, cardID, cardTitle, description)
-
     let requestBody: CardRequest = {
       title: cardTitle,
       list_id: listID,
@@ -147,18 +187,14 @@ export const edCardDescription =
         description: description,
       }
     }
-
-    console.log(config.boards + '/' + boardId + '/card/' + cardID, requestBody)
-
     try {
       let res = await instance.put(
         config.boards + '/' + boardId + '/card/' + cardID,
         requestBody
       )
-      console.log('res edCard', res)
       store.dispatch(getBoard(boardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'edCardDescription')
     }
   }
 
@@ -169,116 +205,86 @@ export const updateCardPosition = (cardId: string, newPosition: number) => ({
 
 export const editCards =
   (
-    boardId: string,
+    targetBoardId: string,
     initialListId: string,
     initialCardsString: string,
     draggedOffPosition: string,
-    list_id: number,
-    cardsToInsert: CardType[],
+    targetListId: number,
+    targetListCards: CardType[],
     addCardInPosition: number,
     placedCardId: string
   ) =>
-  async (dispatch: Dispatch) => {
-    console.log(
-      'editcards. placed:',
-      placedCardId,
-      ' in target pos:',
-      addCardInPosition,
-      cardsToInsert
-      //  'initialCards', initialCards
-    )
-
+  async () => {
     let newCard: changeCardGroup = {
       id: placedCardId,
       position: addCardInPosition,
-      list_id: list_id,
+      list_id: targetListId,
     }
 
-    let cardsAfterInsert: changeCardGroup[] = []
-    let newCardsDel: changeCardGroup[] = []
+    let cardsToPutAfterInserting: changeCardGroup[] = []
 
-    console.log(
-      'initialCards',
-      JSON.parse(initialCardsString),
-      'draggedOffPosition',
-      draggedOffPosition
-    )
-
+    //картки початкового списку
     let cardsToDelete: CardType[] = JSON.parse(initialCardsString)
 
+    //видаляємо перетягувану картку
     cardsToDelete.splice(+draggedOffPosition - 1, 1)
 
-    console.log('cardsToDelete aft splice', cardsToDelete)
+    //копія щоб не було мутації стейту
+    let targetListCardsCopy = targetListCards.map((card) => {
+      const { title, users, created_at, ...rest } = card
+      return rest
+    })
 
-    if (cardsToInsert.length === 0) {
-      cardsAfterInsert[0] = newCard
+    if (targetListCardsCopy.length === 0) {
+      cardsToPutAfterInserting[0] = newCard
     } else {
-      cardsToInsert.forEach((card, index) => {
-        delete card.users
-        delete card.created_at
-        delete card.title
+      targetListCardsCopy.forEach((card, index) => {
         if (
           +card.position >= addCardInPosition &&
-          +card.id! !== +placedCardId
+          +card.id! !== +placedCardId //на випадок, якщо переміщення в межах одного списку?
         ) {
-          console.log(
-            'card.id',
-            typeof card.id,
-            typeof placedCardId,
-            ' placedCardId'
-          )
-          console.log('card.id !== placedCardId', +card.id! !== +placedCardId)
-          console.log('card pos+', card)
-          cardsAfterInsert[index + 1] = {
+          //карткам нижче вставленої збільшуємо позицію на 1
+          cardsToPutAfterInserting[index + 1] = {
             id: card.id!,
             position: +card.position + 1,
-            list_id: list_id,
+            list_id: targetListId,
           }
-          console.log(
-            `cardsAfterInsert JSON ih foreach >addpos`,
-            JSON.parse(JSON.stringify(cardsAfterInsert))
-          )
         } else if (+card.id! !== +placedCardId) {
+          //інашке карткам вище вставленої не міняємо позицію
           console.log('card pos =', card)
-          cardsAfterInsert[index] = {
+          cardsToPutAfterInserting[index] = {
             id: card.id!,
             position: +card.position,
-            list_id: list_id,
+            list_id: targetListId,
           }
-          console.log(
-            `cardsAfterInsert JSON ih foreach`,
-            JSON.parse(JSON.stringify(cardsAfterInsert))
-          )
-        }
-        cardsAfterInsert[addCardInPosition - 1] = newCard
+        }      
       })
+
+      cardsToPutAfterInserting[addCardInPosition - 1] = newCard
     }
 
-    console.log(
-      `cardsAfterInsert JSON`,
-      JSON.parse(JSON.stringify(cardsAfterInsert))
-    )
 
-    const insertedCardsToPut = cardsAfterInsert
+    //нормалізація позиції після переміщення в межах списку, бо може бути 1,3,4
+    const insertedCardsToPut = cardsToPutAfterInserting
       .filter((value) => value !== null)
       .map((item: any, index: number) => ({ ...item, position: index + 1 }))
 
-    console.log('newArr', insertedCardsToPut)
-
     try {
       let resPut = await instance.put(
-        config.boards + '/' + boardId + '/card',
+        config.boards + '/' + targetBoardId + '/card',
         insertedCardsToPut
       )
 
-      console.log(`editCards resPut`, resPut)
 
-      if (+initialListId !== +list_id) {
-        console.log('initialListId !== list_id', initialListId, list_id)
+      //видаляємо драгнуту картку з початкового списку
+      if (+initialListId !== +targetListId) {
+        console.log('initialListId !== list_id', initialListId, targetListId)
         const updatedCardsMinus = cardsToDelete.map((card, index) => {
+          // ці поля треба видалити, ынакше instance.put поверне Error: Wrong data
           delete card.users
           delete card.created_at
           delete card.title
+          delete card.description
           card.position = String(index + 2)
           return {
             ...card,
@@ -287,37 +293,29 @@ export const editCards =
           }
         })
 
-        console.log('updatedCardsMinus bef splice', updatedCardsMinus)
-
         for (let i = 0; i < updatedCardsMinus.length; i++) {
           updatedCardsMinus[i].position = i + 1
         }
 
-        console.log('updatedCardsMinus corrected position', updatedCardsMinus)
-
-        console.log('updatedCardsMinus disp', updatedCardsMinus)
-
         let resDel = await instance.put(
-          config.boards + '/' + boardId + '/card',
+          config.boards + '/' + targetBoardId + '/card',
           updatedCardsMinus
         )
-
-        console.log(`editCards resDel`, resDel)
       }
 
-      store.dispatch(getBoard(boardId))
+      store.dispatch(getBoard(targetBoardId))
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'editCards')
     }
   }
 
 export const deleteList =
-  (boardId: string, listId: number) => async (dispatch: Dispatch) => {
+  (boardId: string, listId: number) => async () => {
     try {
       await instance.delete(config.boards + '/' + boardId + '/list/' + listId)
       store.dispatch(getBoard(boardId))
       store.dispatch(getBoards())
     } catch (e) {
-      handleAxiosError(e)
+      handleAxiosError(e, 'deleteList')
     }
   }

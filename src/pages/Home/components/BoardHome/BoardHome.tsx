@@ -3,22 +3,26 @@ import { Board } from '../../../Board/Board'
 import './boardhome.scss'
 import { deleteBoard } from '../../../../store/modules/board/actions'
 import store from '../../../../store/store'
-import { useState } from 'react'
+
+const getRandomColor = () => {
+  const baseHue = 200; // Відтінок #2f94dc
+  const hueVariation = 30; // Варіація відтінку
+  const saturation = Math.random() * (100 - 80) + 80; // Насиченість від 80% до 100%
+  const lightness = Math.random() * (70 - 50) + 50; // Світлість від 50% до 70%
+
+  // Генеруємо рандомний відтінок в межах дозволених значень
+  const randomHue = baseHue + Math.random() * hueVariation - hueVariation / 2;
+
+  // Створюємо рандомний відтінок кольору зі насиченістю та світлістю
+  const randomColor = { background:`hsl(${randomHue}, ${saturation}%, ${lightness}%)`};
+
+  return randomColor;
+};
 
 export default function BoardHome(props: { id: number; title: string }) {
-  const direction = Math.round(Math.random() * 360)
-  const hue = Math.random() * (192 - 212) + 212;
-  const randomAlpha = Math.random() * (0.6 - 0.4) + 0.8
-  const style = {
-    background: `linear-gradient(${direction}deg, hsla(192, 98%, 33%,${randomAlpha}), hsla(${
-      hue 
-    }, 50%, 50%,${randomAlpha}))`,
-  }
-
-  const [color, setColor] = useState(style)
 
   return (
-    <div key={props.id} style={color} className={`board-home id${props.id}`}>
+    <div key={props.id} style={getRandomColor()} className={`board-home id${props.id}`}>
       <Link
         className="board-link"
         to={{ pathname: '/board/' + props.id }}

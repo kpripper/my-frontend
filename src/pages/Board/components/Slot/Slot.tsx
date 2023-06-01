@@ -32,7 +32,7 @@ export const Slot = ({
   slotIndex,
   boardId,
   listId,
-  cards,
+  cards: cardsInInitialList,
 }: SlotProps) => {
   return (
     <div
@@ -40,29 +40,18 @@ export const Slot = ({
       className="slot"
       onDragOver={enableDropping}
       onDrop={(e) => {
-        //NOTE не знаю що з цих треба, і чи треба обидва
         e.preventDefault()
-        // e.stopPropagation()
         setShowFirstSlot(false)
         setShowSlot(false)
         console.log('setShowSlot(false) onDragLeave below')
         setSlotIndex(-1)
         const idDropped = e.dataTransfer.getData('card id')
-        console.log(
-          `Dropped in list ${listId} in slotPosition ${slotPosition} slotIndex:${slotIndex} a cardId: ${idDropped}  posit: {index}
-          `
-        )
         let dataTransferCardId = +e.dataTransfer.getData('card id')
 
-
-
-        if (slotPosition === 'below') {          
-          console.log('handle drop in Slot below', nextCard, card, 'dataTransferCardId', dataTransferCardId)
-
+        if (slotPosition === 'below') {
           if (dataTransferCardId === +card!.id!) {
-            console.log('same below dataTransferCardId === +card!.id!', dataTransferCardId, +card!.id!)
+            console.log('same below')
           } else {
-            console.log('drop below. try disp')
             store.dispatch(
               editCards(
                 boardId,
@@ -70,7 +59,7 @@ export const Slot = ({
                 e.dataTransfer.getData('initial cards'),
                 e.dataTransfer.getData('dragged off position'),
                 listId,
-                cards,
+                cardsInInitialList,
                 slotIndex + 2,
                 idDropped
               )
@@ -78,145 +67,25 @@ export const Slot = ({
           }
         }
 
-        //не робимо діспатч, якщо дроп на слот самої ж картки
-        // if (slotPosition === 'below') {          
-        //   console.log('handle drop in Slot below', nextCard, card, 'dataTransferCardId', dataTransferCardId)
-
-        //   if (!nextCard && +e.dataTransfer.getData('card id') === +card!.id!) {
-        //     console.log('same card case1')
-        //   } else if (
-        //     nextCard &&
-        //     +e.dataTransfer.getData('card id') === +nextCard.id!
-        //   ) {
-        //     console.log('same card case2')
-        //   } else {
-        //     console.log('drop. try disp')
-        //     store.dispatch(
-        //       editCards(
-        //         boardId,
-        //         e.dataTransfer.getData('initial list'),
-        //         e.dataTransfer.getData('initial cards'),
-        //         e.dataTransfer.getData('dragged off position'),
-        //         listId,
-        //         cards,
-        //         slotIndex + 2,
-        //         idDropped
-        //       )
-        //     )
-        //   }
-        // }
-
-        if (slotPosition === 'above') {   
-          console.log('handle drop in Slot above', nextCard, card, 'dataTransferCardId', dataTransferCardId)
-
-
-          if ( dataTransferCardId === +card!.id!) {
-              console.log('same above dataTransferCardId === +card!.id!', dataTransferCardId, +card!.id!)
+        if (slotPosition === 'above') {
+          if (dataTransferCardId === +card!.id!) {
+            console.log('same above')
           } else {
-            console.log('not same above')
-                store.dispatch(
-                  editCards(
-                    boardId,
-                    e.dataTransfer.getData('initial list'),
-                    e.dataTransfer.getData('initial cards'),
-                    e.dataTransfer.getData('dragged off position'),
-                    listId,
-                    cards,
-                    1,
-                    idDropped
-                  )
-                )
+            store.dispatch(
+              editCards(
+                boardId,
+                e.dataTransfer.getData('initial list'),
+                e.dataTransfer.getData('initial cards'),
+                e.dataTransfer.getData('dragged off position'),
+                listId,
+                cardsInInitialList,
+                1,
+                idDropped
+              )
+            )
           }
-
-          // if (nextCard) {
-          //   if (
-          //     dataTransferCardId !== +nextCard.id! ||
-          //     dataTransferCardId !== +card!.id!
-          //   ) {
-          //     console.log('not same above')
-          //     store.dispatch(
-          //       editCards(
-          //         boardId,
-          //         e.dataTransfer.getData('initial list'),
-          //         e.dataTransfer.getData('initial cards'),
-          //         e.dataTransfer.getData('dragged off position'),
-          //         listId,
-          //         cards,
-          //         1,
-          //         idDropped
-          //       )
-          //     )
-          //   } else {
-          //     console.log('same above')
-          //   }
-          // } else {
-          //   if (dataTransferCardId !== +card!.id!) {
-          //     console.log('not same above')
-          //     store.dispatch(
-          //       editCards(
-          //         boardId,
-          //         e.dataTransfer.getData('initial list'),
-          //         e.dataTransfer.getData('initial cards'),
-          //         e.dataTransfer.getData('dragged off position'),
-          //         listId,
-          //         cards,
-          //         1,
-          //         idDropped
-          //       )
-          //     )
-          //   } else {
-          //     console.log('same above')
-          //   }
-          // }
-
-
-
-          // if (nextCard) {
-          //   if (
-          //     dataTransferCardId === +nextCard.id! ||
-          //     dataTransferCardId === +card!.id!
-          //   ) {
-          //     console.log('same above nextcard or card')
-          //   } else {
-          //     console.log('not same above')
-          //     store.dispatch(
-          //       editCards(
-          //         boardId,
-          //         e.dataTransfer.getData('initial list'),
-          //         e.dataTransfer.getData('initial cards'),
-          //         e.dataTransfer.getData('dragged off position'),
-          //         listId,
-          //         cards,
-          //         1,
-          //         idDropped
-          //       )
-          //     )
-          //   }
-          // } else {
-          //   if (dataTransferCardId === +card!.id!) {
-          //     console.log('same above card')
-
-          //   } else {
-          //     console.log('not same above')
-          //     store.dispatch(
-          //       editCards(
-          //         boardId,
-          //         e.dataTransfer.getData('initial list'),
-          //         e.dataTransfer.getData('initial cards'),
-          //         e.dataTransfer.getData('dragged off position'),
-          //         listId,
-          //         cards,
-          //         1,
-          //         idDropped
-          //       )
-          //     )
-          //   }
-          // }
         }
       }}
-    >
-      slotPosition {slotPosition}, slotInd {slotIndex} <br/>
-       for card {card!.id}
-    </div>
+    ></div>
   )
 }

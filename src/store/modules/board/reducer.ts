@@ -1,6 +1,4 @@
-import { IBoard } from '../../../common/interfaces/IBoard'
-import { BoardType, ListType } from '../../../common/types'
-import { AnyAction } from '@reduxjs/toolkit';
+import { BoardType } from '../../../common/types'
 
 const initialState: BoardType = {
   id: 0,
@@ -26,12 +24,6 @@ export default function reducer(
         ...state,
         title: action.payload.title,
       }
-
-    // case 'MODAL_IS_OPEN':
-    //   return {
-    //     ...state,
-    //     modalIsOpen: action.payload,
-    //   }
 
     default: {
       return { ...state }

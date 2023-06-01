@@ -36,7 +36,6 @@ export const InputName = () => {
         store.dispatch(
           createList((ev.target as HTMLInputElement).value, boardId)
         )
-        // store.dispatch(getBoard(boardId))
     }
   }
 

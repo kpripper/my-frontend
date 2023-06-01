@@ -1,10 +1,6 @@
 import { useState } from 'react'
-import { Slot } from './components/Slot/Slot'
-import { SlotProps } from '../../common/types'
 
 interface AddInputProps {
-  // onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
-  // onDragLeave: (e: React.DragEvent<HTMLDivElement>) => void
   handleSave: (value: string) => void
   defaultValue: string
   source: string
@@ -17,8 +13,6 @@ export const AddInput = ({
 }: AddInputProps) => {
   const [isAdd, setIsAdd] = useState(false)
   const [title, setTitle] = useState('')
-  // const [isInputListName, setInputListNameVisibity] = useState(false)
-  // const [isDragOver, setDragOver] = useState(false)
 
   if (!isAdd) {
     return (
@@ -71,7 +65,9 @@ export const AddInput = ({
         >
           {source === 'list' ? 'Add list' : 'Add new card'}
         </button>
-        <button className="invisible-button">
+        <button 
+         className="invisible-button adding-close-button-parent"
+        >
           <span
             className="icon-close icon-close-addlist"
             onClick={() => {

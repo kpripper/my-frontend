@@ -1,6 +1,6 @@
 @import url('../../index.css');
 
-$base-blue-color: #026AA7;
+$base-blue-color: #2f94dc;
 
 .boards {
     // height: 100%;
@@ -26,11 +26,6 @@ $base-blue-color: #026AA7;
     align-items: center;
 }
 
-.simplebar {
-    //якщо розкоментувати, знизу сторінки біла полоска пікселів на 100
-    // height: 100%;
-}
-
 .board-content {
     white-space: nowrap;
     padding: 0 10px;
@@ -39,53 +34,12 @@ $base-blue-color: #026AA7;
     max-height: calc(100vh - 122px);
 }
 
-// .board-content::-webkit-scrollbar {
-//     position: relative;
-//     height: 20px;
-//     border-radius: 10px;
-//     background-color: rgba(229, 218, 218, 0.58);
-// }
-
-// .board-content::-webkit-scrollbar-thumb {
-//     background-color: rgba(143, 137, 137, 0.78);
-//     border-radius: 10px;
-// }
-
 h1 {
     padding: 0 0 0 30px;
     color: white;
 }
 
-.list {
-    display: inline-block;
-    margin: 0 14px;
-    // padding: 10px;
-    background-color: #ffffff90;
-    border-radius: 3px;
-    color: rgb(61, 61, 61);
-    min-height: 32px;
-    width: 272px;
 
-    //same for text vertical centering
-    // height: 30px;
-    // line-height: 30px;
-
-    &:hover {
-        background-color: #ffffffa9;
-    }
-}
-
-// .list::-webkit-scrollbar {
-//     position: relative;
-//     height: 20px;
-//     border-radius: 10px;
-//     background-color: rgba(229, 218, 218, 0.58);
-// }
-
-// .list::-webkit-scrollbar-thumb {
-//     background-color: rgba(143, 137, 137, 0.78);
-//     border-radius: 10px;
-// }
 
 .active-list {
     background-color: #e8e8e83d;
@@ -103,13 +57,10 @@ h1 {
 }
 
 .input-board-title {
-    // display: none;
     margin: 3px;
-    //   background-color: rgba(255, 255, 255, 0.18);
     font-size: 17px;
-    // line-height: 10px;
     border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #026aa7;
+    box-shadow: inset 0 0 0 2px #2f94dc;
     box-sizing: border-box;
     padding: 8px;
     border: hidden;
@@ -147,10 +98,6 @@ h1 {
     padding: 5px;
 }
 
-.list-add-button {
-    float: left;
-}
-
 .add-list-form {
     display: none;
     flex-direction: column;
@@ -158,6 +105,7 @@ h1 {
 }
 
 .list-add-button {
+    max-width: 85%;
     height: 32px;
     padding: 4px 8px;
     margin: 0 6px 0 0;
@@ -215,4 +163,10 @@ h1 {
     padding: 0;
     background: transparent;
     cursor: pointer;
+}
+
+.adding-close-button-parent {
+    margin-top: 0;
+    display: flex;
+    width: 24px;
 }
