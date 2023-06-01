@@ -1,18 +1,20 @@
-import { IBoard } from '../../../common/interfaces/IBoard'
+import { BoardType } from '../../../common/types'
 
-const initialState: IBoard = {
+const initialState: BoardType = {
+  id: 0,
   title: '',
-  lists: [],
+  lists: [],  
 }
 
 export default function reducer(
   state = initialState,
-  action: { type: string; payload: any }
+  action: { type: string; payload: BoardType }
 ) {
   switch (action.type) {
     case 'UPDATE_BOARD':
       return {
         ...state,
+        id: action.payload.id,
         title: action.payload.title,
         lists: action.payload.lists,
       }
@@ -20,13 +22,7 @@ export default function reducer(
     case 'CREATE_BOARD':
       return {
         ...state,
-        title: action.payload,
-      }
-
-    case 'MODAL_IS_OPEN':
-      return {
-        ...state,
-        modalIsOpen: action.payload,
+        title: action.payload.title,
       }
 
     default: {

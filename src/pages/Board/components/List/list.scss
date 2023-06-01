@@ -1,15 +1,22 @@
-$base-blue-color: #026AA7;
-
+$base-blue-color: #2f94dc;
 .list {
-    box-sizing: border-box;
-    // display: inline-block;
-    height: 100%;
-    margin: 0 4px;
-    vertical-align: top;
+    position: relative;
+    display: inline-block;
+    margin: 0 14px;   
+    color: rgb(61, 61, 61);
+    min-height: 32px;
     width: 272px;
-    background-color: #ebecf0;
+    box-sizing: border-box;
+    vertical-align: top;
     border-radius: 3px;
+    border: 1px solid rgb(118, 126, 133);
+    background-color: #efefef;
+
+    &:hover {
+        background-color: #dedede;
+    }
 }
+
 
 .list-title {
     padding: 8px 10px;
@@ -23,7 +30,7 @@ h2 {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
+
 }
 
 .input-list-title {
@@ -32,7 +39,7 @@ h2 {
     width: 100%;
     line-height: 20px;
     border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #026aa7;
+    box-shadow: inset 0 0 0 2px #2f94dc;
     box-sizing: border-box;
     padding: 6px;
     border: hidden;
@@ -58,10 +65,15 @@ h2 {
 
 .list-card {
     position: relative;
+    padding: 0 10px;
+}
+
+.self-card {
+    position: relative;
     list-style: none;
     padding: 2px 0 5px 10px;
     background-color: rgb(246, 246, 246);
-    border-radius: 3px;
+    border-radius: 13px;
     box-shadow: 0 1px 0 #091e4240;
     margin: 8px 0;
     color: #2e2c2c;
@@ -72,15 +84,15 @@ h2 {
     }
 
     &:hover {
-        background-color: rgb(237, 237, 237);
+        background-color: rgb(254, 254, 254);
 
         .icon-card-edit {
-            display: block;
+            visibility: visible;
         }
 
         &:focus {
             .icon-card-edit {
-                display: none;
+                visibility: hidden;
             }
         }
     }
@@ -107,18 +119,14 @@ h2 {
     color: rgb(61, 61, 61);
     background: #fff;
     border-radius: 3px;
-    box-shadow: 0 8px 16px -4px #091e4240, 0 0 0 1px #091e4214;
-    // display: none;
-    // overflow: hidden;
-    // position: absolute;
-    // right: -9999px;
-    // top: -9999px;
-    //-webkit-transform: translateZ(0);
-    // width: 255px;
+    box-shadow: 0 8px 16px -4px rgb(9 30 66 / 91%);
     padding: 5px;
     margin: 7px 0 0 0;
-    // position: absolute;
-    // top: 54px;
+    position: absolute;
+    top: 4px;
+    left: 13px;
+    width: 90%;
+    box-sizing: border-box;
 }
 
 .list-list-actions ul {
@@ -133,13 +141,7 @@ h2 {
     list-style-type: none;
     padding: 0 0 3px 10px;
     margin: 0 -5px;
-
-    &:hover {
-        background-color: #9e9e9e21;
-    }
 }
-
-
 
 .list-actions-header {
     display: flex;
@@ -190,14 +192,17 @@ h2 {
 }
 
 .icon-card-edit {
-    display: none;
+    width: 20px;
+    height: 15px;
+    color: #5d5454;
+    font-size: 15px;
+    visibility: hidden;
     color: #333333b6;
     font-size: 21px;
     position: absolute;
     left: 223px;
     top: 0px;
     cursor: pointer;
-    //  background-color: #a6a6a646;
 }
 
 .list-card {
@@ -217,9 +222,8 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-    // margin: 0 0 0 10px;
     color: #fff;
-    background-color: #026AA7;
+    background-color: #2f94dc;
     border: none;
     border-radius: 3px;
 }
@@ -228,9 +232,8 @@ h2 {
     height: 32px;
     min-width: 60px;
     padding: 4px 8px;
-    //  margin: 0 10px 0px;
     color: #fff;
-    background-color: #026AA7;
+    background-color: #2f94dc;
     border: none;
     border-radius: 3px;
 }
@@ -247,9 +250,19 @@ h2 {
     margin: 3px 3px 0 0;
 }
 
-.slot {
-    border-radius: 3px;
-    min-height: 30px;
-    background-color: lightgray;
-    width: 100%;
+.link-no-underline {
+    text-decoration: none;
+}
+
+.link-no-underline:hover {
+    text-decoration: none;
+}
+
+.link-no-underline:visited {
+    text-decoration: none;
+}
+
+.list-delete-button {
+    background-color: #2f94dc;
+    max-width: 95%;
 }

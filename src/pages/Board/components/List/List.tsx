@@ -1,26 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import {
   addCard,
-  delCard,
   deleteList,
+  editCards,
   editListTitle,
+  getBoard,
 } from '../../../../store/modules/board/actions'
-import './list.scss'
 import { shallowEqual, useSelector } from 'react-redux'
 import { newNameValidation } from '../../../../common/functions/functions'
 import store, { RootState } from '../../../../store/store'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import { clearError } from '../../../../store/modules/errorHandlers/actions'
-import { CardType, ListType } from '../../../../common/types'
+import { CardType, ListType, SlotProps } from '../../../../common/types'
 import { Card } from '../Card/Card'
 import { AddInput } from '../../AddInput'
-import { setSyntheticLeadingComments } from 'typescript'
-import { borderRadius } from '@mui/system'
 import React from 'react'
+import { Slot } from '../Slot/Slot'
+import './list.scss'
 
-export const List = (props: ListType) => {
+type SetCards = {
+  setCards: (value: CardType[]) => void
+}
+
+export const List = (props: ListType & SetCards) => {
   let boardId = useParams().id as string
 
   const selectError = useSelector(
@@ -40,21 +44,21 @@ export const List = (props: ListType) => {
   const [isErrorValidation, setErrorValidationOpen] = useState(false)
   const [isErrorCardValidation, setErrorCardValidationOpen] = useState(false)
   const [errorText, setErrorText] = useState('Error: ' + selectError.errorText)
+  const [showSlot, setShowSlot] = useState(false)
+  const [showFirstSlot, setShowFirstSlot] = useState(false)
+  const [showSingleSlot, setShowSingleSlot] = useState(false)
 
-  const inputRef = useCallback((input: HTMLInputElement) => {
+  let [slotIndex, setSlotIndex] = useState(-1)
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const inputAddCardRef = useCallback((input: HTMLInputElement) => {
     if (input) {
       input.focus()
       input.select()
-      // input.scrollIntoView({
-      //   behavior: 'smooth',
-      // })
-      // input.scrollTop = 250
 
       var headerOffset = 45
       var elementPosition = input.getBoundingClientRect().top
       var offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
-      console.log('offsetPosition', offsetPosition)
 
       window.scrollTo({
         top: offsetPosition,
@@ -86,8 +90,6 @@ export const List = (props: ListType) => {
       if (newNameValidation(listName)) {
         setListName(listName)
         setEditListNameVisibity(false)
-        console.log(listName, boardId, props.position, props.id)
-
         store.dispatch(
           editListTitle(listName, boardId, props.position, props.id)
         )
@@ -101,7 +103,6 @@ export const List = (props: ListType) => {
   }
 
   const handleBlur = () => {
-    console.log('handleblur list')
     if (newNameValidation(listName)) {
       setEditListNameVisibity(false)
     } else {
@@ -124,7 +125,8 @@ export const List = (props: ListType) => {
             (ev.target as HTMLInputElement).value,
             boardId,
             props.id,
-            props.position
+            props.cards.length,
+            boardId
           )
         )
         showAddCardActions()
@@ -144,7 +146,13 @@ export const List = (props: ListType) => {
 
     if (newNameValidation(elemInpCardTitle.value)) {
       store.dispatch(
-        addCard(elemInpCardTitle.value, boardId, props.id, props.position)
+        addCard(
+          elemInpCardTitle.value,
+          boardId,
+          props.id,
+          props.cards.length,
+          boardId
+        )
       )
       showAddCardActions()
     } else {
@@ -168,116 +176,187 @@ export const List = (props: ListType) => {
       setErrorCardValidationOpen(true)
       return
     }
-    store.dispatch(addCard(cardName, boardId, props.id, props.position))
-  }
-
-  const [dragOver, setDragOver] = useState(false)
-  const [slotPosition, setSlotPosition] = useState('above')
-  const handleDragOverStart = () => setDragOver(true)
-  const handleDragOverEnd = () => setDragOver(false)
-  const [lastDropTarget, setLastDropTarget] = useState(null);
-
-  const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-  }
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    setShowSlot(false)
-    const id = event.dataTransfer.getData('text')
-    const dragCardName = event.dataTransfer.getData('name')
-    console.log(
-      `Dropped in list on ${props.id} an element: ${id} : ${dragCardName}`
+    store.dispatch(
+      addCard(cardName, boardId, props.id, props.cards.length + 1, boardId)
     )
-
-    store.dispatch(addCard(dragCardName, boardId, props.id, props.position))
-    store.dispatch(delCard(boardId, id))
-
-    setDragOver(false)
   }
 
-  const [isOver, setIsOver] = useState(false)
-  const [slot, setSlot] = useState<null | number>(null)
+  // const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault()
+  //   // console.log('onDragLeave list', e.target)
+  //   console.log('onDragLeave list related', e.relatedTarget)
+  //   console.log('onDragLeave e', e)
 
-  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('onDragOver', e.target)
+  //   if (
+  //     (e.relatedTarget as HTMLDivElement).className === 'board-content' ||
+  //     (e.relatedTarget as HTMLDivElement).className === 'boards' ||
+  //     (e.relatedTarget as HTMLDivElement).className === 'board-header'
+  //   ) {
+  //     setShowSlot(false)
+  //     setSlotIndex(-1)
+  //   }
 
-    e.preventDefault()
-    setIsOver(true)
-    setSlot(e.clientY)
-  }
-
-  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('onDragLeave list', e.target)
-
-   // setShowSlot(false)
-  }
-
-  const handleDragExit = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('handleDragExit list', e.target)
-    setShowSlot(false)
-  }
-
-  const [showSlot, setShowSlot] = useState(false)
-
-  const [slotIndex, setSlotIndex] = useState(-1)
-  const listRef = useRef<HTMLDivElement>(null)
+  //   if (
+  //     (e.relatedTarget as HTMLDivElement).className === 'board-content' ||
+  //     (e.relatedTarget as HTMLDivElement).className === 'boards' ||
+  //     (e.relatedTarget as HTMLDivElement).className === 'board-header'
+  //   ) {
+  //     setShowFirstSlot(false)
+  //     setShowSingleSlot(false)
+  //   }
+  // }
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    const id = e.dataTransfer.getData('text')
-    const dragCardName = e.dataTransfer.getData('name')
-
-    // console.log(
-    //   `handleDragOver on ${props.id} an element: ${id} : ${dragCardName} : ${showSlot}`
-    // )
-    setShowSlot(true)
-
-    const listRect = listRef.current?.getBoundingClientRect()
-    if (!listRect) return
-
-    const listHeight = listRect.bottom - listRect.top
-
-   // console.log(`listHeight : ${listHeight}`)
-
-    const mousePos = e.clientY - listRect.top
-
-   // console.log(`mousePos : ${mousePos}`)
-
-    const slotIndex = Math.floor((mousePos / listHeight) * props.cards.length)
-
-   // console.log(`slotIndex : ${slotIndex}`)
-
-    setSlotIndex(slotIndex - 1)
-  }
-
-  const handleDragOverCard = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    //prevent the default behavior of the browser (which is to not allow drops)
     e.preventDefault()
 
-    const cardBounds = e.currentTarget.getBoundingClientRect()
-    const y = e.clientY - cardBounds.top
-
-    if (y < cardBounds.height / 2) {
-      setSlotPosition("above")
-    } else {
-      setSlotPosition("below")
+    if (
+      (e.target as HTMLDivElement).classList.value === 'list-title' ||
+      (e.target as HTMLDivElement).classList.value ===
+        'list-menu icon-dots-three' ||
+      (e.target as HTMLDivElement).classList.value ===
+        'list-header-container' ||
+      (e.target as HTMLDivElement).classList.value === 'list-header'
+    ) {
+      if (props.cards.length > 0) {
+        setShowFirstSlot(true)
+        setShowSlot(false)
+      }
+      if (props.cards.length === 0) {
+        setShowSingleSlot(true)
+      }
     }
 
-    setSlotIndex(index)
-    setShowSlot(true)
+    if (
+      (e.target as HTMLDivElement).classList.value === 'list-card card' ||
+      (e.target as HTMLDivElement).classList.value === 'cards-container' ||
+      (e.target as HTMLDivElement).classList.value === 'self-card' ||
+      (e.target as HTMLDivElement).classList.value ===
+        'list-menu icon-dots-three'
+    ) {
+      if (props.cards.length === 0) {
+        setShowSingleSlot(true)
+        setShowSlot(false)
+      } else {
+        setShowSingleSlot(false)
+        setShowSlot(true)
+        console.log(
+          'handleDragOver showslot',
+          (e.target as HTMLDivElement).classList.value
+        )
+      }
+    }
+
+    if ((e.target as HTMLDivElement).classList.value === 'open-add-list') {
+      if (props.cards.length === 0) {
+        setShowSlot(false)
+        setShowSingleSlot(true)
+      } else {
+        setShowSlot(true)
+        setSlotIndex(props.cards.length - 1)
+      }
+    }
+  }
+
+  const onDragLeaveTarget = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+
+    if (e.relatedTarget && e.relatedTarget instanceof HTMLDivElement) {
+      if ((e.relatedTarget as HTMLDivElement).className === 'open-add-list') {
+        setShowSingleSlot(false)
+        setSlotIndex(-1)
+      } else if (
+        (e.relatedTarget as HTMLDivElement).className === 'board-content' ||
+        (e.relatedTarget as HTMLDivElement).className === 'board-header'
+      ) {
+        allToFalse()
+      }
+    } else {
+      allToFalse()
+    }
+  }
+
+  const setSlotPosition = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    //з e.preventDefault() не показується перетягувана картка
+
+    if (showSingleSlot === false) {
+      setShowSlot(true)
+      setShowFirstSlot(false)
+    }
+
+    const cardBounds = (e.target as HTMLDivElement).getBoundingClientRect()
+
+    const above = e.clientY - cardBounds.top < cardBounds.height / 2
+    const below = e.clientY - cardBounds.top > cardBounds.height / 2
+
+    //first card
+    if (above && index === 0) {
+      setShowSlot(false)
+      setShowFirstSlot(true)
+    }
+    if (below && index === 0) {
+      console.log(`below && index === 0`, slotIndex)
+      setShowFirstSlot(false)
+      setSlotIndex(index)
+    }
+
+    //card 2 and further
+    if (below) {
+      setSlotIndex(index)
+    }
+
+    if (above && index !== 0) {
+      setSlotIndex(index - 1)
+    }
+  }
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    cardPosition: number
+  ) => {
+    if (cardPosition === props.cards.length) {
+      setSlotIndex(props.cards.length - 1)
+    }
+
+    e.dataTransfer.setData('initial list', props.id.toString())
+    e.dataTransfer.setData('initial cards', JSON.stringify(props.cards))
+    e.dataTransfer.setData('dragged off position', JSON.stringify(cardPosition))
+    e.dataTransfer.setData('card id', e.currentTarget.id)
+    e.dataTransfer.setData('card title', e.currentTarget.title)
+    e.dataTransfer.setData('pos', String(cardPosition))
+
+    setTimeout(() => {
+      if (cardPosition === 1) {
+        setShowFirstSlot(true)
+      } else {
+        setShowSlot(true)
+      }
+    }, 0)
+  }
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    setShowFirstSlot(false)
+    setShowSlot(false)
+  }
+
+  const allToFalse = () => {
+    setShowFirstSlot(false)
+    setShowSingleSlot(false)
+    setShowSlot(false)
+    setSlotIndex(-1)
   }
 
   return (
     <div
-      id={props.id}
       className="list"
-      // onDragOver={enableDropping}
-
+      id={String(props.id)}
       ref={listRef}
       onDragOver={handleDragOver}
-      onDragLeave={onDragLeave}
-      onDragExit={handleDragExit}
-      onDrop={handleDrop}
-      // style={ondragover ? { fontWeight: 'bold', background: 'red' } : {}}
+      onDrop={allToFalse}
+      onDragLeave={onDragLeaveTarget}
     >
       <div className="list-header-container">
         <div className="input-container">
@@ -296,7 +375,6 @@ export const List = (props: ListType) => {
               <h2 className="list-title" onClick={toggleListName}>
                 {listName}
               </h2>
-
               <div
                 className="list-menu icon-dots-three"
                 onClick={showListActions}
@@ -306,38 +384,83 @@ export const List = (props: ListType) => {
         </div>
       </div>
 
-      {props.cards.map((card, index) => (
-        <>
-          <Card
-            {...card}
-            index={index}
-            key={card.id}
-            boardId={boardId}
-            listId={props.id}
-            draggable
-            onDragOver={(e) => handleDragOverCard (e, index)}
-          />
+      <div className="cards-container">
+        {props.cards.map((card: CardType, index, arr: CardType[]) => {
+          let nextCard: CardType
+          nextCard = arr[index + 1]
 
-          {index === slotIndex && showSlot && (
-            <div
-              className="slot"
-              style={{
-                top: slotPosition === 'above' ? '-30px' : '30px',
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-              }}
-              onDragOver={(e) => {
-                e.preventDefault()
-              }}
-            >
-              {index}
+          const slotProps: SlotProps = {
+            card: card,
+            nextCard: nextCard,
+            setShowSlot: setShowSlot,
+            setShowFirstSlot: setShowFirstSlot,
+            setSlotIndex: setSlotIndex,
+            slotIndex: slotIndex,
+            boardId: boardId,
+            listId: props.id,
+            cards: props.cards,
+          }
+
+          return (
+            <div key={card!.id}>
+              {index === 0 && showFirstSlot && (
+                <Slot slotPosition="above" {...slotProps} />
+              )}
+
+              <Link
+                className="link-no-underline"
+                to={`/board/${boardId}/card/${card.id}/`}
+              >
+                <Card
+                  {...card}
+                  index={+props.position}
+                  boardid={boardId}
+                  listId={props.id}
+                  setSlotPosition={setSlotPosition}
+                  handleDragStart={handleDragStart}
+                  handleDragEnd={handleDragEnd}
+                />
+              </Link>
+              {
+                //without this condition, the slots under every card are shown
+                index === slotIndex && showSlot && !showFirstSlot && (
+                  <Slot slotPosition="below" {...slotProps} />
+                )
+              }
             </div>
-          )}
-        </>
-      ))}
+          )
+        })}
+      </div>
 
-      <AddInput  handleSave={handleSave} defaultValue={''} source={'card'} />
+      {showSingleSlot && (
+        <div
+          className="single-slot"
+          onDrop={(e) => {
+            let idDropped = e.dataTransfer.getData('card id')
+            setShowSingleSlot(false)
+            store.dispatch(
+              editCards(
+                boardId,
+                e.dataTransfer.getData('initial list'),
+                e.dataTransfer.getData('initial cards'),
+                e.dataTransfer.getData('dragged off position'),
+                props.id,
+                props.cards,
+                1,
+                idDropped
+              )
+            )
+          }}
+        ></div>
+      )}
+
+      <div
+        className="addinput-container"
+        onDragOver={handleDragOver}
+        onDragLeave={onDragLeaveTarget}
+      >
+        <AddInput handleSave={handleSave} defaultValue={''} source={'card'} />
+      </div>
 
       {listActionsShown && (
         <div className="list-actions">
@@ -354,9 +477,10 @@ export const List = (props: ListType) => {
                 <button
                   onClick={(e) => {
                     store.dispatch(deleteList(boardId, props.id))
-                    showListActions()
+                    store.dispatch(getBoard(boardId))
+                    setListActionsShown(!listActionsShown)
                   }}
-                  className="invisible-button"
+                  className="list-delete-button"
                 >
                   Delete list
                 </button>
@@ -375,7 +499,7 @@ export const List = (props: ListType) => {
               name="new-card"
               onKeyDown={addCardOnEnter}
               placeholder="Enter card title..."
-              ref={inputRef}
+              ref={inputAddCardRef}
             />
             <div className="add-cardtitle-controls">
               <button

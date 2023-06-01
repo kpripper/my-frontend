@@ -1,5 +1,4 @@
 export default {
-    baseURL: process.env.REACT_APP_API_URL || '',
-    boards: '/board',
-  };
-  
+  baseURL: 'https://trello-back.shpp.me/treeeeee/api/v1',
+  boards: '/board',
+}

@@ -13,22 +13,20 @@ export const AddInput = ({
 }: AddInputProps) => {
   const [isAdd, setIsAdd] = useState(false)
   const [title, setTitle] = useState('')
-  const [isInputListName, setInputListNameVisibity] = useState(false)
 
   if (!isAdd) {
     return (
-      <div
-        onDragOver={(e) => {
-          e.preventDefault()
-        }}
-        className="open-add-list"
-        onClick={() => setIsAdd((prev) => !prev)}
-      >
-        <span className="icon-plus"></span>
-        <span className="add-list-span">
-          {source === 'list' ? 'Add new list' : 'Add card'}
-        </span>
-      </div>
+      <>
+        <div
+          className="open-add-list"
+          onClick={() => setIsAdd((prev) => !prev)}
+        >
+          <span className="icon-plus"></span>
+          <span className="add-list-span">
+            {source === 'list' ? 'Add new list' : 'Add card'}
+          </span>
+        </div>
+      </>
     )
   }
 
@@ -37,12 +35,11 @@ export const AddInput = ({
       handleSave(event.currentTarget.value)
       setIsAdd(false)
       setTitle('')
-      // setTitle(event.currentTarget.value)
     }
   }
 
   return (
-    <>
+    <div className="adding-list">
       <input
         className="input-list-title"
         type="text"
@@ -68,7 +65,9 @@ export const AddInput = ({
         >
           {source === 'list' ? 'Add list' : 'Add new card'}
         </button>
-        <button className="invisible-button">
+        <button 
+         className="invisible-button adding-close-button-parent"
+        >
           <span
             className="icon-close icon-close-addlist"
             onClick={() => {
@@ -77,6 +76,6 @@ export const AddInput = ({
           ></span>
         </button>
       </div>
-    </>
+    </div>
   )
 }

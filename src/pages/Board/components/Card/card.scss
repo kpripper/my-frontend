@@ -1,16 +1,20 @@
 .save-card-edit {
     cursor: pointer;
+    max-width: 100px;
+    margin-bottom: 10px;
 }
 
 .delete-card {
     cursor: pointer;
+    max-width: 100px;
+    margin-bottom: 10px;
 }
 
 .input-card-title {
     width: 94%;
     line-height: 14px;
     border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #026aa7;
+    box-shadow: inset 0 0 0 2px #2f94dc;
     box-sizing: border-box;
     padding: 8px 12px;
     border: hidden;
@@ -27,14 +31,18 @@
     word-break: break-word;
 }
 
-// .dragStart {
-//     color: rgba(0, 0, 0, 0);
-
-//     &:hover {
-//         background-color: white;
-//     }
-// }
-
 .hidden-card {
     display: none;
+}
+
+.dragged-card {
+    display: none;
+}
+
+.over-card {
+    border: 1px solid red;
+}
+
+.cursor-move {
+    cursor: move;
 }

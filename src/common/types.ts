@@ -1,16 +1,15 @@
-import { AlertTitleClassKey } from '@mui/material'
 import { AxiosResponse } from 'axios'
-import React from 'react'
+import React, { DetailedHTMLProps, HTMLAttributes } from 'react'
 
 export type BoardType = {
-  id: string
+  id: number
   title: string
+  lists: ListType[]
 }
 
 export type BoardResponse = {
-  title: string
-  users: []
-  lists: []
+  title: string 
+  lists: ListType[]
 }
 
 export type BoardProps = {
@@ -25,25 +24,43 @@ export type BoardState = {
   title: string
 }
 
-// export type BoardArray = {
-//   [index: number]: BoardType;
-// }
+export type BoardArray = BoardType[]
 
-export type BoardArray = BoardType[];
+export type CardRequest = {
+  title: string,
+  list_id: number,
+  description?: string
+}
 
 export type CardType = {
   id?: string
   title?: string
-  possition: string
-  boardId: string
-  listId: string
+  position: string
+  boardid: string
+  listId: number
   index: number
-  draggable?: boolean
-  onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void
+  description?:string;
+  users?: []
+  created_at?: number
+  setSlotPosition?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+  handleDragStart?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
+  handleDragEnd?: (e: React.DragEvent<HTMLDivElement>) => void
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
+export type changeCardGroup = {
+  id: string
+  position: number
+  list_id: number
+} 
+
+export interface IGroupCard {
+  id: string
+  position: number
+  list_id: string
 }
 
 export type ListType = {
-  id: string
+  id: number
   title: string
   position: string
   cards: CardType[]
@@ -53,6 +70,18 @@ export type propsHomeType = {
   getBoards: () => Promise<void>
   boards: { id: number; title: string }[]
 }
+
+export type SlotProps = {
+  card: CardType 
+  nextCard: CardType 
+  setShowSlot: (arg0: boolean) => void
+  setShowFirstSlot: (arg0: boolean) => void
+  setSlotIndex: (arg0: number) => void
+  slotIndex: number
+  boardId: string
+  listId: number
+  cards: CardType[]
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 export type stateType = {
   boards: []
