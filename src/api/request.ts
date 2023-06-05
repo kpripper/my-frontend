@@ -10,7 +10,14 @@ const instance = axios.create({
   baseURL: api.baseURL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer 123', 
+    Authorization: localStorage.getItem('token'), 
+  },
+})
+
+export const instanceNotAuth = axios.create({
+  baseURL: api.baseURL,
+  headers: {
+    'Content-Type': 'application/json'
   },
 })
 

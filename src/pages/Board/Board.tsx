@@ -124,6 +124,16 @@ export const Board = () => {
         <Link className="" to="/">
           Main
         </Link>
+        <Link
+          className="sign-out"
+          to="/"
+          onClick={() => {
+            localStorage.removeItem('token')
+            localStorage.removeItem('refreshToken')
+          }}
+        >
+          Sign out
+        </Link>
       </div>
 
       <div className="board-header">

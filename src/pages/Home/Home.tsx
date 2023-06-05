@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import BoardHome from './components/BoardHome/BoardHome'
 import 'simplebar-react/dist/simplebar.min.css'
 import './home.scss'
@@ -9,9 +9,14 @@ import AddBoard from './components/AddBoard/AddBoard'
 import store, { RootState } from '../../store/store'
 import SimpleSnackbar from '../SimpleSnackBar/SimpleSnackbar'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
+import { Link, useNavigate } from 'react-router-dom'
 
 
-const Home = () => {
+const Home = ({
+  setIsAuthenticated,
+}: {
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
+}) => {
 
   const selectBoards = useSelector((state: RootState) => state.boards) 
   const selectError = useSelector((state: RootState) => state.error)
@@ -26,10 +31,26 @@ const Home = () => {
     fetchData()   
   }, [])
 
+  const navigate = useNavigate()
+
   return (
     <div>
       <div className="header-container">
         <p>Home</p>
+        <Link
+          className="sign-out"
+          to="/login"
+          onClick={() => {
+            console.log('Sign out')
+            localStorage.removeItem('token')
+            localStorage.removeItem('refreshToken')
+            setIsAuthenticated(false)
+            navigate('/login')
+            console.log(localStorage.getItem('token'))
+          }}
+        >
+          Sign out
+        </Link>
       </div>
       <div className="boards-header">
         <div className="boards-header-item">
