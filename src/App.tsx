@@ -16,6 +16,7 @@ function App() {
   const loadingState = useSelector((state: RootState) => state.loading)
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -40,7 +41,7 @@ function App() {
         ) : (
           <>
             <Route path="/login" element={<LoginForm setIsAuthenticated={setIsAuthenticated} />} />
-            <Route path="/register" element={<RegisterForm />} />
+            <Route path="/register" element={<RegisterForm setIsAuthenticated={setIsAuthenticated} />} />
             {/* <Route path="/*" element={<Navigate to="/login" />} /> */}
           </>
         )}

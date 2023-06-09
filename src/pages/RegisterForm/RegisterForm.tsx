@@ -1,11 +1,15 @@
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './registerform.scss'
 import instance, { instanceNotAuth } from '../../api/request'
 import zxcvbn from 'zxcvbn'
 import PasswordStrength from './PasswordStrength'
 
-function RegisterForm() {
+function RegisterForm({
+  setIsAuthenticated,
+}: {
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
+}) {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -56,16 +60,17 @@ function RegisterForm() {
       console.log('response', response)
 
       if (response.data.result === 'Created') {
-        const authorized: {
-          result: string
-          token: string
-          refreshToken: string
-        } = await instanceNotAuth.post('/login', formData)
+        const authorized: any = await instanceNotAuth.post('/login', formData)
 
-        if (authorized.result === 'Authorized') {
-          localStorage.setItem('token', authorized.token)
-          localStorage.setItem('refreshToken', authorized.refreshToken)
+        console.log('authorized', authorized)
+
+        if (authorized.data.result === 'Authorized') {
+          localStorage.setItem('token', authorized.data.token)
+          localStorage.setItem('refreshToken', authorized.data.refreshToken)
+          setIsAuthenticated(!!authorized.data.token);
           navigate('/')
+        } else {
+          console.log('not authorized', authorized.result)
         }
       }
     } catch (response: any) {
