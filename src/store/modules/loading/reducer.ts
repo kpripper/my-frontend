@@ -4,8 +4,8 @@ const initialState = {
 
 export default function reducer(
   state = initialState,
-  action: { type: string; payload: boolean }
-) { 
+  action: { type: string; payload: boolean },
+) {
   switch (action.type) {
     case 'LOADING':
       return {

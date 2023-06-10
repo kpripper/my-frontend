@@ -26,7 +26,7 @@ export default function AddBoard() {
     if (newNameValidation(inputRef.current!.value)) {
       store.dispatch(createBoard(inputRef.current!.value))
       setModalIsOpenToFalse()
-    } else {      
+    } else {
       setErrorValidationOpen(true)
     }
   }
@@ -43,10 +43,9 @@ export default function AddBoard() {
   }
 
   const handleSnackbarClose = () => {
-    setErrorValidationOpen(false)    
+    setErrorValidationOpen(false)
   }
 
-  
   const customModalStyles = {
     content: {
       top: '50%',
@@ -87,7 +86,7 @@ export default function AddBoard() {
                 type="text"
                 placeholder="Name of new board"
                 value={boardName}
-                onChange={(e) => {
+                onChange={e => {
                   setBoardName(e.target.value)
                 }}
                 onKeyDown={handleKeyDown}

@@ -17,10 +17,7 @@ export const AddInput = ({
   if (!isAdd) {
     return (
       <>
-        <div
-          className="open-add-list"
-          onClick={() => setIsAdd((prev) => !prev)}
-        >
+        <div className="open-add-list" onClick={() => setIsAdd(prev => !prev)}>
           <span className="icon-plus"></span>
           <span className="add-list-span">
             {source === 'list' ? 'Add new list' : 'Add card'}
@@ -44,9 +41,9 @@ export const AddInput = ({
         className="input-list-title"
         type="text"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={e => setTitle(e.target.value)}
         onKeyDown={onKeyDown}
-        onBlur={(e) => {
+        onBlur={e => {
           if (e.target.value === '') {
             setIsAdd(false)
             setTitle(defaultValue)
@@ -65,9 +62,7 @@ export const AddInput = ({
         >
           {source === 'list' ? 'Add list' : 'Add new card'}
         </button>
-        <button 
-         className="invisible-button adding-close-button-parent"
-        >
+        <button className="invisible-button adding-close-button-parent">
           <span
             className="icon-close icon-close-addlist"
             onClick={() => {

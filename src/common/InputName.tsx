@@ -11,7 +11,7 @@ export const InputName = () => {
 
   const selectError = useSelector(
     (state: RootState) => state.error,
-    shallowEqual
+    shallowEqual,
   )
 
   const [isInputListName, setInputListNameVisibity] = useState(false)
@@ -27,15 +27,15 @@ export const InputName = () => {
     if (ev.key === 'Enter') {
       if (!newNameValidation((ev.target as HTMLInputElement).value)) {
         setErrorText(
-          'List name ' + (ev.target as HTMLInputElement).value + ' is not valid'
+          'List name ' +
+            (ev.target as HTMLInputElement).value +
+            ' is not valid',
         )
         setErrorListValidationOpen(true)
         return
-      }      
-        setInputListNameVisibity(false)
-        store.dispatch(
-          createList((ev.target as HTMLInputElement).value, boardId)
-        )
+      }
+      setInputListNameVisibity(false)
+      store.dispatch(createList((ev.target as HTMLInputElement).value, boardId))
     }
   }
 
@@ -43,11 +43,11 @@ export const InputName = () => {
     if (!newNameValidation(listName)) {
       setErrorListValidationOpen(true)
       return
-    } 
-      setListName(listName)
-      setInputListNameVisibity(false)
-      store.dispatch(createList(listName, boardId))
-      store.dispatch(getBoard(boardId))
+    }
+    setListName(listName)
+    setInputListNameVisibity(false)
+    store.dispatch(createList(listName, boardId))
+    store.dispatch(getBoard(boardId))
   }
 
   const addListOnButton = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -55,14 +55,14 @@ export const InputName = () => {
       setErrorText('List name ' + listName + ' is not valid')
       setErrorListValidationOpen(true)
       return
-    }     
-      setInputListNameVisibity(false)
-      store.dispatch(createList(listName, boardId))
-      store.dispatch(getBoard(boardId))
+    }
+    setInputListNameVisibity(false)
+    store.dispatch(createList(listName, boardId))
+    store.dispatch(getBoard(boardId))
   }
 
   const toggleInputListName = () => {
-    setInputListNameVisibity((prev) => !prev)
+    setInputListNameVisibity(prev => !prev)
   }
 
   return (

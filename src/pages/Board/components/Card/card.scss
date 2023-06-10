@@ -1,48 +1,48 @@
 .save-card-edit {
-    cursor: pointer;
-    max-width: 100px;
-    margin-bottom: 10px;
+  cursor: pointer;
+  max-width: 100px;
+  margin-bottom: 10px;
 }
 
 .delete-card {
-    cursor: pointer;
-    max-width: 100px;
-    margin-bottom: 10px;
+  cursor: pointer;
+  max-width: 100px;
+  margin-bottom: 10px;
 }
 
 .input-card-title {
-    width: 94%;
-    line-height: 14px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #2f94dc;
-    box-sizing: border-box;
-    padding: 8px 12px;
-    border: hidden;
-    outline: none;
-    margin: 0 8px 8px 8px;
+  width: 94%;
+  line-height: 14px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #2f94dc;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: hidden;
+  outline: none;
+  margin: 0 8px 8px 8px;
 }
 
 .edit-buttons {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .card-title {
-    word-break: break-word;
+  word-break: break-word;
 }
 
 .hidden-card {
-    display: none;
+  display: none;
 }
 
 .dragged-card {
-    display: none;
+  display: none;
 }
 
 .over-card {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
 .cursor-move {
-    cursor: move;
+  cursor: move;
 }

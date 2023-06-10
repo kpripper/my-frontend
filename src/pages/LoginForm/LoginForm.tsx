@@ -1,25 +1,15 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './loginform.scss'
-import instance, { instanceNotAuth } from '../../api/request'
-import { SetState } from 'immer/dist/internal'
+import { instanceNotAuth } from '../../api/request'
+import store from '../../store/store'
+import { authentificate } from '../../store/modules/user/actions'
 
-function LoginForm({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
-}) {
+function LoginForm() {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-
-  // useEffect(() => {
-  //   const isAuthenticated = !!localStorage.getItem('token');
-  //   if (isAuthenticated) {
-  //     navigate('/');
-  //   }
-  // }, [navigate]);
 
   const handleUsernameChange = (event: any) => {
     setUsername(event.target.value)
@@ -36,21 +26,12 @@ function LoginForm({
     }
 
     try {
-      console.log('login formData', formData)
-
       const response = await instanceNotAuth.post('/login', formData)
-
-      console.log('login response', response)
-
       if (response.status === 200) {
-        console.log('response.status === 200')
         const { token, refreshToken } = response.data
-
-        console.log('token 200', token)
+        store.dispatch(authentificate(true))
         localStorage.setItem('token', token)
         localStorage.setItem('refreshToken', refreshToken)
-        // window.location.href = '/'
-        setIsAuthenticated(true)
         try {
           navigate('/')
         } catch (error) {
@@ -60,7 +41,6 @@ function LoginForm({
         setError('User with such email or password was not found')
       }
     } catch (error: any) {
-      console.log('Помилка при логіні', error)
       setError(error.response.data.error)
     }
   }

@@ -3,12 +3,12 @@ import { BoardType } from '../../../common/types'
 const initialState: BoardType = {
   id: 0,
   title: '',
-  lists: [],  
+  lists: [],
 }
 
 export default function reducer(
   state = initialState,
-  action: { type: string; payload: BoardType }
+  action: { type: string; payload: BoardType },
 ) {
   switch (action.type) {
     case 'UPDATE_BOARD':

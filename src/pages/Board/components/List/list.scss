@@ -1,268 +1,265 @@
 $base-blue-color: #2f94dc;
 .list {
-    position: relative;
-    display: inline-block;
-    margin: 0 14px;   
-    color: rgb(61, 61, 61);
-    min-height: 32px;
-    width: 272px;
-    box-sizing: border-box;
-    vertical-align: top;
-    border-radius: 3px;
-    border: 1px solid rgb(118, 126, 133);
-    background-color: #efefef;
+  position: relative;
+  display: inline-block;
+  margin: 0 14px;
+  color: rgb(61, 61, 61);
+  min-height: 32px;
+  width: 272px;
+  box-sizing: border-box;
+  vertical-align: top;
+  border-radius: 3px;
+  border: 1px solid rgb(118, 126, 133);
+  background-color: #efefef;
 
-    &:hover {
-        background-color: #dedede;
-    }
+  &:hover {
+    background-color: #dedede;
+  }
 }
 
-
 .list-title {
-    padding: 8px 10px;
+  padding: 8px 10px;
 }
 
 h2 {
-    margin: 0 0 8px;
+  margin: 0 0 8px;
 }
 
 .list-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .input-list-title {
-    height: 32px;
-    margin: 0 0 5px 0;
-    width: 100%;
-    line-height: 20px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #2f94dc;
-    box-sizing: border-box;
-    padding: 6px;
-    border: hidden;
-    outline: none;
+  height: 32px;
+  margin: 0 0 5px 0;
+  width: 100%;
+  line-height: 20px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #2f94dc;
+  box-sizing: border-box;
+  padding: 6px;
+  border: hidden;
+  outline: none;
 }
 
 .input-container {
-    display: flex;
-    padding: 3px;
+  display: flex;
+  padding: 3px;
 }
 
 .list-menu {
-    color: black;
-    font-size: 21px;
-    padding: 0px 7px 0 0;
+  color: black;
+  font-size: 21px;
+  padding: 0px 7px 0 0;
 }
 
 .list-menu .fa-solid {
-    color: black;
-    font-size: 18px;
-    font-stretch: ultra-expanded;
+  color: black;
+  font-size: 18px;
+  font-stretch: ultra-expanded;
 }
 
 .list-card {
-    position: relative;
-    padding: 0 10px;
+  position: relative;
+  padding: 0 10px;
 }
 
 .self-card {
-    position: relative;
-    list-style: none;
-    padding: 2px 0 5px 10px;
-    background-color: rgb(246, 246, 246);
-    border-radius: 13px;
-    box-shadow: 0 1px 0 #091e4240;
-    margin: 8px 0;
-    color: #2e2c2c;
-    white-space: break-spaces;
+  position: relative;
+  list-style: none;
+  padding: 2px 0 5px 10px;
+  background-color: rgb(246, 246, 246);
+  border-radius: 13px;
+  box-shadow: 0 1px 0 #091e4240;
+  margin: 8px 0;
+  color: #2e2c2c;
+  white-space: break-spaces;
 
-    p {
-        margin: 0;
+  p {
+    margin: 0;
+  }
+
+  &:hover {
+    background-color: rgb(254, 254, 254);
+
+    .icon-card-edit {
+      visibility: visible;
     }
 
-    &:hover {
-        background-color: rgb(254, 254, 254);
-
-        .icon-card-edit {
-            visibility: visible;
-        }
-
-        &:focus {
-            .icon-card-edit {
-                visibility: hidden;
-            }
-        }
+    &:focus {
+      .icon-card-edit {
+        visibility: hidden;
+      }
     }
+  }
 }
 
 .add-card {
-    display: flex;
-    //same for text vertical centering
-    height: 40px;
-    line-height: 40px;
-    margin: 8px;
-    list-style-type: none;
-    padding: 0 0 0 10px;
-    color: rgb(59, 59, 59);
-    border-radius: 5px;
+  display: flex;
+  //same for text vertical centering
+  height: 40px;
+  line-height: 40px;
+  margin: 8px;
+  list-style-type: none;
+  padding: 0 0 0 10px;
+  color: rgb(59, 59, 59);
+  border-radius: 5px;
 
-    &:hover {
-        background-color: rgb(200 198 198);
-        color: rgb(61, 61, 61);
-    }
+  &:hover {
+    background-color: rgb(200 198 198);
+    color: rgb(61, 61, 61);
+  }
 }
 
 .list-actions {
-    color: rgb(61, 61, 61);
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 8px 16px -4px rgb(9 30 66 / 91%);
-    padding: 5px;
-    margin: 7px 0 0 0;
-    position: absolute;
-    top: 4px;
-    left: 13px;
-    width: 90%;
-    box-sizing: border-box;
+  color: rgb(61, 61, 61);
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 91%);
+  padding: 5px;
+  margin: 7px 0 0 0;
+  position: absolute;
+  top: 4px;
+  left: 13px;
+  width: 90%;
+  box-sizing: border-box;
 }
 
 .list-list-actions ul {
-    padding: 0;
+  padding: 0;
 }
 
 .list-list-actions button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .list-list-actions li {
-    list-style-type: none;
-    padding: 0 0 3px 10px;
-    margin: 0 -5px;
+  list-style-type: none;
+  padding: 0 0 3px 10px;
+  margin: 0 -5px;
 }
 
 .list-actions-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 3px 3px 0 0;
-    border-bottom: 1px solid #091e4221;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 3px 3px 0 0;
+  border-bottom: 1px solid #091e4221;
 }
 
 .list-actions-title {
-    padding: 0 0 0 9px;
-    font-weight: 400;
-    font-size: 19px;
+  padding: 0 0 0 9px;
+  font-weight: 400;
+  font-size: 19px;
 }
 
 .inp-cardtitle {
-    width: 100%;
-    line-height: 20px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px $base-blue-color;
-    box-sizing: border-box;
-    margin: 0 auto 3px;
-    padding: 8px 12px;
-    border: hidden;
-    outline: none;
+  width: 100%;
+  line-height: 20px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px $base-blue-color;
+  box-sizing: border-box;
+  margin: 0 auto 3px;
+  padding: 8px 12px;
+  border: hidden;
+  outline: none;
 }
 
 .add-cardtitle-controls {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .cardtitle-add-button {
-    height: 32px;
-    padding: 4px 8px;
-    margin: 0 5px 0 0;
-    color: #fff;
-    background-color: $base-blue-color;
-    border: none;
-    border-radius: 3px;
+  height: 32px;
+  padding: 4px 8px;
+  margin: 0 5px 0 0;
+  color: #fff;
+  background-color: $base-blue-color;
+  border: none;
+  border-radius: 3px;
 }
 
 .icon-close-cardtitle {
-    color: #2e2c2c;
-    font-size: 27px;
-    // padding: 3px 0 0 0 !important;
+  color: #2e2c2c;
+  font-size: 27px;
+  // padding: 3px 0 0 0 !important;
 }
 
 .icon-card-edit {
-    width: 20px;
-    height: 15px;
-    color: #5d5454;
-    font-size: 15px;
-    visibility: hidden;
-    color: #333333b6;
-    font-size: 21px;
-    position: absolute;
-    left: 223px;
-    top: 0px;
-    cursor: pointer;
+  width: 20px;
+  height: 15px;
+  color: #5d5454;
+  font-size: 15px;
+  visibility: hidden;
+  color: #333333b6;
+  font-size: 21px;
+  position: absolute;
+  left: 223px;
+  top: 0px;
+  cursor: pointer;
 }
 
 .list-card {
-    &:focus {
-        background-color: #ffffff;
-        width: 90%;
-        border: none;
-        border-radius: 2px;
-        box-shadow: 0 0 0 2px $base-blue-color;
-        ;
-        outline: none;
-        transition: .1s;
-    }
+  &:focus {
+    background-color: #ffffff;
+    width: 90%;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 0 0 2px $base-blue-color;
+    outline: none;
+    transition: 0.1s;
+  }
 }
 
 .delete-card {
-    height: 32px;
-    min-width: 60px;
-    padding: 4px 8px;
-    color: #fff;
-    background-color: #2f94dc;
-    border: none;
-    border-radius: 3px;
+  height: 32px;
+  min-width: 60px;
+  padding: 4px 8px;
+  color: #fff;
+  background-color: #2f94dc;
+  border: none;
+  border-radius: 3px;
 }
 
 .save-card-edit {
-    height: 32px;
-    min-width: 60px;
-    padding: 4px 8px;
-    color: #fff;
-    background-color: #2f94dc;
-    border: none;
-    border-radius: 3px;
+  height: 32px;
+  min-width: 60px;
+  padding: 4px 8px;
+  color: #fff;
+  background-color: #2f94dc;
+  border: none;
+  border-radius: 3px;
 }
 
 .add-cardtitle-form {
-    margin: 7px 8px;
+  margin: 7px 8px;
 }
 
 .icon-close-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    padding: 2px;
-    margin: 3px 3px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  padding: 2px;
+  margin: 3px 3px 0 0;
 }
 
 .link-no-underline {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .link-no-underline:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .link-no-underline:visited {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .list-delete-button {
-    background-color: #2f94dc;
-    max-width: 95%;
+  background-color: #2f94dc;
+  max-width: 95%;
 }

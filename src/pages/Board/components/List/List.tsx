@@ -29,7 +29,7 @@ export const List = (props: ListType & SetCards) => {
 
   const selectError = useSelector(
     (state: RootState) => state.error,
-    shallowEqual
+    shallowEqual,
   )
 
   //For display changes after deleting the list
@@ -91,7 +91,7 @@ export const List = (props: ListType & SetCards) => {
         setListName(listName)
         setEditListNameVisibity(false)
         store.dispatch(
-          editListTitle(listName, boardId, props.position, props.id)
+          editListTitle(listName, boardId, props.position, props.id),
         )
       } else {
         setEditListNameVisibity(false)
@@ -126,13 +126,15 @@ export const List = (props: ListType & SetCards) => {
             boardId,
             props.id,
             props.cards.length,
-            boardId
-          )
+            boardId,
+          ),
         )
         showAddCardActions()
       } else {
         setErrorText(
-          'Card name ' + (ev.target as HTMLInputElement).value + ' is not valid'
+          'Card name ' +
+            (ev.target as HTMLInputElement).value +
+            ' is not valid',
         )
         setErrorCardValidationOpen(true)
       }
@@ -141,7 +143,7 @@ export const List = (props: ListType & SetCards) => {
 
   const addCardOnButton = () => {
     const elemInpCardTitle = document.querySelector(
-      '.inp-cardtitle'
+      '.inp-cardtitle',
     ) as HTMLInputElement
 
     if (newNameValidation(elemInpCardTitle.value)) {
@@ -151,8 +153,8 @@ export const List = (props: ListType & SetCards) => {
           boardId,
           props.id,
           props.cards.length,
-          boardId
-        )
+          boardId,
+        ),
       )
       showAddCardActions()
     } else {
@@ -177,7 +179,7 @@ export const List = (props: ListType & SetCards) => {
       return
     }
     store.dispatch(
-      addCard(cardName, boardId, props.id, props.cards.length + 1, boardId)
+      addCard(cardName, boardId, props.id, props.cards.length + 1, boardId),
     )
   }
 
@@ -242,7 +244,7 @@ export const List = (props: ListType & SetCards) => {
         setShowSlot(true)
         console.log(
           'handleDragOver showslot',
-          (e.target as HTMLDivElement).classList.value
+          (e.target as HTMLDivElement).classList.value,
         )
       }
     }
@@ -278,7 +280,7 @@ export const List = (props: ListType & SetCards) => {
 
   const setSlotPosition = (
     e: React.DragEvent<HTMLDivElement>,
-    index: number
+    index: number,
   ) => {
     //з e.preventDefault() не показується перетягувана картка
 
@@ -315,7 +317,7 @@ export const List = (props: ListType & SetCards) => {
 
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
-    cardPosition: number
+    cardPosition: number,
   ) => {
     if (cardPosition === props.cards.length) {
       setSlotIndex(props.cards.length - 1)
@@ -435,7 +437,7 @@ export const List = (props: ListType & SetCards) => {
       {showSingleSlot && (
         <div
           className="single-slot"
-          onDrop={(e) => {
+          onDrop={e => {
             let idDropped = e.dataTransfer.getData('card id')
             setShowSingleSlot(false)
             store.dispatch(
@@ -447,8 +449,8 @@ export const List = (props: ListType & SetCards) => {
                 props.id,
                 props.cards,
                 1,
-                idDropped
-              )
+                idDropped,
+              ),
             )
           }}
         ></div>
@@ -475,7 +477,7 @@ export const List = (props: ListType & SetCards) => {
             <ul>
               <li>
                 <button
-                  onClick={(e) => {
+                  onClick={e => {
                     store.dispatch(deleteList(boardId, props.id))
                     store.dispatch(getBoard(boardId))
                     setListActionsShown(!listActionsShown)

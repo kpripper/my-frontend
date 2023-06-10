@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { useEffect } from 'react'
 import BoardHome from './components/BoardHome/BoardHome'
 import 'simplebar-react/dist/simplebar.min.css'
 import './home.scss'
@@ -10,25 +10,19 @@ import store, { RootState } from '../../store/store'
 import SimpleSnackbar from '../SimpleSnackBar/SimpleSnackbar'
 import { ProgressBar } from '../ProgressBar/ProgressBar'
 import { Link, useNavigate } from 'react-router-dom'
+import { signOut } from '../../store/modules/user/actions'
 
-
-const Home = ({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
-}) => {
-
-  const selectBoards = useSelector((state: RootState) => state.boards) 
+const Home = () => {
+  const selectBoards = useSelector((state: RootState) => state.boards)
   const selectError = useSelector((state: RootState) => state.error)
   const selectLoadingState = useSelector((state: RootState) => state.loading)
-
 
   async function fetchData() {
     store.dispatch(getBoards())
   }
 
   useEffect(() => {
-    fetchData()   
+    fetchData()
   }, [])
 
   const navigate = useNavigate()
@@ -41,12 +35,8 @@ const Home = ({
           className="sign-out"
           to="/login"
           onClick={() => {
-            console.log('Sign out')
-            localStorage.removeItem('token')
-            localStorage.removeItem('refreshToken')
-            setIsAuthenticated(false)
+            store.dispatch(signOut())
             navigate('/login')
-            console.log(localStorage.getItem('token'))
           }}
         >
           Sign out
@@ -59,7 +49,7 @@ const Home = ({
         </div>
       </div>
       <div className="all-boards">
-        {selectBoards.map(({ id, title } : {id:number, title:string} ) => (
+        {selectBoards.map(({ id, title }: { id: number; title: string }) => (
           <BoardHome key={id} id={id} title={title} />
         ))}
         <AddBoard />

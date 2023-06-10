@@ -1,4 +1,4 @@
-import { CardType } from "../../../common/types";
+import { CardType } from '../../../common/types'
 
 const initialState = {
   cards: [] as CardType[],
@@ -6,12 +6,12 @@ const initialState = {
 
 const reducer = (
   state = initialState,
-  action: { type: string; payload: { cardId: string; newPosition: number } }
+  action: { type: string; payload: { cardId: string; newPosition: number } },
 ) => {
   switch (action.type) {
     case 'UPDATE_CARD_POSITION':
       const { cardId, newPosition } = action.payload
-      const newCards = state.cards.map((card) => {
+      const newCards = state.cards.map(card => {
         if (card.id === cardId) {
           return { ...card, position: newPosition }
         } else {

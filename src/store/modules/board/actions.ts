@@ -52,10 +52,9 @@ export const editListTitle =
   }
 
 export const createBoard = (boardTitle: string) => async () => {
-  console.log(instance)
-
   try {
-    await instance.post(config.boards, { title: boardTitle })
+    let createBoard = await instance.post(config.boards, { title: boardTitle })
+    console.log('createBoard', createBoard)
     store.dispatch(getBoards())
   } catch (e) {
     handleAxiosError(e, 'createBoard')
@@ -75,7 +74,7 @@ export const createList =
   (listTitle: string, boardId: string) => async (dispatch: Dispatch) => {
     try {
       const currentBoard: { lists: [] } = await instance.get(
-        '/board/' + boardId
+        '/board/' + boardId,
       )
       await instance.post(config.boards + '/' + boardId + '/list', {
         title: listTitle,
@@ -94,7 +93,7 @@ export const addCard =
     listID: number,
     cardsLength: number,
     boardToGetBoard: string,
-    cardDescription?: string
+    cardDescription?: string,
   ) =>
   async () => {
     try {
@@ -105,7 +104,7 @@ export const addCard =
           list_id: listID,
           position: cardsLength,
           description: cardDescription,
-        }
+        },
       )
 
       //якщо додаємо картку на іншу дошку, то беремо поточну, щоб не відобразилася таргет-дошка
@@ -126,7 +125,7 @@ export const normalizeCardsPositions =
 
     const board: BoardType = await instance.get('/board/' + boardId)
 
-    board.lists.forEach((list) => {
+    board.lists.forEach(list => {
       if (list.id === listId) {
         normalizedCards = list.cards.map((card, index) => {
           delete card.users
@@ -145,7 +144,7 @@ export const normalizeCardsPositions =
     try {
       let resPut = await instance.put(
         config.boards + '/' + boardId + '/card',
-        normalizedCards
+        normalizedCards,
       )
       store.dispatch(getBoard(boardId))
     } catch (e) {
@@ -155,10 +154,9 @@ export const normalizeCardsPositions =
 
 export const delCard =
   (boardId: string, cardID: string) => async (dispatch: Dispatch) => {
-
     try {
       let res = await instance.delete(
-        config.boards + '/' + boardId + '/card/' + cardID
+        config.boards + '/' + boardId + '/card/' + cardID,
       )
 
       store.dispatch(getBoard(boardId))
@@ -173,7 +171,7 @@ export const edCardDescription =
     listID: number,
     cardID: string,
     cardTitle: string,
-    description?: string
+    description?: string,
   ) =>
   async () => {
     let requestBody: CardRequest = {
@@ -190,7 +188,7 @@ export const edCardDescription =
     try {
       let res = await instance.put(
         config.boards + '/' + boardId + '/card/' + cardID,
-        requestBody
+        requestBody,
       )
       store.dispatch(getBoard(boardId))
     } catch (e) {
@@ -212,7 +210,7 @@ export const editCards =
     targetListId: number,
     targetListCards: CardType[],
     addCardInPosition: number,
-    placedCardId: string
+    placedCardId: string,
   ) =>
   async () => {
     let newCard: changeCardGroup = {
@@ -230,7 +228,7 @@ export const editCards =
     cardsToDelete.splice(+draggedOffPosition - 1, 1)
 
     //копія щоб не було мутації стейту
-    let targetListCardsCopy = targetListCards.map((card) => {
+    let targetListCardsCopy = targetListCards.map(card => {
       const { title, users, created_at, ...rest } = card
       return rest
     })
@@ -257,24 +255,22 @@ export const editCards =
             position: +card.position,
             list_id: targetListId,
           }
-        }      
+        }
       })
 
       cardsToPutAfterInserting[addCardInPosition - 1] = newCard
     }
 
-
     //нормалізація позиції після переміщення в межах списку, бо може бути 1,3,4
     const insertedCardsToPut = cardsToPutAfterInserting
-      .filter((value) => value !== null)
+      .filter(value => value !== null)
       .map((item: any, index: number) => ({ ...item, position: index + 1 }))
 
     try {
       let resPut = await instance.put(
         config.boards + '/' + targetBoardId + '/card',
-        insertedCardsToPut
+        insertedCardsToPut,
       )
-
 
       //видаляємо драгнуту картку з початкового списку
       if (+initialListId !== +targetListId) {
@@ -299,7 +295,7 @@ export const editCards =
 
         let resDel = await instance.put(
           config.boards + '/' + targetBoardId + '/card',
-          updatedCardsMinus
+          updatedCardsMinus,
         )
       }
 
@@ -309,13 +305,12 @@ export const editCards =
     }
   }
 
-export const deleteList =
-  (boardId: string, listId: number) => async () => {
-    try {
-      await instance.delete(config.boards + '/' + boardId + '/list/' + listId)
-      store.dispatch(getBoard(boardId))
-      store.dispatch(getBoards())
-    } catch (e) {
-      handleAxiosError(e, 'deleteList')
-    }
+export const deleteList = (boardId: string, listId: number) => async () => {
+  try {
+    await instance.delete(config.boards + '/' + boardId + '/list/' + listId)
+    store.dispatch(getBoard(boardId))
+    store.dispatch(getBoards())
+  } catch (e) {
+    handleAxiosError(e, 'deleteList')
   }
+}

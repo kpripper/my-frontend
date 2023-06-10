@@ -39,7 +39,7 @@ export const Slot = ({
       key={card!.id}
       className="slot"
       onDragOver={enableDropping}
-      onDrop={(e) => {
+      onDrop={e => {
         e.preventDefault()
         setShowFirstSlot(false)
         setShowSlot(false)
@@ -61,8 +61,8 @@ export const Slot = ({
                 listId,
                 cardsInInitialList,
                 slotIndex + 2,
-                idDropped
-              )
+                idDropped,
+              ),
             )
           }
         }
@@ -80,8 +80,8 @@ export const Slot = ({
                 listId,
                 cardsInInitialList,
                 1,
-                idDropped
-              )
+                idDropped,
+              ),
             )
           }
         }

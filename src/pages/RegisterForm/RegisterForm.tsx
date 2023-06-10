@@ -1,15 +1,12 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './registerform.scss'
-import instance, { instanceNotAuth } from '../../api/request'
-import zxcvbn from 'zxcvbn'
+import { instanceNotAuth } from '../../api/request'
 import PasswordStrength from './PasswordStrength'
+import store from '../../store/store'
+import { authentificate } from '../../store/modules/user/actions'
 
-function RegisterForm({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
-}) {
+function RegisterForm() {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -40,11 +37,6 @@ function RegisterForm({
     isPasswordsEqual()
   }, [password, passwordRepeat])
 
-  // const getPasswordStrength = (password: string) => {
-  //   const result = zxcvbn(password)
-  //   return result.score // Значення від 0 до 4, де 0 - найслабший пароль, 4 - найсильніший пароль
-  // }
-
   const handleRegister = async () => {
     const formData = {
       email: username,
@@ -52,22 +44,15 @@ function RegisterForm({
     }
 
     try {
-      console.log('formData', formData)
-      const response: any = await instanceNotAuth.post(
-        '/user',
-        formData
-      )
-      console.log('response', response)
+      const response: any = await instanceNotAuth.post('/user', formData)
 
       if (response.data.result === 'Created') {
         const authorized: any = await instanceNotAuth.post('/login', formData)
 
-        console.log('authorized', authorized)
-
         if (authorized.data.result === 'Authorized') {
+          store.dispatch(authentificate(true))
           localStorage.setItem('token', authorized.data.token)
           localStorage.setItem('refreshToken', authorized.data.refreshToken)
-          setIsAuthenticated(!!authorized.data.token);
           navigate('/')
         } else {
           console.log('not authorized', authorized.result)
@@ -94,7 +79,7 @@ function RegisterForm({
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
-            // type="password"
+            type="password"
             id="password"
             value={password}
             onChange={handlePasswordChange}
@@ -104,7 +89,7 @@ function RegisterForm({
         <div className="form-group">
           <label htmlFor="password">Pepeat password</label>
           <input
-            // type="password"
+            type="password"
             id="password"
             value={passwordRepeat}
             onChange={handlePasswordRepeat}
