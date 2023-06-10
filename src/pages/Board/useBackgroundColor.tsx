@@ -3,14 +3,14 @@ import { CSSProperties, useEffect, useState } from 'react'
 const getDefaultStyles = (
   direction: number,
   randomAlpha: number,
-  hue: number
+  hue: number,
 ) => ({
-    background: `linear-gradient(${direction}deg, hsla(192, 98%, 33%,${randomAlpha}), hsla(${hue}, 50%, 50%,${randomAlpha}))`
+  background: `linear-gradient(${direction}deg, hsla(192, 98%, 33%,${randomAlpha}), hsla(${hue}, 50%, 50%,${randomAlpha}))`,
 })
- 
 
 export const useBackgroundColor = (): CSSProperties => {
-  const [backGroundStyles, setBackgroundStyles] = useState<CSSProperties | null>(null)
+  const [backGroundStyles, setBackgroundStyles] =
+    useState<CSSProperties | null>(null)
 
   useEffect(() => {
     const direction = Math.round(Math.random() * 360)
@@ -21,4 +21,3 @@ export const useBackgroundColor = (): CSSProperties => {
 
   return backGroundStyles as CSSProperties
 }
-

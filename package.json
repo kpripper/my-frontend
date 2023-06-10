@@ -23,6 +23,7 @@
     "html-react-parser": "^3.0.15",
     "html-to-react": "^1.5.1",
     "immer": "^9.0.19",
+    "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dom": "^18.2.0",
@@ -39,7 +40,8 @@
     "sass": "^1.55.0",
     "simplebar-react": "^2.4.3",
     "typescript": "^4.8.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zxcvbn": "^4.4.2"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -47,7 +49,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "eslintConfig": {
     "extends": [
@@ -69,7 +73,8 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.13.1",
-    "@types/react-router-dom": "^5.3.3"
+    "@types/react-router-dom": "^5.3.3",
+    "@types/zxcvbn": "^4.4.1"
   },
   "comment_homepage": "https://kpripper.github.io/my-trello-frontend"
 }

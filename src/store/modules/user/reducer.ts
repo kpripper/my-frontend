@@ -1,12 +1,26 @@
-const initialState = {}
+const initialState = {
+  isAuthentificated: false,
+}
 
 export default function reducer(
   state = initialState,
-  action: { type: string; payload?: any }
+  action: { type: string },
 ) {
   switch (action.type) {
-    default: {     
-      return { ...state }
+    case 'AUTHENTIFICATE':
+      return {
+        ...state,
+        isAuthentificated: true,
+      }
+
+    case 'SIGNOUT':
+      return {
+        ...state,
+        isAuthentificated: false,
+      }
+
+    default: {
+      return state
     }
   }
 }

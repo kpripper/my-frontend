@@ -3,170 +3,170 @@
 $base-blue-color: #2f94dc;
 
 .boards {
-    // height: 100%;
-    //  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
-    //padding: 0 0 50px 0;
-    // background-size: cover;
+  // height: 100%;
+  //  background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/409912d2e941ab425f837d47d7d29b9e/photo-1666718350701-ddd15ae61a7b.jpg");
+  //padding: 0 0 50px 0;
+  // background-size: cover;
 }
 
 .board {
-    padding-left: 16px;
-    background-color: #0000003d;
-    background: linear-gradient(to bottom,
-            rgba(81, 81, 81, 0.832),
-            rgba(109, 109, 109, 0.257),
-            rgba(212, 212, 212, 0.041))
+  padding-left: 16px;
+  background-color: #0000003d;
+  background: linear-gradient(
+    to bottom,
+    rgba(81, 81, 81, 0.832),
+    rgba(109, 109, 109, 0.257),
+    rgba(212, 212, 212, 0.041)
+  );
 }
 
 .board-header {
-    height: 78px;
-    padding: 0 0 0 30px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  height: 78px;
+  padding: 0 0 0 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .board-content {
-    white-space: nowrap;
-    padding: 0 10px;
-    overflow-x: auto;
-    height: calc(100vh - 122px);
-    max-height: calc(100vh - 122px);
+  white-space: nowrap;
+  padding: 0 10px;
+  overflow-x: auto;
+  height: calc(100vh - 122px);
+  max-height: calc(100vh - 122px);
 }
 
 h1 {
-    padding: 0 0 0 30px;
-    color: white;
+  padding: 0 0 0 30px;
+  color: white;
 }
 
-
-
 .active-list {
-    background-color: #e8e8e83d;
+  background-color: #e8e8e83d;
 }
 
 .fa-plus {
-    margin: 0 5px 0 10px;
+  margin: 0 5px 0 10px;
 }
 
 .board-h1 {
-    color: #000;
-    font-size: 24px;
-    font-weight: 600;
-    cursor: pointer;
+  color: #000;
+  font-size: 24px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .input-board-title {
-    margin: 3px;
-    font-size: 17px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #2f94dc;
-    box-sizing: border-box;
-    padding: 8px;
-    border: hidden;
-    outline: none;
+  margin: 3px;
+  font-size: 17px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #2f94dc;
+  box-sizing: border-box;
+  padding: 8px;
+  border: hidden;
+  outline: none;
 }
 
 .list-title {
-    color: #000;
-    font-size: 20px;
-    font-weight: 400;
+  color: #000;
+  font-size: 20px;
+  font-weight: 400;
 }
 
 .inp-list-title {
-    // display: block;
-    width: 100%;
-    line-height: 20px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px $base-blue-color;
-    box-sizing: border-box;
-    margin: 0 auto 3px;
-    padding: 8px 12px;
-    border: hidden;
-    outline: none;
+  // display: block;
+  width: 100%;
+  line-height: 20px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px $base-blue-color;
+  box-sizing: border-box;
+  margin: 0 auto 3px;
+  padding: 8px 12px;
+  border: hidden;
+  outline: none;
 }
 
 .fa-xmark {
-    color: #5b6c89;
-    font-size: 25px;
-    height: 32px;
-    line-height: 32px !important;
-    width: 32px;
+  color: #5b6c89;
+  font-size: 25px;
+  height: 32px;
+  line-height: 32px !important;
+  width: 32px;
 }
 
 .adding-list {
-    padding: 5px;
+  padding: 5px;
 }
 
 .add-list-form {
-    display: none;
-    flex-direction: column;
-    //align-items: flex-start;    
+  display: none;
+  flex-direction: column;
+  //align-items: flex-start;
 }
 
 .list-add-button {
-    max-width: 85%;
-    height: 32px;
-    padding: 4px 8px;
-    margin: 0 6px 0 0;
-    color: #fff;
-    background-color: $base-blue-color;
-    border: none;
-    border-radius: 3px;
+  max-width: 85%;
+  height: 32px;
+  padding: 4px 8px;
+  margin: 0 6px 0 0;
+  color: #fff;
+  background-color: $base-blue-color;
+  border: none;
+  border-radius: 3px;
 
-    &:hover {
-        background-color: rgba($base-blue-color, 0.89);
-        cursor: pointer;
-    }
+  &:hover {
+    background-color: rgba($base-blue-color, 0.89);
+    cursor: pointer;
+  }
 }
 
 .open-add-list {
-    display: flex;
-    align-items: center;
-    // width: 100%;
-    cursor: pointer;
-    border: none;
-    border-radius: 3px;
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  // width: 100%;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  padding: 10px;
 
-    &:hover {
-        background-color: #8f8f8f3d;
-    }
+  &:hover {
+    background-color: #8f8f8f3d;
+  }
 }
 
-.list-header-container+.open-add-list {
-    margin-top: 8px;
+.list-header-container + .open-add-list {
+  margin-top: 8px;
 }
 
 .list-header-container {
-    padding: 10px;
-    border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
+  padding: 10px;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.1294117647);
 }
 
 .icon-close-addlist {
-    color: #2e2c2c;
-    font-size: 24px;
-    padding: 0 4px;
+  color: #2e2c2c;
+  font-size: 24px;
+  padding: 0 4px;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.569);
-        cursor: pointer;
-    }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.569);
+    cursor: pointer;
+  }
 }
 
 .add-list-controls {
-    display: flex;
+  display: flex;
 }
 
 .invisible-button {
-    border: 0;
-    padding: 0;
-    background: transparent;
-    cursor: pointer;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .adding-close-button-parent {
-    margin-top: 0;
-    display: flex;
-    width: 24px;
+  margin-top: 0;
+  display: flex;
+  width: 24px;
 }

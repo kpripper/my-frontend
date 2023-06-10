@@ -22,7 +22,7 @@ export const CardModal = () => {
   const { id: board_id, cardId } = useParams() as { id: string; cardId: string }
   const selectBoard = useSelector(
     (state: RootState) => state.board,
-    shallowEqual
+    shallowEqual,
   )
 
   useEffect(() => {
@@ -72,18 +72,18 @@ export const CardModal = () => {
   }
 
   const handleKeyDownTextarea = (
-    ev: React.KeyboardEvent<HTMLTextAreaElement>
+    ev: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
     if (ev.key === 'Enter') {
       toggleState(setCardDescEditing)
       store.dispatch(
-        edCardDescription(board_id, list_id, cardId!, cardTitle, textAreaValue)
+        edCardDescription(board_id, list_id, cardId!, cardTitle, textAreaValue),
       )
     }
   }
 
   const handleKeyDownCardTitle = (
-    ev: React.KeyboardEvent<HTMLInputElement>
+    ev: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (ev.key === 'Enter') {
       if (newNameValidation(cardTitle)) {
@@ -122,7 +122,7 @@ export const CardModal = () => {
 
   const saveCardDescription = (textAreaValue: string) => {
     store.dispatch(
-      edCardDescription(board_id, list_id, cardId!, cardTitle, textAreaValue)
+      edCardDescription(board_id, list_id, cardId!, cardTitle, textAreaValue),
     )
   }
 
@@ -145,19 +145,17 @@ export const CardModal = () => {
               toggleState(setInputCardTitleVisibity)
             }}
           >
-            {cardTitle} 
+            {cardTitle}
           </h1>
         )}
         <button
           className="close-button"
-          onClick={() => { 
+          onClick={() => {
             navigate('/board/' + location.pathname.split('/')[2])
           }}
         ></button>
         <div>
-          <h2>
-            In list: {listTitle}    
-          </h2>
+          <h2>In list: {listTitle}</h2>
           <div className="main-content">
             <div className="left-content">
               <h3>Users</h3>
@@ -211,7 +209,7 @@ export const CardModal = () => {
                         theme="snow"
                         value={textAreaValue}
                         placeholder={'Content goes here...'}
-                        onChange={(value) => {
+                        onChange={value => {
                           setTextAreaValue(value)
                         }}
                         onKeyDown={handleKeyDownTextarea}

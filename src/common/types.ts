@@ -8,7 +8,7 @@ export type BoardType = {
 }
 
 export type BoardResponse = {
-  title: string 
+  title: string
   lists: ListType[]
 }
 
@@ -27,8 +27,8 @@ export type BoardState = {
 export type BoardArray = BoardType[]
 
 export type CardRequest = {
-  title: string,
-  list_id: number,
+  title: string
+  list_id: number
   description?: string
 }
 
@@ -39,7 +39,7 @@ export type CardType = {
   boardid: string
   listId: number
   index: number
-  description?:string;
+  description?: string
   users?: []
   created_at?: number
   setSlotPosition?: (e: React.DragEvent<HTMLDivElement>, index: number) => void
@@ -51,7 +51,7 @@ export type changeCardGroup = {
   id: string
   position: number
   list_id: number
-} 
+}
 
 export interface IGroupCard {
   id: string
@@ -72,8 +72,8 @@ export type propsHomeType = {
 }
 
 export type SlotProps = {
-  card: CardType 
-  nextCard: CardType 
+  card: CardType
+  nextCard: CardType
   setShowSlot: (arg0: boolean) => void
   setShowFirstSlot: (arg0: boolean) => void
   setSlotIndex: (arg0: number) => void

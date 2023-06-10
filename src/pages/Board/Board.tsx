@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useParams, useLocation, Outlet } from 'react-router-dom'
+import React, { SetStateAction, useEffect, useState } from 'react'
+import {
+  Link,
+  useParams,
+  useLocation,
+  Outlet,
+  useNavigate,
+} from 'react-router-dom'
 import { List } from './components/List/List'
 import 'simplebar-react/dist/simplebar.min.css'
 import './board.scss'
@@ -18,15 +24,16 @@ import { Alert, Snackbar } from '@mui/material'
 import { BoardType, ListType } from '../../common/types'
 import { clearError } from '../../store/modules/errorHandlers/actions'
 import { AddInput } from './AddInput'
+import { signOut } from '../../store/modules/user/actions'
 
 export const Board = () => {
   let boardId = useParams().id as string
 
   const location = useLocation()
-
+  const navigate = useNavigate()
   const selectError = useSelector(
     (state: RootState) => state.error,
-    shallowEqual
+    shallowEqual,
   )
 
   const [boardName, setBoardName] = useState('')
@@ -62,7 +69,7 @@ export const Board = () => {
 
   const listsSelector: ListType[] = useSelector(
     (state: RootState) => state.board.lists,
-    shallowEqual
+    shallowEqual,
   )
 
   const selectLoadingState = useSelector((state: RootState) => state.loading)
@@ -123,6 +130,16 @@ export const Board = () => {
       <div className="header-container">
         <Link className="" to="/">
           Main
+        </Link>
+        <Link
+          className="sign-out"
+          to="/"
+          onClick={() => {
+            store.dispatch(signOut())
+            navigate('/login')
+          }}
+        >
+          Sign out
         </Link>
       </div>
 

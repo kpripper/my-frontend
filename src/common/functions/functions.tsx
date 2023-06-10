@@ -5,6 +5,8 @@ export const newNameValidation = (text: string) => {
   return text !== '' ? pattern.test(text) : false
 }
 
-export const toggleState = (setState: Dispatch<SetStateAction<boolean>>): void => {
-  setState(prev => !prev);
+export const toggleState = (
+  setState: Dispatch<SetStateAction<boolean>>,
+): void => {
+  setState(prev => !prev)
 }

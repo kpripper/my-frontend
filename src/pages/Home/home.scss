@@ -1,94 +1,97 @@
 $base-blue-color: #2f94dc;
 
 .boards-header {
-    display: flex;
-    padding: 15px 0 0 16px;
+  display: flex;
+  padding: 15px 0 0 16px;
 }
 
 .boards-header-item {
-    background-color: #091e420a;
-    border-radius: 5px;
-    display: flex;
-    padding: 10px 12px 10px 12px;
-    cursor: pointer;
+  background-color: #091e420a;
+  border-radius: 5px;
+  display: flex;
+  padding: 10px 12px 10px 12px;
+  cursor: pointer;
 }
 
 .icon-boards {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 .your-boards {
-    padding: 0 0 3px 10px;
-    font-weight: 600;
+  padding: 0 0 3px 10px;
+  font-weight: 600;
 }
 
 .fa-table {
-    padding: 7px 10px 0 6px;
+  padding: 7px 10px 0 6px;
 }
 
 .all-boards {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .add-board {
-    height: 100px;
-    width: 170px;
-    background-color: #00000018;
-    border-radius: 5px;
-    margin: 1rem 0 1rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-    align-items: center;
+  height: 100px;
+  width: 170px;
+  background-color: #00000018;
+  border-radius: 5px;
+  margin: 1rem 0 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
 }
 
 .add-board-new-board {
-    font-weight: 600;
-
+  font-weight: 600;
 }
 
 .icon-plus {
-    font-size: 20px;
-    padding: 0 5px 0 0;
+  font-size: 20px;
+  padding: 0 5px 0 0;
 }
 
 #addBoardInput {
-    height: 28px;
-    // margin: 5px 4px;
-    width: 100%;
-    line-height: 20px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 2px #2f94dc;
-    box-sizing: border-box;
-    padding: 6px;
-    border: hidden;
-    outline: none;
+  height: 28px;
+  // margin: 5px 4px;
+  width: 100%;
+  line-height: 20px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #2f94dc;
+  box-sizing: border-box;
+  padding: 6px;
+  border: hidden;
+  outline: none;
 }
 
 .create-new-board {
-    height: 28px;
-    padding: 4px;
-    color: #fff;
-    background-color: $base-blue-color;
-    border: none;
-    border-radius: 3px;
-    max-width: 100%;
+  height: 28px;
+  padding: 4px;
+  color: #fff;
+  background-color: $base-blue-color;
+  border: none;
+  border-radius: 3px;
+  max-width: 100%;
 }
 
 .icon-close {
-    // height: 28px;
-    // margin: 5px 4px;
-    // width: 100%;
-    //  line-height: 20px;
-    border-radius: 3px;
-    color: #303030;
-    box-shadow: inset 0 0 0 1px #737373;
-    box-sizing: border-box;
-    //  padding: 6px;
-    border: hidden;
-    outline: none;
+  // height: 28px;
+  // margin: 5px 4px;
+  // width: 100%;
+  //  line-height: 20px;
+  border-radius: 3px;
+  color: #303030;
+  box-shadow: inset 0 0 0 1px #737373;
+  box-sizing: border-box;
+  //  padding: 6px;
+  border: hidden;
+  outline: none;
+}
+
+.sign-out {
+  margin: 0 10px 0 0;
 }

@@ -5,14 +5,12 @@ import store from '../../store/store'
 import { clearError } from '../../store/modules/errorHandlers/actions'
 
 export default function SimpleSnackbar({ text }: { text: string }) {
-
   const [open, setOpen] = useState(true)
 
   const handleClose = () => {
-    setOpen(false)    
+    setOpen(false)
     store.dispatch(clearError())
   }
-
 
   return (
     <div>
@@ -21,11 +19,11 @@ export default function SimpleSnackbar({ text }: { text: string }) {
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'center'
+          horizontal: 'center',
         }}
       >
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          {"Simple error "+text}
+          {'Simple error ' + text}
         </Alert>
       </Snackbar>
     </div>

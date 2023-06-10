@@ -34,7 +34,7 @@
       "textMateRules": [
         {
           "scope": "string",
-          "settings":{ "foreground": "#b9e18f", "fontStyle": "" }
+          "settings": { "foreground": "#b9e18f", "fontStyle": "" }
         },
         {
           "scope": "punctuation.definition.tag",

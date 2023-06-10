@@ -47,7 +47,7 @@ export const Card = (props: CardType) => {
         setInputCardNameVisibity(false)
         setIsSaveDelete(false)
         store.dispatch(
-          edCardDescription(boardid!, listId, props.id!, cardName!)
+          edCardDescription(boardid!, listId, props.id!, cardName!),
         )
       } else {
         setErrorValidationOpen(true)
@@ -91,7 +91,7 @@ export const Card = (props: CardType) => {
 
   const handleDragOverCard = (
     e: React.DragEvent<HTMLDivElement>,
-    index: number
+    index: number,
   ) => {
     e.preventDefault()
     setTimeout(() => {
@@ -105,7 +105,7 @@ export const Card = (props: CardType) => {
 
   return (
     <div
-      onDragOver={(e) => {
+      onDragOver={e => {
         e.preventDefault()
       }}
     >
@@ -126,17 +126,17 @@ export const Card = (props: CardType) => {
             id={id}
             data-index={props.position}
             className={`list-card card ${onHold ? 'hidden-card' : ''}`}
-            onDragStart={(e) => {
+            onDragStart={e => {
               props.handleDragStart!(e, +props.position)
               setTimeout(() => {
                 setOnHold(true)
               }, 0)
             }}
-            onDragEnd={(e) => {
+            onDragEnd={e => {
               setOnHold(false)
               props.handleDragEnd!(e)
             }}
-            onDragOver={(e) => {
+            onDragOver={e => {
               handleDragOverCard(e, props.index)
             }}
           >
@@ -144,7 +144,7 @@ export const Card = (props: CardType) => {
               {props.title}
               <p
                 className="icon-edit icon-card-edit"
-                onClick={(e) => {
+                onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
                   toggleInputCardName()
