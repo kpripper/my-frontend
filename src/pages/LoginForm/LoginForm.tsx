@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './loginform.scss'
-import { instanceNotAuth } from '../../api/request'
+import instance, { instanceNotAuth } from '../../api/request'
 import store from '../../store/store'
 import { authentificate } from '../../store/modules/user/actions'
 
@@ -29,6 +29,7 @@ function LoginForm() {
       const response = await instanceNotAuth.post('/login', formData)
       if (response.status === 200) {
         const { token, refreshToken } = response.data
+ 
         store.dispatch(authentificate(true))
         localStorage.setItem('token', token)
         localStorage.setItem('refreshToken', refreshToken)

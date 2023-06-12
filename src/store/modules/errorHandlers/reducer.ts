@@ -8,12 +8,21 @@ export default function reducer(
   action: { type: string; payload: string },
 ) {
   switch (action.type) {
-    case 'AXIOS_ERROR':
+    case 'AXIOS_ERROR': {
+      //на випадок отримання в пейлоаді значення, яке неможливо серіалізувати
+      let serializedPayload
+      try {
+        serializedPayload = JSON.stringify(action.payload)
+      } catch (error) {    
+        serializedPayload = String(action.payload)
+      }
+
       return {
         ...state,
         isError: true,
-        errorText: action.payload,
+        errorText: serializedPayload,
       }
+    }
 
     case 'CLEAR_ERROR':
       return {
