@@ -35,7 +35,7 @@ const Home = () => {
           className="sign-out"
           to="/login"
           onClick={() => {
-            store.dispatch(signOut())
+            store.dispatch(signOut())            
             navigate('/login')
           }}
         >
@@ -63,5 +63,4 @@ const Home = () => {
     </div>
   )
 }
-
 export default Home

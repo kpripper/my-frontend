@@ -8,6 +8,7 @@ export default function reducer(
   switch (action.type) {
     case 'UPDATE_BOARDS':
       console.log('UPDATE_BOARDS', action.payload)
+      console.log('UPDATE_BOARDS tok',  localStorage.getItem('token'))
       return action.payload
 
     default: {

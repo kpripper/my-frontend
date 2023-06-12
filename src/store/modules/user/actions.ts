@@ -15,7 +15,10 @@ export const authentificate =
 
 export const signOut = () => async (dispatch: Dispatch) => {
   try {
+    console.log('SIGNOUT')
     localStorage.setItem('isAuthentificated', 'false')
+    localStorage.removeItem('token')
+    console.log('SIGNOUT', localStorage.getItem('token'))
     dispatch({ type: 'SIGNOUT' })
   } catch (e) {
     handleAxiosError(e, 'getBoard')

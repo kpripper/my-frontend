@@ -22,6 +22,8 @@ export const instanceNotAuth = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
+    const token = localStorage.getItem('token')
+    config.headers!.Authorization = `Bearer ${token}`
     store.dispatch(toggleLoading(true))
     return config
   },
